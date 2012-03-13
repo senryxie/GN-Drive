@@ -1,11 +1,50 @@
-from flask import Flask, render_template
+import MySQLdb
+from flask import Flask, g, request, render_template, jsonify
+
 app = Flask(__name__)
 from flup.server.fcgi import WSGIServer
 
-@app.route("/")
+import morelife
+import api_1
+
+@app.before_request
+def before_request():
+    g.db = MySQLdb.connect('localhost', 'eye', 'sauron',
+            'exia', port=3306)
+
+@app.teardown_request
+def teardown_request(exception):
+    if hasattr(g, 'db'):
+        g.db.close()
+
+@app.route('/')
 def index():
+    length = 21
+    start  = request.args.get('start', 0)
+    start = 0 if int(start) < 0 else int(start)
+
+    next = start + length
+    pre = start - length if start - length > 0 else 0
+
+    sql = "select * from entry  order by create_time desc \
+            limit %s, %s" % (start, length)
+    c = g.db.cursor()
+    c.execute(sql)
+    msgs = list(c.fetchall())
     return render_template('index.html', **locals())
 
+@app.route('/version/')
+def get_version():
+    ret = { 'version': 1 }
+    ret['action'] = 'version'
+    return jsonify(ret)
+
 if __name__ == "__main__":
-    WSGIServer(app,bindAddress='/var/www/gn-drive.sock').run()
-    #app.run(host='0.0.0.0')
+    import sys
+    args = sys.argv
+    if len(args) > 1:
+        print 'test mode'
+        app.debug = True
+        app.run(host='0.0.0.0')
+    else:
+        WSGIServer(app,bindAddress='/var/www/gn-drive.sock').run()
