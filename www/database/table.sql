@@ -49,7 +49,7 @@ CREATE TABLE `entry` (
 DROP TABLE IF EXISTS `draft`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `entry` (
+CREATE TABLE `draft` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `sid` bigint(16) unsigned NOT NULL,
   `pic` varchar(64) NOT NULL DEFAULT '',
