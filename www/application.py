@@ -7,5 +7,5 @@ def index():
     return render_template('index.html', **locals())
 
 if __name__ == "__main__":
-    WSGIServer(app,bindAddress='/tmp/gn-drive.sock').run()
+    WSGIServer(app,bindAddress='/var/www/gn-drive.sock').run()
     #app.run(host='0.0.0.0')
