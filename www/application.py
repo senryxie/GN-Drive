@@ -33,6 +33,38 @@ def index():
     msgs = list(c.fetchall())
     return render_template('index.html', **locals())
 
+@app.route('/draft')
+def draft():
+    length = 21
+    start  = request.args.get('start', 0)
+    start = 0 if int(start) < 0 else int(start)
+
+    next = start + length
+    pre = start - length if start - length > 0 else 0
+
+    sql = "select * from draft order by create_time desc \
+            limit %s, %s" % (start, length)
+    c = g.db.cursor()
+    c.execute(sql)
+    msgs = list(c.fetchall())
+    return render_template('index.html', **locals())
+
+@app.route('/sample')
+def sample():
+    length = 21
+    start  = request.args.get('start', 0)
+    start = 0 if int(start) < 0 else int(start)
+
+    next = start + length
+    pre = start - length if start - length > 0 else 0
+
+    sql = "select * from draft order by create_time desc \
+            limit %s, %s" % (start, length)
+    c = g.db.cursor()
+    c.execute(sql)
+    msgs = list(c.fetchall())
+    return render_template('index.html', **locals())
+
 @app.route('/version/')
 def get_version():
     ret = { 'version': 1 }
@@ -42,7 +74,7 @@ def get_version():
 if __name__ == "__main__":
     import sys
     args = sys.argv
-    if len(args) > 1:
+    if len(args) == 2 and args[1] == 'test':
         print 'test mode'
         app.debug = True
         app.run(host='0.0.0.0')
