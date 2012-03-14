@@ -36,7 +36,7 @@ def login():
 @app.route('/')
 def index():
     if 'username' not in session and request.path != '/login':
-        return redirect(url_for('/login'))
+        return redirect('/login')
 
     length = 21
     start  = request.args.get('start', 0)
@@ -55,7 +55,7 @@ def index():
 @app.route('/draft')
 def draft():
     if 'username' not in session and request.path != '/login':
-        return redirect(url_for('/login'))
+        return redirect('/login')
 
     length = 21
     start  = request.args.get('start', 0)
@@ -74,7 +74,7 @@ def draft():
 @app.route('/sample')
 def sample():
     if 'username' not in session and request.path != '/login':
-        return redirect(url_for('/login'))
+        return redirect('/login')
 
     length = 21
     start  = request.args.get('start', 0)
