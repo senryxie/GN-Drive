@@ -19,13 +19,16 @@ class Store:
     def execute(self, sql):
         self.con = MySQLdb.connect('localhost', 'eye', 'sauron', 'exia')
         self.c = self.con.cursor()
+        ret = None
         try:
             ret = self.c.execute(sql)
-            self.con.commit()
-            return ret
         except:
-            import traceback; traceback.print_exc()
-        self.close()
+            pass
+            #import traceback; traceback.print_exc()
+        return ret
+
+    def commit(self):
+        self.con.commit()
 
     def fetchall(self):
         return self.c.fetchall()

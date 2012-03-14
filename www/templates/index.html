@@ -25,11 +25,15 @@
                 <div class="inner">
                     <div id="container" class="clearfix">
                         {% for row in msgs %}
-                        <div class="box photo col3">
-                        <a href="show-{{row[2]}}">
-                            <img src="{{row[2]}}" alt="{{row[7]}}">
-                        </a>
-                        </div>
+                            <div class="box photo col3">
+                                <a class="pic-item" href="{{row.pic}}" title="{{row.text.decode('utf-8', 'ignore')}}" data-sid="{{row.sid}}">
+                                    {% if row.status == 0 %}
+                                        <img src="{{row.pic}}" class="img-pending">
+                                    {% else %}
+                                        <img src="{{row.pic}}" class="img-entry">
+                                    {% endif %}
+                                </a>
+                            </div>
                         {% endfor %}
                     </div>
                 </div>

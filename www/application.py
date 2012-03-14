@@ -4,8 +4,10 @@ from flask import Flask, g, request, render_template, jsonify
 app = Flask(__name__)
 from flup.server.fcgi import WSGIServer
 
-import morelife
+from collections import namedtuple
 import api_1
+
+Draft = namedtuple('Draft', 'id, sid, pic, snum, lnum, author, text, utime, ctime, status')
 
 @app.before_request
 def before_request():
@@ -30,7 +32,7 @@ def index():
             limit %s, %s" % (start, length)
     c = g.db.cursor()
     c.execute(sql)
-    msgs = list(c.fetchall())
+    msgs = map(Draft._make, c.fetchall())
     return render_template('index.html', **locals())
 
 @app.route('/draft')
@@ -46,7 +48,7 @@ def draft():
             limit %s, %s" % (start, length)
     c = g.db.cursor()
     c.execute(sql)
-    msgs = list(c.fetchall())
+    msgs = map(Draft._make, c.fetchall())
     return render_template('index.html', **locals())
 
 @app.route('/sample')
@@ -62,7 +64,7 @@ def sample():
             limit %s, %s" % (start, length)
     c = g.db.cursor()
     c.execute(sql)
-    msgs = list(c.fetchall())
+    msgs = map(Draft._make, c.fetchall())
     return render_template('index.html', **locals())
 
 @app.route('/version/')

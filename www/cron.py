@@ -45,7 +45,7 @@ def download_snap_timeline():
                 all.append(feature)
         page += 1
         tweets = client.trends__statuses(trend_name='街拍', page=page)
-        if page > 10:
+        if page > 5:
             break
 
     #svm predict
@@ -53,7 +53,7 @@ def download_snap_timeline():
     for t in all:
         x = build_x(t[3])
         if predict(x):
-            pic = t[1]
+            id, pic, author, text = t
             passed = True
 
             try:
@@ -63,20 +63,22 @@ def download_snap_timeline():
                 if height / width > 1.7777 or width / height > 1.7777:
                     passed = False
             except :
-                import traceback; traceback.print_exc()
+                print '抓取、分析图片异常'
+                #import traceback; traceback.print_exc()
             if passed:
                 selected.add(t)
-                print pic
 
-    print '选中:', len(selected)
 
     #save to draft
     for line in selected:
+        id, pic, author, text = line
         try:
             store.execute('insert into draft (sid, pic, author, text, create_time) \
               values(%s,"%s",%s,"%s", now())' % line)
+            store.commit()
+            print '入库:', id, pic, author, text
         except:
-            print '已经插入'
+            print '重复入库:', id, pic, author, text
 
 if __name__ == '__main__':
     download_snap_timeline()
