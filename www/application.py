@@ -26,7 +26,7 @@ def index():
     next = start + length
     pre = start - length if start - length > 0 else 0
 
-    sql = "select * from entry  order by create_time desc \
+    sql = "select * from entry order by id desc \
             limit %s, %s" % (start, length)
     c = g.db.cursor()
     c.execute(sql)
@@ -42,7 +42,7 @@ def draft():
     next = start + length
     pre = start - length if start - length > 0 else 0
 
-    sql = "select * from draft order by create_time desc \
+    sql = "select * from draft order by id desc \
             limit %s, %s" % (start, length)
     c = g.db.cursor()
     c.execute(sql)
@@ -58,7 +58,7 @@ def sample():
     next = start + length
     pre = start - length if start - length > 0 else 0
 
-    sql = "select * from draft order by create_time desc \
+    sql = "select * from sample order by id desc \
             limit %s, %s" % (start, length)
     c = g.db.cursor()
     c.execute(sql)

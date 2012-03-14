@@ -7,3 +7,5 @@ iPhoneClient/TwinDriveSystem/TwinDriveSystem.xcodeproj/project.xcworkspace/xcuse
 
 iPhoneClient/TwinDriveSystem/TwinDriveSystem.xcodeproj/xcuserdata/zhongsheng.xcuserdatad/xcdebugger/Breakpoints.xcbkptlist
 *.pyc
+
+www/libs/smallseg/*
