@@ -12,9 +12,6 @@ Draft = namedtuple('Draft', 'id, sid, pic, snum, lnum, author, text, utime, ctim
 
 @app.before_request
 def before_request():
-    if 'username' not in session and request.path != '/login':
-        return redirect(url_for('login'))
-
     g.db = MySQLdb.connect('localhost', 'eye', 'sauron',
             'exia', port=3306)
 
@@ -38,6 +35,9 @@ def login():
 
 @app.route('/')
 def index():
+    if 'username' not in session and request.path != '/login':
+        return redirect(url_for('/login'))
+
     length = 21
     start  = request.args.get('start', 0)
     start = 0 if int(start) < 0 else int(start)
@@ -54,6 +54,9 @@ def index():
 
 @app.route('/draft')
 def draft():
+    if 'username' not in session and request.path != '/login':
+        return redirect(url_for('/login'))
+
     length = 21
     start  = request.args.get('start', 0)
     start = 0 if int(start) < 0 else int(start)
@@ -70,6 +73,9 @@ def draft():
 
 @app.route('/sample')
 def sample():
+    if 'username' not in session and request.path != '/login':
+        return redirect(url_for('/login'))
+
     length = 21
     start  = request.args.get('start', 0)
     start = 0 if int(start) < 0 else int(start)
