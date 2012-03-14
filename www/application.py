@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import MySQLdb
-from flask import Flask, g, request, render_template, jsonify
+from flask import Flask, g, request, render_template, jsonify, session, redirect, url_for
 
 app = Flask(__name__)
+app.secret_key = 'ssdofiuwexcvsfsjdlgkfjsdfu'
 from flup.server.fcgi import WSGIServer
 from user import User
 from collections import namedtuple
@@ -11,6 +12,9 @@ Draft = namedtuple('Draft', 'id, sid, pic, snum, lnum, author, text, utime, ctim
 
 @app.before_request
 def before_request():
+    if 'username' not in session and request.path != '/login':
+        return redirect(url_for('login'))
+
     g.db = MySQLdb.connect('localhost', 'eye', 'sauron',
             'exia', port=3306)
 
@@ -18,6 +22,19 @@ def before_request():
 def teardown_request(exception):
     if hasattr(g, 'db'):
         g.db.close()
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        print '尝试登录'
+        print username, password
+        if username == 'some' and password == 'one':
+            session['username'] = 'some'
+            return redirect('/')
+        session.pop('username', None)
+    return render_template('login.html', **locals())
 
 @app.route('/')
 def index():
