@@ -3,7 +3,7 @@
 
 import re
 from libs.smallseg.smallseg import SEG
-from libs.store import store
+from libs.sqlstore import store
 
 seg = SEG()
 ban_list = ['-', '的', '是', '@', '#', '/', '.', '_', '~', '+', 'T', '..', '##', '//', '~~', '...', 'weibo.com', '--', 't.cn', '街拍']
