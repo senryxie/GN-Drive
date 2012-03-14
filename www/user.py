@@ -40,4 +40,8 @@ class User(object):
 
     @property
     def page(self):
-        return self.start or self.end or 80
+        sql = "select count(*) from entry"
+        c = g.db.cursor()
+        c.execute(sql)
+        r = c.fetchone()
+        return self.start or self.end or int(r[0] / 5)
