@@ -45,7 +45,7 @@ def download_snap_timeline():
                 all.append(feature)
         page += 1
         tweets = client.trends__statuses(trend_name='街拍', page=page)
-        if page > 1:
+        if page > 10:
             break
 
     #svm predict
