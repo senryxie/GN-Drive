@@ -63,7 +63,8 @@ def download_snap_timeline():
                 if height / width > 1.7777 or width / height > 1.7777:
                     passed = False
             except :
-                print '抓取、分析图片异常'
+                pass
+                #print '抓取、分析图片异常'
                 #import traceback; traceback.print_exc()
             if passed:
                 selected.add(t)
@@ -76,9 +77,10 @@ def download_snap_timeline():
             store.execute('insert into draft (sid, pic, author, text, create_time) \
               values(%s,"%s",%s,"%s", now())' % line)
             store.commit()
-            print '入库:', id, pic, author, text
+            #print '入库:', id, pic, author, text
         except:
-            print '重复入库:', id, pic, author, text
+            pass
+            #print '重复入库:', id, pic, author, text
 
 if __name__ == '__main__':
     download_snap_timeline()
