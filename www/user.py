@@ -19,6 +19,7 @@ class User(object):
                 ('%s', %s, %s, now())" % (udid, start, end)
         c = g.db.cursor()
         c.execute(sql)
+        g.db.commit()
 
     @classmethod
     def get(cls, udid):
@@ -35,8 +36,8 @@ class User(object):
         sql = "update device set start=%s, end=%s where id=%s" % (start, end, self.id)
         c = g.db.cursor()
         c.execute(sql)
+        g.db.commit()
 
     @property
     def page(self):
-        return 80
-        #return self.start or self.end or 80
+        return self.start or self.end or 80
