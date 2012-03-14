@@ -1,6 +1,11 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import Image
+import sys
+from os.path import dirname, abspath
+HOME_PATH = dirname(abspath(__file__))
+sys.path.insert(0, HOME_PATH)
+
 import urllib2
 from libs.weibo1 import APIClient
 from libs.sqlstore import store

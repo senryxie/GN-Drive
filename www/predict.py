@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
+from os.path import dirname, abspath
+HOME_PATH = dirname(abspath(__file__))
+sys.path.insert(0, HOME_PATH)
+
 import random
 from os.path import exists
 from libs.sqlstore import store
@@ -49,7 +54,7 @@ def build_x(text):
     return features
 
 def predict(x):
-    m = svm_model('snap.svm')
+    m = svm_model(HOME_PATH + '/snap.svm')
     label = m.predict(x)
     label = int(label)
     if label == 1:
@@ -58,7 +63,7 @@ def predict(x):
 
 if __name__ == '__main__':
     fy, fx, fd = get_training_data()
-    svm_file = 'snap.svm'
+    svm_file = HOME_PATH + '/snap.svm'
     if exists(svm_file):
         print '使用已有model'
         m = svm_model(svm_file)

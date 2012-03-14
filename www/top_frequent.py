@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
+import sys
+from os.path import dirname, abspath
+HOME_PATH = dirname(abspath(__file__))
+sys.path.insert(0, HOME_PATH)
+
 import re
 from libs.smallseg.smallseg import SEG
 from libs.sqlstore import store
