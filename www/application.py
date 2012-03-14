@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import MySQLdb
 from flask import Flask, g, request, render_template, jsonify
 
@@ -49,7 +50,7 @@ def draft():
     c = g.db.cursor()
     c.execute(sql)
     msgs = map(Draft._make, c.fetchall())
-    return render_template('index.html', **locals())
+    return render_template('draft.html', **locals())
 
 @app.route('/sample')
 def sample():
@@ -65,12 +66,63 @@ def sample():
     c = g.db.cursor()
     c.execute(sql)
     msgs = map(Draft._make, c.fetchall())
-    return render_template('index.html', **locals())
+    return render_template('sample.html', **locals())
 
 @app.route('/version/')
 def get_version():
     ret = { 'version': 1 }
     ret['action'] = 'version'
+    return jsonify(ret)
+
+@app.route('/classification/<int:sid>/')
+def classification(sid):
+    c = g.db.cursor()
+    sql = "select * from draft where sid=%s" % sid
+    c.execute(sql)
+    r = c.fetchone()
+    draft = Draft(*r)
+    status = 1 - draft.status
+    sql = 'update draft set status=%s where sid=%s' % (status, sid)
+
+    ret = {}
+    c.execute(sql)
+    g.db.commit()
+    if status:
+        try:
+            c.execute('insert into entry (sid, pic, author, text, create_time, status) \
+              values(%s,"%s",%s,"%s", now(), 1)' % \
+              (draft.sid, draft.pic, draft.author, draft.text))
+            g.db.commit()
+        except:
+            print '重复插入'
+    else:
+        try:
+            c.execute('delete from entry where id=%s' % draft.id)
+            g.db.commit()
+        except:
+            print '删除失败'
+    ret['status'] = status
+    return jsonify(ret)
+
+@app.route('/remove_entry/<int:sid>/')
+def remove_entry(sid):
+    c = g.db.cursor()
+    sql = "select * from entry where sid=%s" % sid
+    c.execute(sql)
+    r = c.fetchone()
+    draft = Draft(*r)
+    status = 1 - draft.status
+    sql = 'update draft set status=%s where sid=%s' % (status, sid)
+
+    ret = {}
+    c.execute(sql)
+    g.db.commit()
+    try:
+        c.execute('delete from entry where id=%s' % draft.id)
+        g.db.commit()
+    except:
+        print '删除失败'
+    ret['status'] = status
     return jsonify(ret)
 
 if __name__ == "__main__":

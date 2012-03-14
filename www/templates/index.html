@@ -27,11 +27,7 @@
                         {% for row in msgs %}
                             <div class="box photo col3">
                                 <a class="pic-item" href="{{row.pic}}" title="{{row.text.decode('utf-8', 'ignore')}}" data-sid="{{row.sid}}">
-                                    {% if row.status == 0 %}
-                                        <img src="{{row.pic}}" class="img-pending">
-                                    {% else %}
-                                        <img src="{{row.pic}}" class="img-entry">
-                                    {% endif %}
+                                    <img src="{{row.pic}}">
                                 </a>
                             </div>
                         {% endfor %}
@@ -60,6 +56,21 @@
               $container.masonry({
                 itemSelector : '.box'
               });
+            });
+
+            $('.pic-item').bind('click', function(e){
+                e.preventDefault();
+                var target = $(this),
+                    sid = target.data('sid'),
+                    oImg = $('img', target);
+                $.getJSON('/remove_entry/' + sid + '/', {}, function(ret){
+                    if(ret.status == 0){
+                        oImg.removeClass('img-pending').addClass('img-entry');
+                    }
+                    else{
+                        oImg.removeClass('img-entry').addClass('img-pending');
+                    }
+                });
             });
 
           });

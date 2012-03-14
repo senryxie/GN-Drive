@@ -69,3 +69,5 @@ a.btn-blue:hover { color: white; background: #67a88f }
 a.btn-green:hover {background-color:#78b9a0;}
 a.btn-blue:hover { background:#729ab5 }
 a.btn-green:active, a.btn-blue:active { color: white}
+
+.img-entry { opacity:0.3 }
