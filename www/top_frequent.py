@@ -14,8 +14,8 @@ seg = SEG()
 ban_list = ['-', '的', '是', '@', '#', '/', '.', '_', '~', '+', 'T', '..', '##', '//', '~~', '...', 'weibo.com', '--', 't.cn', '街拍']
 url_re = re.compile(r'http://.*?')
 
-def get_top_list():
-    sql = "select text from sample where status=1"
+def get_top_list(status=1):
+    sql = "select text from sample where status=%s" % status
     store.execute(sql)
     rs = store.fetchall()
     tweets = [r[0] for r in rs]
@@ -43,6 +43,12 @@ def get_top_list():
     return top
 
 if __name__ == '__main__':
-    top = get_top_list()
+    import sys
+    args = sys.argv
+    print 'get_frequent.py trash'
+    if len(args) == 2 and args[1] == 'trash':
+        top = get_top_list(status=0)
+    else:
+        top = get_top_list()
     for k, v in top:
         print k, v

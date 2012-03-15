@@ -22,6 +22,8 @@ client = APIClient(app_key=APP_KEY, app_secret=APP_SECRET)
 client.oauth_token = access_token
 client.oauth_token_secret = token_secret
 
+baned_list = ['淘宝', '聚美秀', '跑车街拍', '汽车街拍', '网友原创街拍', '手机摄影', '头条博客', '精品App推荐', '京东商城', '微电影', '爆笑街拍', 'Camera360']
+
 def download_snap_timeline():
     page = 1
     all=[]
@@ -51,6 +53,16 @@ def download_snap_timeline():
     #svm predict
     selected = set()
     for t in all:
+        is_ban = False
+        for ban in baned_list:
+            if ban in t[3]:
+                is_ban = True
+                break
+
+        #是否ban掉
+        if is_ban:
+            continue
+
         x = build_x(t[3])
         if predict(x):
             id, pic, author, text = t
