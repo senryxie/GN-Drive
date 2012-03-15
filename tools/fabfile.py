@@ -1,6 +1,6 @@
 from fabric.api import sudo, cd, env#, run
 
-env.hosts=['gundam00']
+env.hosts=['ofshellohicy@gundam00']
 
 def restart_mysql():
     sudo('sudo /etc/init.d/mysql restart', user='ofshellohicy')
