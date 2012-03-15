@@ -11,7 +11,13 @@ from libs.smallseg.smallseg import SEG
 from libs.sqlstore import store
 
 seg = SEG()
-ban_list = ['-', '的', '是', '@', '#', '/', '.', '_', '~', '+', 'T', '..', '##', '//', '~~', '...', 'weibo.com', '--', 't.cn', '街拍']
+
+digit_re = re.compile(r'.?\d+.?\d*.?', re.DOTALL)
+
+ban_list = ['-', '的', '是', '@', '#', '/', '.', '_', '~', '+', 'T', '..', '##', '//', '~~', '...', 'weibo.com', '--', 't.cn', '街拍', '...-',
+           '没', '欧', '下', '[囧', '囧]', '里', '[太', '找', '基', '社', '来的', '具', ']~', '～～', 'by', '次', 't', '吧~', '啊', '&',
+           '中', '~[', '?', '】', '在', '【', '了', ']',
+            '就', '原', '这', '详情请', '从', '加', '熊猫', '网友', '月号', '博也', '``', 'h4MS2M', '被', ';', '#t.cn', '*', '陈皮', '1747534564', '@kiki', '王晓', '发表', '亚马逊', 'http', 'Http', '兰州', 'else.', '】长', ]
 url_re = re.compile(r'http://.*?')
 
 def get_top_list(status=1):
@@ -33,6 +39,8 @@ def get_top_list(status=1):
             #print 'word:', w
             if w in ban_list:
                 continue
+            if digit_re.match(w):
+                continue
             dicts[w] = dicts.get(w,0) + 1
 
     for key, value in dicts.items():
@@ -50,5 +58,6 @@ if __name__ == '__main__':
         top = get_top_list(status=0)
     else:
         top = get_top_list()
-    for k, v in top:
+    for k, v in top[1000:]:
         print k, v
+    print len(top)

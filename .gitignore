@@ -9,3 +9,5 @@ iPhoneClient/TwinDriveSystem/TwinDriveSystem.xcodeproj/xcuserdata/zhongsheng.xcu
 *.pyc
 
 www/libs/smallseg/*
+www/snap.html
+www/trash.html

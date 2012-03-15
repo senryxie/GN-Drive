@@ -19,7 +19,7 @@ words = [w for w, v in top]
 def get_training_data():
     Draft = namedtuple('Draft', 'id, sid, pic, snum, lnum, author, text, utime, ctime, status')
 
-    store.execute('select * from draft order by rand()')
+    store.execute('select * from sample order by rand()')
     rs = store.fetchall()
 
     tweets = map(Draft._make, rs)
@@ -64,6 +64,7 @@ def predict(x):
 if __name__ == '__main__':
     fy, fx, fd = get_training_data()
     svm_file = HOME_PATH + '/snap.svm'
+    m = None
     if exists(svm_file):
         print '使用已有model'
         m = svm_model(svm_file)
@@ -75,3 +76,29 @@ if __name__ == '__main__':
         ## training  the model
         m = svm_model(prob, param)
         m.save('snap.svm')
+
+    if m:
+        img = '<img src="%s"></img>'
+        super_count = 0
+        error_count = 0
+        html_snap = ''
+        html_trash = ''
+        for i, x in enumerate(fx):
+            label = m.predict(x)
+            if label == 1:
+                html_snap += img % fd[i][0]
+            else:
+                html_trash += img % fd[i][0]
+            if label == fy[i]:
+                super_count += 1
+            else:
+                error_count += 1
+        print m, super_count, error_count
+
+        with open('snap.html', 'w') as f:
+            f.write(html_snap)
+            f.close()
+
+        with open('trash.html', 'w') as f:
+            f.write(html_trash)
+            f.close()
