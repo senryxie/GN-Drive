@@ -15,9 +15,9 @@ def restart_nginx():
 def update_drive():
     with cd('/home/nginx/GN-Drive'):
         sudo('git fetch origin',user='nginx')
+        sudo('/etc/init.d/snap-fastcgi stop',user='root')
         sudo('git rebase origin/master',user='nginx')
-        sleep(5)
-        sudo('/etc/init.d/snap-fastcgi restart',user='root')
+        sudo('/etc/init.d/snap-fastcgi start',user='root')
 
 def see_letter():
     with cd('/home/nginx/'):
