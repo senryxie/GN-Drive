@@ -119,7 +119,7 @@ def classification(sid):
             print '重复插入'
     else:
         try:
-            c.execute('delete from entry where id=%s' % draft.id)
+            c.execute('delete from entry where sid=%s' % draft.sid)
             g.db.commit()
         except:
             print '删除失败'

@@ -29,9 +29,11 @@
                     <div id="container" class="clearfix">
                         {% for row in msgs %}
                             <div class="box photo col3">
-                                <a href="#" class="btn-blue snap-sample" data-sid="{{row.sid}}">街拍样本+</a>
-                                <a href="#" class="btn-blue trash-sample" data-sid="{{row.sid}}">垃圾样本+</a>
-                                <span class="error"></span>
+                                <div class="op-bar">
+                                    <!--<a href="#" class="btn-blue snap-sample" data-sid="{{row.sid}}">投赞成票</a>-->
+                                    <a href="#" class="btn-blue trash-sample" data-sid="{{row.sid}}">举报垃圾</a>
+                                    <span class="error"></span>
+                                </div>
                                 <a class="pic-item" href="{{row.pic}}" title="{{row.text.decode('utf-8', 'ignore')}}" data-sid="{{row.sid}}">
                                     {% if row.status == 0 %}
                                         <img src="{{row.pic}}" class="img-pending">
@@ -86,6 +88,7 @@
                 });
             });
 
+            /*
             $('.snap-sample').on('click', function(e){
                 e.preventDefault();
                 var target = $(this),
@@ -99,6 +102,7 @@
                     }
                 });
             });
+            */
 
             $('.trash-sample').on('click', function(e){
                 e.preventDefault();

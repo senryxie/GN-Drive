@@ -73,3 +73,5 @@ a.btn-green:active, a.btn-blue:active { color: white}
 .img-entry { opacity:0.3 }
 
 .error { font-size: 14px; color: #78b9a0 }
+
+.op-bar { position: absolute; top: 2; left: 2; opacity: 0.8 }

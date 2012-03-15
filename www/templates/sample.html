@@ -29,12 +29,14 @@
                     <div id="container" class="clearfix">
                         {% for row in msgs %}
                             <div class="box photo col3">
-                                <a class="pic-item" href="{{row.pic}}" title="{{row.text.decode('utf-8', 'ignore')}}" data-sid="{{row.sid}}">
-                                    {% if row.status == 0 %}
-                                        <img src="{{row.pic}}" class="img-entry">
-                                    {% else %}
-                                        <img src="{{row.pic}}" class="img-pending">
-                                    {% endif %}
+                                <div class="op-bar">
+                                    <a href="#" class="btn-blue btn-delete" data-sid="{{row.sid}}">删除</a>
+                                    <span class="error"></span>
+                                </div>
+                                <a class="pic-item" href="{{row.pic}}"
+                                    title="[{{row.status}}]--{{row.text.decode('utf-8', 'ignore')}}"
+                                    data-sid="{{row.sid}}">
+                                    <img src="{{row.pic}}" class="img-pending">
                                 </a>
                             </div>
                         {% endfor %}
@@ -70,12 +72,16 @@
 
             $('.pic-item').on('click', function(e){
                 e.preventDefault();
+            });
+
+            $('.btn-delete').on('click', function(e){
+                e.preventDefault();
                 var target = $(this),
                     sid = target.data('sid'),
-                    oImg = $('img', target);
+                    oItem = target.parent().parent();
                 $.getJSON('/remove_sample/' + sid + '/', {}, function(ret){
-                    if(ret.status == 0){
-                        target.parent().remove()
+                    if(!ret.status){
+                        oItem.remove();
                     }
                 });
             });

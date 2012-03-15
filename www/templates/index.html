@@ -29,6 +29,10 @@
                     <div id="container" class="clearfix">
                         {% for row in msgs %}
                             <div class="box photo col3">
+                                <div class="op-bar">
+                                    <a href="#" class="btn-blue btn-delete" data-sid="{{row.sid}}">删除</a>
+                                    <span class="error"></span>
+                                </div>
                                 <a class="pic-item" href="{{row.pic}}" title="{{row.text.decode('utf-8', 'ignore')}}" data-sid="{{row.sid}}">
                                     <img src="{{row.pic}}">
                                 </a>
@@ -63,18 +67,17 @@
                 itemSelector : '.box'
               });
             });
-
             $('.pic-item').on('click', function(e){
+                e.preventDefault();
+            });
+            $('.btn-delete').on('click', function(e){
                 e.preventDefault();
                 var target = $(this),
                     sid = target.data('sid'),
-                    oImg = $('img', target);
+                    oItem = target.parent().parent();
                 $.getJSON('/remove_entry/' + sid + '/', {}, function(ret){
-                    if(ret.status == 0){
-                        oImg.removeClass('img-pending').addClass('img-entry');
-                    }
-                    else{
-                        oImg.removeClass('img-entry').addClass('img-pending');
+                    if(!ret.status){
+                        oItem.remove();
                     }
                 });
             });

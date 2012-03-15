@@ -95,4 +95,6 @@ def download_snap_timeline():
             #print '重复入库:', id, pic, author, text
 
 if __name__ == '__main__':
+    import datetime
+    print datetime.datetime.now()
     download_snap_timeline()
