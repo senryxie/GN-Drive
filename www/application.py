@@ -126,6 +126,44 @@ def classification(sid):
     ret['status'] = status
     return jsonify(ret)
 
+@app.route('/add_snap_sample/<int:sid>/')
+def add_snap_sample(sid):
+    c = g.db.cursor()
+    sql = "select * from draft where sid=%s" % sid
+    c.execute(sql)
+    r = c.fetchone()
+    draft = Draft(*r)
+    g.db.commit()
+
+    try:
+        c.execute('insert into sample (sid, pic, author, text, create_time, status) \
+          values(%s,"%s",%s,"%s", now(), 1)' % \
+          (draft.sid, draft.pic, draft.author, draft.text))
+        g.db.commit()
+    except:
+        print '重复插入'
+
+    return jsonify({'status':0})
+
+@app.route('/add_trash_sample/<int:sid>/')
+def add_trash_sample(sid):
+    c = g.db.cursor()
+    sql = "select * from draft where sid=%s" % sid
+    c.execute(sql)
+    r = c.fetchone()
+    draft = Draft(*r)
+    g.db.commit()
+
+    try:
+        c.execute('insert into sample (sid, pic, author, text, create_time, status) \
+          values(%s,"%s",%s,"%s", now(), 0)' % \
+          (draft.sid, draft.pic, draft.author, draft.text))
+        g.db.commit()
+    except:
+        print '重复插入'
+
+    return jsonify({'status':0})
+
 @app.route('/remove_entry/<int:sid>/')
 def remove_entry(sid):
     c = g.db.cursor()
@@ -146,6 +184,16 @@ def remove_entry(sid):
         print '删除失败'
     ret['status'] = status
     return jsonify(ret)
+
+@app.route('/remove_sample/<int:sid>/')
+def remove_sample(sid):
+    c = g.db.cursor()
+    try:
+        c.execute('delete from sample where sid=%s' % sid)
+        g.db.commit()
+    except:
+        print '删除失败'
+    return jsonify({'status':0})
 
 #################################
 

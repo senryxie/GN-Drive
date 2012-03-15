@@ -67,6 +67,18 @@
                 itemSelector : '.box'
               });
             });
+
+            $('.pic-item').on('click', function(e){
+                e.preventDefault();
+                var target = $(this),
+                    sid = target.data('sid'),
+                    oImg = $('img', target);
+                $.getJSON('/remove_sample/' + sid + '/', {}, function(ret){
+                    if(ret.status == 0){
+                        target.parent().remove()
+                    }
+                });
+            });
           });
         </script>
     <body>

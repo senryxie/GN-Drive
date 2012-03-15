@@ -29,6 +29,9 @@
                     <div id="container" class="clearfix">
                         {% for row in msgs %}
                             <div class="box photo col3">
+                                <a href="#" class="btn-blue snap-sample" data-sid="{{row.sid}}">街拍样本+</a>
+                                <a href="#" class="btn-blue trash-sample" data-sid="{{row.sid}}">垃圾样本+</a>
+                                <span class="error"></span>
                                 <a class="pic-item" href="{{row.pic}}" title="{{row.text.decode('utf-8', 'ignore')}}" data-sid="{{row.sid}}">
                                     {% if row.status == 0 %}
                                         <img src="{{row.pic}}" class="img-pending">
@@ -68,7 +71,7 @@
               });
             });
 
-            $('.pic-item').bind('click', function(e){
+            $('.pic-item').on('click', function(e){
                 e.preventDefault();
                 var target = $(this),
                     sid = target.data('sid'),
@@ -79,6 +82,34 @@
                     }
                     else{
                         oImg.removeClass('img-pending').addClass('img-entry');
+                    }
+                });
+            });
+
+            $('.snap-sample').on('click', function(e){
+                e.preventDefault();
+                var target = $(this),
+                    sid = target.data('sid');
+                console.info('click');
+                $.getJSON('/add_snap_sample/' + sid + '/', {}, function(ret){
+                    if(ret.status == 0){
+                        $('.error', target.parent()).text('加入街拍样本').delay(1500).fadeIn(function(){ $(this).text('')});
+                    }
+                    else{
+                    }
+                });
+            });
+
+            $('.trash-sample').on('click', function(e){
+                e.preventDefault();
+                var target = $(this),
+                    sid = target.data('sid');
+                console.info('click');
+                $.getJSON('/add_trash_sample/' + sid + '/', {}, function(ret){
+                    if(ret.status == 0){
+                        $('.error', target.parent()).text('加入垃圾信息样本').delay(1500).fadeIn(function(){ $(this).text('')});
+                    }
+                    else{
                     }
                 });
             });

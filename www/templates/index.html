@@ -64,7 +64,7 @@
               });
             });
 
-            $('.pic-item').bind('click', function(e){
+            $('.pic-item').on('click', function(e){
                 e.preventDefault();
                 var target = $(this),
                     sid = target.data('sid'),
