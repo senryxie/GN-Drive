@@ -83,7 +83,7 @@ def sample():
     next = start + length
     pre = start - length if start - length > 0 else 0
 
-    sql = "select * from sample order by id desc \
+    sql = "select * from sample where status=0 order by id desc \
             limit %s, %s" % (start, length)
     c = g.db.cursor()
     c.execute(sql)
