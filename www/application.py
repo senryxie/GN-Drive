@@ -27,8 +27,6 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        print '尝试登录'
-        print username, password
         if username == 'some' and password == 'one':
             session['username'] = 'some'
             return redirect('/')
@@ -111,33 +109,33 @@ def classification(sid):
     ret = {}
     c.execute(sql)
     g.db.commit()
-    error = 1
+    sina = 1
     if status:
         try:
             c.execute('insert into entry (sid, pic, author, text, create_time, status) \
               values(%s,"%s",%s,"%s", now(), 1)' % \
               (draft.sid, draft.pic, draft.author, draft.text))
             g.db.commit()
-            data = {
-                'sid': draft.sid,
-                'pic': draft.pic,
-                'author': draft.author,
-                'text': draft.text
-            }
-            ret = requests.post('http://morelife.sinaapp.com/import_data', data=data)
-            ret_data = json.loads(ret.content)
-            if ret_data.get('status') == 0:
-                error = 0
         except:
             print '重复插入'
+        data = {
+            'sid': draft.sid,
+            'pic': draft.pic,
+            'author': draft.author,
+            'text': draft.text
+        }
+        r = requests.post('http://morelife.sinaapp.com/import_data', data=data)
+        r_data = json.loads(r.content)
+        if r_data.get('status') == 0:
+            sina = 0
     else:
         try:
             c.execute('delete from entry where sid=%s' % draft.sid)
             g.db.commit()
-            error = 0
         except:
             print '删除失败'
-    ret['status'] = error
+    ret['status'] = status
+    ret['sina'] = sina
     return jsonify(ret)
 
 @app.route('/add_snap_sample/<int:sid>/')
