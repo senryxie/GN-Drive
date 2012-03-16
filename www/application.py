@@ -15,7 +15,7 @@ Draft = namedtuple('Draft', 'id, sid, pic, snum, lnum, author, text, utime, ctim
 @app.before_request
 def before_request():
     g.db = MySQLdb.connect('localhost', 'eye', 'sauron',
-            'exia', port=3306)
+            'exia', port=3306, charset='utf8')
 
 @app.teardown_request
 def teardown_request(exception):
