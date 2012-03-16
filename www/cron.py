@@ -9,7 +9,7 @@ sys.path.insert(0, HOME_PATH)
 import urllib2
 from libs.weibo1 import APIClient
 from libs.sqlstore import store
-from predict import predict, build_x
+from predict import predict, build_x, get_model
 from libs.core_image import open_pic
 
 APP_KEY = '459673502'
@@ -52,6 +52,7 @@ def download_snap_timeline():
 
     #svm predict
     selected = set()
+    model = get_model()
     for t in all:
         is_ban = False
         for ban in baned_list:
@@ -64,7 +65,7 @@ def download_snap_timeline():
             continue
 
         x = build_x(t[3])
-        if predict(x):
+        if predict(x, model):
             id, pic, author, text = t
             passed = True
 
