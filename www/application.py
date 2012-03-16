@@ -4,7 +4,6 @@ from flask import Flask, g, request, render_template, jsonify, session, redirect
 
 app = Flask(__name__)
 app.secret_key = 'ssdofiuwexcvsfsjdlgkfjsdfu'
-from flup.server.fcgi import WSGIServer
 from user import User
 from collections import namedtuple
 import requests
@@ -283,12 +282,4 @@ def post_feedback(udid):
     return jsonify(ret)
 
 if __name__ == "__main__":
-    import sys
-    args = sys.argv
-    if len(args) == 2 and args[1] == 'test':
-        print 'test mode'
-        app.debug = True
-        app.run(host='0.0.0.0')
-    else:
-        app.debug = True
-        WSGIServer(app,bindAddress='/var/www/gn-drive.sock').run()
+    app.run()

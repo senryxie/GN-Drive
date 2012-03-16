@@ -16,8 +16,7 @@ def update_drive():
     with cd('/home/nginx/GN-Drive'):
         sudo('git fetch origin',user='nginx')
         sudo('git rebase origin/master',user='nginx')
-        sudo("find . -name '*.pyc' -delete", user='nginx')
-    sudo('/etc/init.d/snap-fastcgi restart',user='root')
+    sudo('/etc/init.d/snap-drive restart',user='root')
 
 def see_letter():
     with cd('/home/nginx/'):
