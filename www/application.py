@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 import MySQLdb
-from flask import Flask, g, request, render_template, jsonify, session, redirect, url_for
+from flask import Flask, g, request, render_template, jsonify, session, redirect
 
 app = Flask(__name__)
 app.secret_key = 'ssdofiuwexcvsfsjdlgkfjsdfu'
 from flup.server.fcgi import WSGIServer
 from user import User
 from collections import namedtuple
+import requests
+import json
 
 Draft = namedtuple('Draft', 'id, sid, pic, snum, lnum, author, text, utime, ctime, status')
 
@@ -109,21 +111,33 @@ def classification(sid):
     ret = {}
     c.execute(sql)
     g.db.commit()
+    error = 1
     if status:
         try:
             c.execute('insert into entry (sid, pic, author, text, create_time, status) \
               values(%s,"%s",%s,"%s", now(), 1)' % \
               (draft.sid, draft.pic, draft.author, draft.text))
             g.db.commit()
+            data = {
+                'sid': draft.sid,
+                'pic': draft.pic,
+                'author': draft.author,
+                'text': draft.text
+            }
+            ret = requests.post('http://morelife.sinaapp.com/import_data', data=data)
+            ret_data = json.loads(ret.content)
+            if ret_data.get('status') == 0:
+                error = 0
         except:
             print '重复插入'
     else:
         try:
             c.execute('delete from entry where sid=%s' % draft.sid)
             g.db.commit()
+            error = 0
         except:
             print '删除失败'
-    ret['status'] = status
+    ret['status'] = error
     return jsonify(ret)
 
 @app.route('/add_snap_sample/<int:sid>/')
@@ -278,4 +292,5 @@ if __name__ == "__main__":
         app.debug = True
         app.run(host='0.0.0.0')
     else:
+        app.debug = True
         WSGIServer(app,bindAddress='/var/www/gn-drive.sock').run()

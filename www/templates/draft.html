@@ -34,7 +34,7 @@
                                     <a href="#" class="btn-blue trash-sample" data-sid="{{row.sid}}">举报垃圾</a>
                                     <span class="error"></span>
                                 </div>
-                                <a class="pic-item" href="{{row.pic}}" title="{{row.text.decode('utf-8', 'ignore')}}" data-sid="{{row.sid}}">
+                                <a class="pic-item" href="{{row.pic}}" title="{{row.text}}" data-sid="{{row.sid}}">
                                     {% if row.status == 0 %}
                                         <img src="{{row.pic}}" class="img-pending">
                                     {% else %}
