@@ -51,6 +51,7 @@ def get_top_list(tweets=[]):
 
 
 def get_training_data():
+    print '获取样本...'
     Draft = namedtuple('Draft', 'id, sid, pic, snum, lnum, author, text, utime, ctime, status')
     conn = engine.connect()
 
@@ -62,14 +63,18 @@ def get_training_data():
 
 
     tweets = trash_tweets + snap_tweets
+    print '随机打乱样本顺序...'
     random.shuffle(tweets, random.random)
 
+    print '获取特征表...'
     top = get_top_list(tweets=(t.text for t in tweets))
     words = [w for w, v in top]
 
+    print '特征表存入redis...'
     db = redis.StrictRedis()
     db.set('features', simplejson.dumps(words))
 
+    print '特征表写入本地文件...'
     with open('feature_words.txt', 'w') as f:
         f.writelines((w + '\n' for w in words))
         f.close()
@@ -91,6 +96,7 @@ def get_training_data():
     fy = []
     fd = []
 
+    print '构建fx, fy, fd'
     for t in tweets:
         features = build_x(t.text)
         fx.append(features)
@@ -103,36 +109,57 @@ def get_training_data():
     return fy, fx, fd
 
 if __name__ == '__main__':
-    fy, fx, fd = get_training_data()
-    print '训练新的model'
-    prob = svm_problem(fy, fx)
-    param = svm_parameter(kernel_type = LINEAR, C = 80)
+    from optparse import OptionParser
+    u = 'app for snap'
+    parser = OptionParser(usage=u)
+    parser.add_option('-t', '--test', action='store_true')
+    options, args = parser.parse_args()
 
-    ## training  the model
-    m = svm_model(prob, param)
-    m.save('snap.svm')
+    sample_file = 'sample.dat'
 
-    img = '<img src="%s"></img>'
-    super_count = 0
-    error_count = 0
-    html_snap = ''
-    html_trash = ''
-    for i, x in enumerate(fx):
-        label = m.predict(x)
-        if label == 1:
-            html_snap += img % fd[i][0]
-        else:
-            html_trash += img % fd[i][0]
-        if label == fy[i]:
-            super_count += 1
-        else:
-            error_count += 1
-    print m, super_count, error_count
-
-    with open('snap.html', 'w') as f:
-        f.write(html_snap)
+    if options.test:
+        f = open(sample_file, 'r')
+        j = f.read()
+        fy, fx, fd = simplejson.loads(j)
         f.close()
+        print '训练新的model'
+        prob = svm_problem(fy, fx)
+        param = svm_parameter(kernel_type = LINEAR, C = 80)
 
-    with open('trash.html', 'w') as f:
-        f.write(html_trash)
-        f.close()
+        ## training  the model
+        m = svm_model(prob, param)
+        m.save('snap.svm')
+
+        img = '<img src="%s"></img>'
+        super_count = 0
+        error_count = 0
+        html_snap = ''
+        html_trash = ''
+        for i, x in enumerate(fx):
+            label = m.predict(x)
+            if label == 1:
+                html_snap += img % fd[i][0]
+            else:
+                html_trash += img % fd[i][0]
+            if label == fy[i]:
+                super_count += 1
+            else:
+                error_count += 1
+        print m, super_count, error_count
+
+        print '生成预测后snap html...'
+        with open('snap.html', 'w') as f:
+            f.write(html_snap)
+            f.close()
+
+        print '生成预测后trash html...'
+        with open('trash.html', 'w') as f:
+            f.write(html_trash)
+            f.close()
+    else:
+        fy, fx, fd = get_training_data()
+        print '保存样本数据'
+        data = [fy, fx, fd]
+        with open(sample_file, 'w') as f:
+            f.write(simplejson.dumps(data))
+            f.close()
