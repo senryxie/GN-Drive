@@ -22,7 +22,7 @@ def see_letter():
         run('cat dead.letter')
 
 def get_sample():
-    with cd('/home/nginx/GN-Drive'):
-        run('python build_svm.py')
+    with cd('/home/nginx/GN-Drive/www'):
+        sudo('python build_svm.py', user='nginx')
         get('sample.dat')
 

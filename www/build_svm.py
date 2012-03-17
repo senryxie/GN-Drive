@@ -47,7 +47,7 @@ def get_top_list(tweets=[]):
             top.append((key, value))
 
     top.sort(key=lambda x:x[1], reverse=True)
-    return top
+    return top[:1500]
 
 
 def get_training_data():
