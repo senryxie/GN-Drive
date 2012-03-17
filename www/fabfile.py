@@ -24,7 +24,7 @@ def see_letter():
 def get_sample():
     with cd('/home/nginx/GN-Drive/www'):
         sudo('python build_svm.py', user='nginx')
-        get('sample.dat')
+        get('sample.dat', local_path='.')
 
 def put_svm():
     with cd('/home/nginx/GN-Drive/www'):
