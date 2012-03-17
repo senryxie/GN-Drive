@@ -25,6 +25,7 @@ def get_sample():
     with cd('/home/nginx/GN-Drive/www'):
         sudo('python build_svm.py', user='nginx')
         get('sample.dat', local_path='.')
+        get('feature_words.txt', local_path='.')
 
 def put_svm():
     with cd('/home/nginx/GN-Drive/www'):

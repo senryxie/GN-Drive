@@ -55,10 +55,11 @@ def get_training_data():
     Draft = namedtuple('Draft', 'id, sid, pic, snum, lnum, author, text, utime, ctime, status')
     conn = engine.connect()
 
-    rs = conn.execute('select * from sample where status=0 order by rand()')
+    rs = conn.execute('select * from sample where status=0')
     trash_tweets = map(Draft._make, rs)
 
     count_trash = len(trash_tweets)
+    print '垃圾样本数量'
 
     rs = conn.execute('select * from entry order by rand() limit %s' % count_trash)
     snap_tweets = map(Draft._make, rs)
@@ -120,6 +121,15 @@ if __name__ == '__main__':
     sample_file = 'sample.dat'
 
     if options.test:
+        f = open('feature_words.txt', 'r')
+        ls = f.readlines()
+        ls = [l.strip() for l in ls]
+        print '新的特征表存入redis...'
+        print 'len features', len(ls)
+        db = redis.StrictRedis()
+        db.set('features', simplejson.dumps(ls))
+        f.close()
+
         f = open(sample_file, 'r')
         j = f.read()
         fy, fx, fd = simplejson.loads(j)
