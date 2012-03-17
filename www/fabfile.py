@@ -1,4 +1,4 @@
-from fabric.api import sudo, cd, env, run, get
+from fabric.api import sudo, cd, env, run, get, put
 
 env.hosts=['ofshellohicy@gundam00']
 
@@ -26,3 +26,8 @@ def get_sample():
         sudo('python build_svm.py', user='nginx')
         get('sample.dat')
 
+def put_svm():
+    with cd('/home/nginx/GN-Drive/www'):
+        put('snap.svm', '')
+        sudo('cp /home/ofshellohicy/snap.svm .', user='nginx')
+    run('rm snap.svm')

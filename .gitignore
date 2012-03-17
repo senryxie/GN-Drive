@@ -14,3 +14,4 @@ www/trash.html
 www/snap.svm
 www/feature_words.txt
 www/sample.dat
+*.bak
