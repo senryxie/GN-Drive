@@ -282,4 +282,13 @@ def post_feedback(udid):
     return jsonify(ret)
 
 if __name__ == "__main__":
-    app.run()
+    from optparse import OptionParser
+    u = 'app for snap'
+    parser = OptionParser(usage=u)
+    parser.add_option('-t', '--test', action='store_true')
+    options, args = parser.parse_args()
+    if options.test:
+        app.debug = True
+        app.run(host='0.0.0.0')
+    else:
+        app.run()
