@@ -20,9 +20,9 @@ def _get_features():
 words = _get_features()
 snap_model = svm_model(HOME_PATH + '/snap.svm')
 
-def predict(text, m):
+def predict(text):
     x = _build_x(text)
-    label = m.predict(x)
+    label = snap_model.predict(x)
     label = int(label)
     if label == 1:
         return  True
@@ -47,5 +47,5 @@ if __name__ == '__main__':
     for w in words:
         print w, type(w)
     '''
-    print 'predict "#韩国街拍#裤子的颜色很心水": ', predict('#韩国街拍#裤子的颜色很心水', snap_model)
-    print 'predict "淘宝皇冠": ', predict('淘宝皇冠', snap_model)
+    print 'predict "#韩国街拍#裤子的颜色很心水": ', predict('#韩国街拍#裤子的颜色很心水')
+    print 'predict "淘宝皇冠": ', predict('淘宝皇冠')

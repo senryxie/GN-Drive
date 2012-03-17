@@ -55,10 +55,10 @@ def get_training_data():
     Draft = namedtuple('Draft', 'id, sid, pic, snum, lnum, author, text, utime, ctime, status')
     conn = engine.connect()
 
-    rs = conn.execute('select * from sample where status=0 order by rand()')
+    rs = conn.execute('select * from sample where status=0 order by rand() limit 1000')
     trash_tweets = map(Draft._make, rs)
 
-    rs = conn.execute('select * from entry order by rand()')
+    rs = conn.execute('select * from entry order by rand() limit 1000')
     snap_tweets = map(Draft._make, rs)
 
 

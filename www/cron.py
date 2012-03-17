@@ -10,7 +10,7 @@ sys.path.insert(0, HOME_PATH)
 from libs.sqlstore import engine
 from libs.weibo1 import APIClient
 from libs.core_image import open_pic
-from predict import predict, snap_model
+from predict import predict
 
 APP_KEY = '459673502'
 APP_SECRET = '87ff70bf34f6b026217a4025a97b0ed0'
@@ -64,7 +64,7 @@ def download_snap_timeline():
             continue
 
         text = t[3]
-        if predict(text, snap_model):
+        if predict(text):
             id, pic, author, text = t
             passed = True
 
