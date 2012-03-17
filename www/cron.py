@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import urllib2
 from os.path import dirname, abspath
 HOME_PATH = dirname(abspath(__file__))
 sys.path.insert(0, HOME_PATH)
 
-import urllib2
+from libs.sqlstore import engine
 from libs.weibo1 import APIClient
-from libs.sqlstore import store
-from predict import predict, build_x, get_model
 from libs.core_image import open_pic
+from predict import predict, snap_model
 
 APP_KEY = '459673502'
 APP_SECRET = '87ff70bf34f6b026217a4025a97b0ed0'
@@ -52,7 +52,6 @@ def download_snap_timeline():
 
     #svm predict
     selected = set()
-    model = get_model()
     for t in all:
         is_ban = False
         for ban in baned_list:
@@ -64,8 +63,8 @@ def download_snap_timeline():
         if is_ban:
             continue
 
-        x = build_x(t[3])
-        if predict(x, model):
+        text = t[3]
+        if predict(text, snap_model):
             id, pic, author, text = t
             passed = True
 
@@ -84,16 +83,17 @@ def download_snap_timeline():
 
 
     #save to draft
+    conn = engine.connect()
     for line in selected:
         id, pic, author, text = line
         try:
-            store.execute('insert into draft (sid, pic, author, text, create_time) \
+            conn.execute('insert into draft (sid, pic, author, text, create_time) \
               values(%s,"%s",%s,"%s", now())' % line)
-            store.commit()
             #print '入库:', id, pic, author, text
         except:
             pass
             #print '重复入库:', id, pic, author, text
+    conn.close()
 
 if __name__ == '__main__':
     import datetime

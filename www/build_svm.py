@@ -1,24 +1,54 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import re
 import sys
+import random
+from collections import namedtuple
 from os.path import dirname, abspath
 HOME_PATH = dirname(abspath(__file__))
 sys.path.insert(0, HOME_PATH)
 
-import random
-from os.path import exists
-from sqlalchemy import create_engine
-from collections import namedtuple
-from top_frequent import get_top_list, url_re, seg
 from svm import (svm_problem, svm_parameter, svm_model, LINEAR)
+from libs.sqlstore import engine
+from libs.smallseg.smallseg import SEG
 
-top = get_top_list()
-words = [w for w, v in top]
+seg = SEG()
+url_re = re.compile(r'http://.*?')
+digit_re = re.compile(r'.?\d+.?\d*.?', re.DOTALL)
+
+ban_list = ['-', '的', '是', '@', '#', '/', '.', '_', '~', '+', 'T', '..', '##', '//', '~~', '...', 'weibo.com', '--', 't.cn', '街拍', '...-',
+           '没', '欧', '下', '[囧', '囧]', '里', '[太', '找', '基', '社', '来的', '具', ']~', '～～', 'by', '次', 't', '吧~', '啊', '&',
+           '中', '~[', '?', '】', '在', '【', '了', ']',
+            '就', '原', '这', '详情请', '从', '加', '熊猫', '网友', '月号', '博也', '``', 'h4MS2M', '被', ';', '#t.cn', '*', '陈皮', '1747534564', '@kiki', '王晓', '发表', '亚马逊', 'http', 'Http', '兰州', 'else.', '】长', ]
+
+
+def get_top_list(tweets=[]):
+    dicts={}
+    top = []
+
+    for t in tweets:
+        t = url_re.sub('', t)
+        w_list = seg.cut(t.strip())
+        w_list.reverse()
+        for w in w_list:
+            w = w.encode('utf-8')
+            if w in ban_list:
+                continue
+            if digit_re.match(w):
+                continue
+            dicts[w] = dicts.get(w,0) + 1
+
+    for key, value in dicts.items():
+        if len(key) and value > 1:
+            top.append((key, value))
+
+    top.sort(key=lambda x:x[1], reverse=True)
+    return top
+
 
 def get_training_data():
     Draft = namedtuple('Draft', 'id, sid, pic, snum, lnum, author, text, utime, ctime, status')
-    engine = create_engine('mysql://eye:sauron@localhost/exia')
     conn = engine.connect()
 
     rs = conn.execute('select * from sample where status=0 order by rand()')
@@ -27,10 +57,38 @@ def get_training_data():
     rs = conn.execute('select * from entry order by rand()')
     snap_tweets = map(Draft._make, rs)
 
-    conn.close()
 
     tweets = trash_tweets + snap_tweets
     random.shuffle(tweets, random.random)
+
+    top = get_top_list(tweets=(t.text for t in tweets))
+    words = [w for w, v in top]
+
+    conn.execute('delete from features')
+    for w in words:
+        try:
+            conn.execute('insert into features (word) values("%s")' % w)
+        except:
+            import traceback; traceback.print_exc()
+            continue
+    conn.close()
+
+    with open('feature_words.txt', 'w') as f:
+        f.writelines((w + '\n' for w in words))
+        f.close()
+
+    def build_x(text):
+        text = url_re.sub('', text)
+        w_list = seg.cut(text.strip())
+        w_list.reverse()
+        w_list = [w.encode('utf-8') for w in w_list]
+        fs = []
+        for w in words:
+            if w in w_list:
+                fs.append(1)
+            else:
+                fs.append(0)
+        return fs
 
     fx = []
     fy = []
@@ -46,19 +104,6 @@ def get_training_data():
         item = (t.pic, str(t.sid))
         fd.append(item)
     return fy, fx, fd
-
-def build_x(text):
-    text = url_re.sub('', text)
-    w_list = seg.cut(text.strip())
-    w_list.reverse()
-    w_list = [w.encode('utf-8') for w in w_list]
-    features = []
-    for w in words:
-        if w in w_list:
-            features.append(1)
-        else:
-            features.append(0)
-    return features
 
 if __name__ == '__main__':
     fy, fx, fd = get_training_data()
@@ -93,8 +138,4 @@ if __name__ == '__main__':
 
     with open('trash.html', 'w') as f:
         f.write(html_trash)
-        f.close()
-
-    with open('feature_words.txt', 'w') as f:
-        f.writelines((w + '\n' for w in words))
         f.close()
