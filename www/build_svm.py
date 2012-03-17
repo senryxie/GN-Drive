@@ -14,6 +14,7 @@ from libs.sqlstore import engine
 from libs.smallseg.smallseg import SEG
 
 seg = SEG()
+
 url_re = re.compile(r'http://.*?')
 digit_re = re.compile(r'.?\d+.?\d*.?', re.DOTALL)
 

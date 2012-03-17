@@ -11,6 +11,15 @@ from svm import svm_model
 from libs.sqlstore import engine
 from build_svm import url_re, seg
 
+def _get_features():
+    conn = engine.connect()
+    rs = conn.execute('select word from features order by id')
+    conn.close()
+    return [r[0] for r in rs]
+
+words = _get_features()
+snap_model = svm_model(HOME_PATH + '/snap.svm')
+
 def predict(text, m):
     x = _build_x(text)
     label = m.predict(x)
@@ -18,12 +27,6 @@ def predict(text, m):
     if label == 1:
         return  True
     return False
-
-def _get_features():
-    conn = engine.connect()
-    rs = conn.execute('select word from features order by id')
-    conn.close()
-    return [r[0] for r in rs]
 
 def _build_x(text):
     text = url_re.sub('', text)
@@ -37,9 +40,6 @@ def _build_x(text):
         else:
             features.append(0)
     return features
-
-words = _get_features()
-snap_model = svm_model(HOME_PATH + '/snap.svm')
 
 if __name__ == '__main__':
     print '特征数量', len(words)
