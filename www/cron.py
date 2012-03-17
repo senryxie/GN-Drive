@@ -1,6 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+#singleton job
+import fcntl, sys
+pid_file = '/var/tmp/snap-cron.pid'
+fp = open(pid_file, 'w')
+try:
+    fcntl.lockf(fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
+except IOError:
+    # another instance is running
+    sys.exit(0)
+
 import sys
 import urllib2
 from os.path import dirname, abspath
