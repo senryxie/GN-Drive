@@ -9,6 +9,8 @@ from os.path import dirname, abspath
 HOME_PATH = dirname(abspath(__file__))
 sys.path.insert(0, HOME_PATH)
 
+import redis
+import simplejson
 from svm import (svm_problem, svm_parameter, svm_model, LINEAR)
 from libs.sqlstore import engine
 from libs.smallseg.smallseg import SEG
@@ -65,14 +67,8 @@ def get_training_data():
     top = get_top_list(tweets=(t.text for t in tweets))
     words = [w for w, v in top]
 
-    conn.execute('delete from features')
-    for w in words:
-        try:
-            conn.execute('insert into features (word) values("%s")' % w)
-        except:
-            import traceback; traceback.print_exc()
-            continue
-    conn.close()
+    db = redis.StrictRedis()
+    db.set('features', simplejson.dumps(words))
 
     with open('feature_words.txt', 'w') as f:
         f.writelines((w + '\n' for w in words))

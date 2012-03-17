@@ -7,15 +7,15 @@ from os.path import dirname, abspath
 HOME_PATH = dirname(abspath(__file__))
 sys.path.insert(0, HOME_PATH)
 
+import redis
+import simplejson
 from svm import svm_model
-from libs.sqlstore import engine
 from build_svm import url_re, seg
 
 def _get_features():
-    conn = engine.connect()
-    rs = conn.execute('select word from features order by id')
-    conn.close()
-    return [r[0] for r in rs]
+    db = redis.StrictRedis()
+    ws = simplejson.loads(db.get('features') or '[]')
+    return [w.encode('utf-8', 'ignore') for w in ws]
 
 words = _get_features()
 snap_model = svm_model(HOME_PATH + '/snap.svm')
@@ -43,5 +43,9 @@ def _build_x(text):
 
 if __name__ == '__main__':
     print '特征数量', len(words)
+    '''
+    for w in words:
+        print w, type(w)
+    '''
     print 'predict "#韩国街拍#裤子的颜色很心水": ', predict('#韩国街拍#裤子的颜色很心水', snap_model)
     print 'predict "淘宝皇冠": ', predict('淘宝皇冠', snap_model)
