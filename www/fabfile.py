@@ -1,5 +1,4 @@
-from time import sleep
-from fabric.api import sudo, cd, env, run, settings
+from fabric.api import sudo, cd, env, run, get
 
 env.hosts=['ofshellohicy@gundam00']
 
@@ -21,3 +20,9 @@ def update_drive():
 def see_letter():
     with cd('/home/nginx/'):
         run('cat dead.letter')
+
+def get_sample():
+    with cd('/home/nginx/GN-Drive'):
+        run('python build_svm.py')
+        get('sample.dat')
+

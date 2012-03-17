@@ -43,7 +43,7 @@ def get_top_list(tweets=[]):
             dicts[w] = dicts.get(w,0) + 1
 
     for key, value in dicts.items():
-        if len(key) and value > 1:
+        if len(key) and value > 2:
             top.append((key, value))
 
     top.sort(key=lambda x:x[1], reverse=True)
