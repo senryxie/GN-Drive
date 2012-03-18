@@ -4,12 +4,15 @@ from flask import Flask, g, request, render_template, jsonify, session, redirect
 
 app = Flask(__name__)
 app.secret_key = 'ssdofiuwexcvsfsjdlgkfjsdfu'
+
+import json
+import redis
+import requests
 from user import User
 from collections import namedtuple
-import requests
-import json
 
 Draft = namedtuple('Draft', 'id, sid, pic, snum, lnum, author, text, utime, ctime, status')
+db = redis.StrictRedis()
 
 @app.before_request
 def before_request():
@@ -53,6 +56,7 @@ def index():
 
 @app.route('/draft')
 def draft():
+    lastrun = db.get('lastrun')
     if 'username' not in session and request.path != '/login':
         return redirect('/login')
 
