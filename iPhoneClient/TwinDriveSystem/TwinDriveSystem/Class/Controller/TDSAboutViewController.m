@@ -25,6 +25,13 @@
 #pragma mark - debug
 - (void)testAction:(id)sender{
     [TDSDataPersistenceAssistant clearAllData];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil
+                                                        message:@"清除缓存成功"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"确定"
+                                              otherButtonTitles:nil];
+    [alertView show];
+    [alertView release];
 }
 
 - (void)viewDidLoad

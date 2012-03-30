@@ -56,7 +56,7 @@
         // 初始化载入Loading图
         [[self photoSource] addLoadingPhotosOfCount:ONCE_REQUEST_COUNT_LIMIT];
         
-        _startPage = 0;
+        
         
         NSIndexPath *startIndexPath = [TDSDataPersistenceAssistant getReadedPhotoIndexPath];
         _recordPageSection = startIndexPath.section;
@@ -65,6 +65,8 @@
 
         _requestPage = _recordPageSection;
         _pageIndex = _recordPageIndex;        
+        
+        _startPage = _requestPage;
         
         _firstLoad = YES;
     }
@@ -82,11 +84,11 @@
     [super loadView];
     // 启动获得初始页面
     // TODO:获取缓存页数，下面每次都请求了个最新页数
-//    if (_recordPageSection>0 || _recordPageIndex>0) {
-//        [self photosLoadMore:YES inPage:_recordPageSection];
-//    }else {
+    if (_recordPageSection>0 || _recordPageIndex>0) {
+        [self photosLoadMore:YES inPage:_recordPageSection];
+    }else {
         [self photosLoadMore:NO inPage:0];
-//    }
+    }
 }
 
 

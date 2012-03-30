@@ -13,7 +13,9 @@
 @implementation TDSDataPersistenceAssistant
 
 + (void)clearAllData {
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kDataVersion];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kCollectPhotos];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kReadedPhotoIndexPath];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 + (void)saveCollectPhotos:(NSArray *)array{
