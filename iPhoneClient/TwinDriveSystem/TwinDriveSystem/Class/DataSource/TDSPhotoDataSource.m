@@ -102,5 +102,12 @@
     }
     _numberOfPhotos = [_photos count];
 }
-
+- (void)removePhotos:(NSArray *)photos inRange:(NSRange)range{
+    // TODO:这里可能有bug，脑子晕了，回头再调试
+    if (!_photos || [_photos count] <= range.location) {
+        return;
+    }
+    [_photos removeObjectsInRange:range];
+    _numberOfPhotos = [_photos count];
+}
 @end

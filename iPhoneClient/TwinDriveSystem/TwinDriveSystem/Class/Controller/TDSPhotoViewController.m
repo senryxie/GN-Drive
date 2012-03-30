@@ -57,15 +57,24 @@
         [[self photoSource] addLoadingPhotosOfCount:ONCE_REQUEST_COUNT_LIMIT];
         
         _startPage = 0;
-        _startIndex = 0;
+        
+        NSIndexPath *startIndexPath = [TDSDataPersistenceAssistant getReadedPhotoIndexPath];
+        _recordPageSection = startIndexPath.section;
+        _recordPageIndex = startIndexPath.row;
+        NSLog(@" recordPage<%d,%d>",_recordPageSection,_recordPageIndex);
+
+        _requestPage = _recordPageSection;
+        _pageIndex = _recordPageIndex;        
+        
+        _firstLoad = YES;
     }
     return self;
 }
 - (TDSPhotoDataSource *)photoSource{
     return (TDSPhotoDataSource*)_photoSource;
 }
-#pragma mark - View lifecycle
 
+#pragma mark - View lifecycle
 
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 - (void)loadView
@@ -73,7 +82,11 @@
     [super loadView];
     // 启动获得初始页面
     // TODO:获取缓存页数，下面每次都请求了个最新页数
-    [self photosLoadMore:NO inPage:0];
+//    if (_recordPageSection>0 || _recordPageIndex>0) {
+//        [self photosLoadMore:YES inPage:_recordPageSection];
+//    }else {
+        [self photosLoadMore:NO inPage:0];
+//    }
 }
 
 
@@ -163,8 +176,17 @@
 
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated {
     [super moveToPhotoAtIndex:index animated:animated];
+    
+
+    // TODO:<前提有网>
+    BOOL haveNet = YES;
+    if (!haveNet) {
+        // 卖萌的时刻
+        return;
+    }
     NSLog(@" ##all:%d   %d",[self.photoViews count],[self.photoSource numberOfPhotos]);
 	NSLog(@" @@@ move to :%d",index);
+    
     
     // 超过一天能看的总数了
     if([self.photoViews count] >= MAC_COUNT_LIMIT){
@@ -178,7 +200,7 @@
     if (index == 0 && _requestPage-_requestPrePageCount > 0) 
     {
         NSLog(@" ### now index = 0");
-        _requestPrePageCount += 1;
+        ++_requestPrePageCount;
         [[self photoSource] addLoadingPhotosOfCount:ONCE_REQUEST_COUNT_LIMIT atIndex:0];
         NSRange range;
         range.location = 0;
@@ -187,8 +209,13 @@
             [self.photoViews insertObject:[NSNull null] atIndex:0];
         }
         [self setupScrollViewContentSize];
-        [self moveToPhotoAtIndex:(index+ONCE_REQUEST_COUNT_LIMIT) animated:NO];
-        
+        // 第一次载入，移动个
+        if (_firstLoad && [self.photoViews count] >= _recordPageIndex+ONCE_REQUEST_COUNT_LIMIT) {
+            _firstLoad = NO;
+            [self moveToPhotoAtIndex:_recordPageIndex+ONCE_REQUEST_COUNT_LIMIT animated:NO];
+        }else {
+            [self moveToPhotoAtIndex:ONCE_REQUEST_COUNT_LIMIT animated:NO];
+        }
         // send request
         [self photosLoadMore:YES inPage:(_requestPage-_requestPrePageCount)];
     }
@@ -208,6 +235,16 @@
             [self photosLoadMore:YES inPage:(++_requestPage)];
         }
 	} 
+
+    _recordPageSection = (NSInteger)ceilf(index/ONCE_REQUEST_COUNT_LIMIT)+_startPage-_requestPrePageCount;
+    _recordPageIndex = index%ONCE_REQUEST_COUNT_LIMIT ;
+    
+    NSLog(@" @@@ %.0f+%d == %d[now move index]",ceilf(index/ONCE_REQUEST_COUNT_LIMIT)*ONCE_REQUEST_COUNT_LIMIT,_recordPageIndex,index);        
+    NSLog(@" record<%d,%d>,requestPage:%d,requestPreCount:%d",_recordPageSection,_recordPageIndex,_requestPage,_requestPrePageCount);    
+    
+    // TODO:每次都存了，dirty code,回头想想怎么寸
+    [TDSDataPersistenceAssistant saveReadedPhotoIndexPath:[NSIndexPath indexPathForRow:_recordPageIndex inSection:_recordPageSection]];
+
 }
 
 #pragma mark - Private Function
@@ -300,6 +337,13 @@
             }
         }else {
             // TODO:没有更多照片了
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"返回false"
+                                                                message:[NSString stringWithFormat:@"没有了@%d",_requestPage]
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"确定"
+                                                      otherButtonTitles: nil];
+            [alertView show];
+            [alertView release];
         }
         NSLog(@"###### [%d]\n%@",more,pics);
     }

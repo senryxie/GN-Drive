@@ -41,7 +41,6 @@
         
     // http请求超时时间
 	NSTimeInterval _httpTimeout;
-    
 }
 
 // singleton
@@ -78,6 +77,7 @@
 // Client Info.
 @property (nonatomic, readonly) NSString *clientInfoJSONString;
 
+// Request Timeout.
 @property (assign) NSTimeInterval httpTimeout;
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "TDSAboutViewController.h"
+#define CONTACT_INFO @"icephone@gmail.com"
 
 @interface TDSAboutViewController ()
 - (void)setDataSource;
@@ -20,6 +21,12 @@
     self.tableView = nil;
     [super dealloc];
 }
+
+#pragma mark - debug
+- (void)testAction:(id)sender{
+    [TDSDataPersistenceAssistant clearAllData];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -34,6 +41,17 @@
     _tableView.dataSource = self;
     
     [self.view addSubview:_tableView];
+    
+    /* for debug
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.frame = CGRectMake(50, 50, 50, 50);
+    button.center = self.view.center;
+    button.backgroundColor = [UIColor redColor];
+    [button addTarget:self 
+               action:@selector(testAction:) 
+     forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button];
+     //*/
 }
 
 - (void)viewDidUnload
@@ -49,11 +67,23 @@
 }
 #pragma mark - Pirvate
 - (void)setDataSource{
-    _aboutArray = [[NSArray alloc] initWithObjects:@"版本",@"意见反馈",@"联系方式", nil];
+    // dirty code
+    // TODO:为了快点看到效果
+    _aboutArray = [[NSArray alloc] initWithObjects:AboutInfo_Version,AboutInfo_Feedback,AboutInfo_ContactInfo, nil];
 }
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *message = [_aboutArray objectAtIndex:indexPath.row];
+    // dirty code
+    
+    NSString *cellInfo = [_aboutArray objectAtIndex:indexPath.row];
+    NSMutableString *message= [NSMutableString stringWithString:cellInfo];
+    if ([cellInfo isEqualToString:AboutInfo_Version]) {
+        [message appendFormat:@":%@",[TDSConfig getInstance].version];
+    }else if([cellInfo isEqualToString:AboutInfo_Feedback]) {
+        [message appendString:@":魂淡"];        
+    }else if([cellInfo isEqualToString:AboutInfo_ContactInfo]) {
+        [message appendFormat:@":%@",CONTACT_INFO];        
+    }
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil
                                                         message:message
                                                        delegate:nil

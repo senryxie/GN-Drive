@@ -30,6 +30,6 @@
 
 - (void)setPhotos:(NSArray *)photos inRange:(NSRange)range;
 
-
+- (void)removePhotos:(NSArray *)photos inRange:(NSRange)range;
 @end
 
