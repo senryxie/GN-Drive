@@ -12,8 +12,8 @@
 @interface TDSPhotoViewController : EGOPhotoViewController <TDSNetControlCenterDelegate>{
     TDSNetControlCenter *_photoViewNetControlCenter;
     
-    NSInteger _requestPage; // 请求页面
-    NSInteger _requestPrePageCount; // 向前请求page计数
+    NSInteger _requestNextPageCount; // 向后请求page计数    
+    NSInteger _requestPrePageCount;  // 向前请求page计数
     
     NSInteger _startPage;   // 开始页面，配合无线前后翻滚逻辑
 

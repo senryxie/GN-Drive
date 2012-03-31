@@ -9,11 +9,25 @@
 #import "TDSRequestObject.h"
 
 @implementation TDSRequestObject
-@synthesize URL;
+@synthesize URL = _URL;
 @synthesize parametersDic = _parametersDic;
+@synthesize userInfo = _userInfo;
+
+- (void)dealloc{
+    self.URL = nil;
+    self.parametersDic = nil;
+    self.userInfo = nil;
+    [super dealloc];
+}
 
 + (TDSRequestObject*)request{
     TDSRequestObject *requestObject = [[TDSRequestObject alloc] init];
+    return [requestObject autorelease];
+}
++ (TDSRequestObject*)requestWithURL:(NSURL*)URL andUserInfo:(NSDictionary*)userInfo{
+    TDSRequestObject *requestObject = [[TDSRequestObject alloc] init];
+    requestObject.URL = URL;
+    requestObject.userInfo = userInfo;
     return [requestObject autorelease];
 }
 + (id)requestObjectForQuery:(NSMutableDictionary*)query{
@@ -23,18 +37,19 @@
 }
 
 - (NSURL*)URL{
-    TDSConfig *config = [TDSConfig getInstance];
-    NSMutableString *urlString = [NSMutableString stringWithString:config.mApiUrl];
-    if ([self.parametersDic allKeys]>0) {
-        [urlString appendString:@"?"];
-        for (id key in self.parametersDic.allKeys) {
-            id value = [self.parametersDic objectForKey:key];
-            [urlString appendFormat:@"%@=%@",key,value];
+    if (_URL == nil) {
+        TDSConfig *config = [TDSConfig getInstance];
+        NSMutableString *urlString = [NSMutableString stringWithString:config.mApiUrl];
+        if ([self.parametersDic allKeys]>0) {
+            [urlString appendString:@"?"];
+            for (id key in self.parametersDic.allKeys) {
+                id value = [self.parametersDic objectForKey:key];
+                [urlString appendFormat:@"%@=%@",key,value];
+            }
         }
+        _URL = [NSURL URLWithString:urlString];       
     }
-    TDSLOG_debug(@" ##requestURL:%@",urlString);
-    
-    return [NSURL URLWithString:urlString];
-
+    TDSLOG_debug(@" ##requestURL:%@",_URL);    
+    return _URL;
 }
 @end

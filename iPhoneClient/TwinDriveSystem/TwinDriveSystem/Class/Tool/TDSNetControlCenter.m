@@ -63,6 +63,7 @@
     }else if ([reqObj isKindOfClass:[TDSRequestObject class]]){
         TDSRequestObject *requestObject = (TDSRequestObject*)reqObj;
         asiRequest = [ASIHTTPRequest requestWithURL:requestObject.URL];
+        asiRequest.userInfo = requestObject.userInfo;
     }
     if (asiRequest != nil) {
         [asiRequest setDelegate:self];
@@ -85,7 +86,7 @@
 }
 
 - (void)requestDidStartSelector:(ASIHTTPRequest *)request{
-    TDSLOG_info(@" requestDidStartSelector");
+    TDSLOG_info(@" requestDidStartSelector withUserInfo:%@",request.userInfo);
     // 回调
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(tdsNetControlCenter:requestDidFinishedLoad:)]) {
         [self.delegate tdsNetControlCenter:self requestDidStartRequest:nil];
@@ -93,7 +94,8 @@
 }
 
 - (void)requestDidFinishSelector:(ASIHTTPRequest *)request{
-    TDSLOG_info(@" requestDidFinishSelector");
+    TDSLOG_info(@" requestDidFinishSelector withUserInfo:%@",request.userInfo);
+    
     TDSResponseObject *responseObject = [TDSResponseObject response];
     // json 格式
     responseObject.rootObject = [request.responseString JSONValue];
@@ -103,10 +105,10 @@
     }
 }
 - (void)requestDidFailSelector:(ASIHTTPRequest *)request{
-    TDSLOG_info(@" requestDidFailSelector");    
-    TDSLOG_error(@"error:%@",request.responseString);
+    TDSLOG_info(@" requestDidFailSelector withUserInfo:%@",request.userInfo);
     TDSResponseObject *responseObject = [TDSResponseObject response];
     responseObject.error = request.error;
+    TDSLOG_error(@"error:%@ === 【%@】",request.responseString,responseObject.error);    
     // 回调
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(tdsNetControlCenter:requestDidFailedLoad:)]) {
         [self.delegate tdsNetControlCenter:self requestDidFailedLoad:responseObject];
