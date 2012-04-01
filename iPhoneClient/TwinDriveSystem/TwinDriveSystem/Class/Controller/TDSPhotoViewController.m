@@ -69,7 +69,7 @@
         _recordPageIndex = startIndexPath.row;
         NSLog(@" recordPage<%d,%d>",_recordPageSection,_recordPageIndex);
 
-        _pageIndex = _recordPageIndex;        
+        _pageIndex = _recordPageIndex; // 重置了下初始index,EGO自带处理，真好
         
         _startPage = _recordPageSection;
         
@@ -217,13 +217,7 @@
             [self.photoViews insertObject:[NSNull null] atIndex:0];
         }
         [self setupScrollViewContentSize];
-        // 第一次载入，移动个
-        if (_firstLoad && [self.photoViews count] >= _recordPageIndex+ONCE_REQUEST_COUNT_LIMIT) {
-            _firstLoad = NO;
-            [self moveToPhotoAtIndex:_recordPageIndex+ONCE_REQUEST_COUNT_LIMIT animated:NO];
-        }else {
-            [self moveToPhotoAtIndex:ONCE_REQUEST_COUNT_LIMIT animated:NO];
-        }
+        [self moveToPhotoAtIndex:ONCE_REQUEST_COUNT_LIMIT animated:NO];
         // send request
         [self photosLoadMore:YES inPage:(_startPage+_requestNextPageCount-_requestPrePageCount)];
     }
