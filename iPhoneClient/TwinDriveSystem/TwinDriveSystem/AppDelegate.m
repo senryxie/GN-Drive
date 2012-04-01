@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 
 #import "GNViewController.h"
+#import "TDSLoggerView.h"
 
 @implementation AppDelegate
 
@@ -29,6 +30,7 @@
     self.viewController = [[[GNViewController alloc] init] autorelease];
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
+    [TDSLoggerView getInstance];
     return YES;
 }
 

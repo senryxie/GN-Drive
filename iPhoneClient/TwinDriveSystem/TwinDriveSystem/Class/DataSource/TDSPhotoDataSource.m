@@ -110,4 +110,10 @@
     [_photos removeObjectsInRange:range];
     _numberOfPhotos = [_photos count];
 }
+- (id)objectAtIndex:(int)index{
+    if (!_photos || [_photos count] < index+1) {
+        return nil;
+    }
+    return [_photos objectAtIndex:index];
+}
 @end

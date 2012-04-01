@@ -10,7 +10,6 @@
 #import "TDSPhotoView.h"
 #import "TDSPhotoDataSource.h"
 #import "TDSRequestObject.h"
-#import "TDSResponseObject.h"
 #import "TDSPhotoViewItem.h"
 
 #define ONCE_REQUEST_COUNT_LIMIT 5
@@ -32,6 +31,8 @@
     self.photoViewNetControlCenter = nil;
     [super dealloc];
 }
+
+#pragma mark - debug
 - (void)didReceiveMemoryWarning
 {
     // Releases the view if it doesn't have a superview.
@@ -192,10 +193,8 @@
         // 卖萌的时刻
         return;
     }
-    NSLog(@" ##all:%d   %d",[self.photoViews count],[self.photoSource numberOfPhotos]);
-	NSLog(@" @@@ move to :%d",index);
     
-    
+    TDSLOG_info(@"allCount:%d:%d    moveIndex:%d  ",[self.photoViews count],[self.photoSource numberOfPhotos],index);
     // 超过一天能看的总数了
     if([self.photoViews count] >= MAC_COUNT_LIMIT){
         NSLog(@" mo~ ");
@@ -208,6 +207,7 @@
     if (index == 0 && _startPage+_requestNextPageCount-_requestPrePageCount > 0) 
     {
         NSLog(@" ### now index = 0");
+        TDSLOG_info(@"previous===================================");
         ++_requestPrePageCount;
         [[self photoSource] addLoadingPhotosOfCount:ONCE_REQUEST_COUNT_LIMIT atIndex:0];
         NSRange range;
@@ -220,6 +220,7 @@
         [self moveToPhotoAtIndex:ONCE_REQUEST_COUNT_LIMIT animated:NO];
         // send request
         [self photosLoadMore:YES inPage:(_startPage+_requestNextPageCount-_requestPrePageCount)];
+        return;
     }
     // 无限后滚逻辑
     // 在最后2个内的时候重新请求
@@ -227,6 +228,7 @@
         // TODO: 请求新数据
         // 《记得加锁哟，亲》添加测试数据
         @synchronized(self){
+            TDSLOG_info(@"next===================================");
             // load photoSource first
             [[self photoSource] addLoadingPhotosOfCount:ONCE_REQUEST_COUNT_LIMIT];
             for (unsigned i = 0; i < ONCE_REQUEST_COUNT_LIMIT; i++) {
@@ -242,8 +244,8 @@
     _recordPageSection = (NSInteger)ceilf(index/ONCE_REQUEST_COUNT_LIMIT)+_startPage-_requestPrePageCount;
     _recordPageIndex = index%ONCE_REQUEST_COUNT_LIMIT ;
     
-    NSLog(@" @@@ %.0f+%d == %d[now move index]",ceilf(index/ONCE_REQUEST_COUNT_LIMIT)*ONCE_REQUEST_COUNT_LIMIT,_recordPageIndex,index);        
-    NSLog(@" record<%d,%d>,requestPage:%d,requestPreCount:%d",_recordPageSection,_recordPageIndex,_startPage+_requestNextPageCount,_requestPrePageCount);    
+    TDSLOG_info(@"@@@ %.0f+%d == %d[now move index]",ceilf(index/ONCE_REQUEST_COUNT_LIMIT)*ONCE_REQUEST_COUNT_LIMIT,_recordPageIndex,index);        
+    TDSLOG_info(@"record<%d,%d>,startPage:%d,next:%d,pre:%d",_recordPageSection,_recordPageIndex,_startPage,_requestNextPageCount,_requestPrePageCount);
     
 }
 #pragma mark - Notification Action
@@ -268,6 +270,7 @@
     NSDictionary *userInfo = nil;
     NSMutableString *requestString = [NSMutableString stringWithString:config.mApiUrl];
     if (more) {
+        TDSLOG_info(@"---->send request with page:%d",page);
         [requestString appendFormat:@"/v/%@/snaps/%d/",config.version,page];
         userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:page] forKey:@"page"];        
     }else{
@@ -278,6 +281,7 @@
     TDSRequestObject *requestObject = [TDSRequestObject requestWithURL:requestURL 
                                                            andUserInfo:userInfo];
     [self.photoViewNetControlCenter sendRequestWithObject:requestObject];
+    
 }
 
 - (void)updateByResponseDic:(NSMutableDictionary *)responseDic{
@@ -306,7 +310,7 @@
         NSNumber *pId = [responseDic objectForKey:@"id"];
         NSString *caption = [responseDic objectForKey:@"text"];
         NSString *url = [responseDic objectForKey:@"url"];
-        NSLog(@"######\n get single photo[%@]:%@\n%@",pId,url,caption);                        
+        NSLog(@"###### get single photo[%@]:%@\n%@",pId,url,caption);                        
     }
     // 多张照片
     else if([actionString isEqualToString:ResponseAction_MultiPhoto]){
@@ -363,9 +367,10 @@
 }
 - (void)tdsNetControlCenter:(TDSNetControlCenter*)netControlCenter requestDidFinishedLoad:(id)response{
     TDSLOG_debug(@"result :%@",response );
-    if ([response isKindOfClass:[TDSResponseObject class]]) {
-        TDSResponseObject *responseObject = (TDSResponseObject *)response;
+    if ([response isKindOfClass:[TDSRequestObject class]]) {
+        TDSRequestObject *responseObject = (TDSRequestObject *)response;
         NSLog(@" %@",responseObject.rootObject);
+        TDSLOG_info(@"---->get response with page:%@",[responseObject.userInfo objectForKey:@"page"]);
         [self updateByResponseDic:(NSMutableDictionary*)responseObject.rootObject];
     }
 }

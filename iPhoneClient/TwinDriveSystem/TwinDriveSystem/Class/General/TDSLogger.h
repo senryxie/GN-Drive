@@ -18,7 +18,7 @@
  */
 
 // NSLog 也定义了去！！
-#define NSLog TDSLOG_info
+#define NSLog TDSLOG_debug
 
 @interface TDSLogger : NSObject
 

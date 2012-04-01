@@ -12,14 +12,31 @@
 @synthesize URL = _URL;
 @synthesize parametersDic = _parametersDic;
 @synthesize userInfo = _userInfo;
+@synthesize error = _error;
+@synthesize rootObject = _rootObject;
+@synthesize responseString = _responseString;
 
 - (void)dealloc{
     self.URL = nil;
     self.parametersDic = nil;
     self.userInfo = nil;
+    self.error = nil;
+    self.rootObject = nil;
+    self.responseString = nil;
     [super dealloc];
 }
-
+- (id)init{
+    self = [super init];
+    if (self) {
+        self.URL = nil;
+        self.parametersDic = nil;
+        self.userInfo = nil;
+        self.error = nil;
+        self.rootObject = nil;
+        self.responseString = nil;
+    }
+    return self;
+}
 + (TDSRequestObject*)request{
     TDSRequestObject *requestObject = [[TDSRequestObject alloc] init];
     return [requestObject autorelease];

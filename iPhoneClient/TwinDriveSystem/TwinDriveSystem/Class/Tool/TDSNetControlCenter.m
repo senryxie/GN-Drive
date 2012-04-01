@@ -8,7 +8,6 @@
 
 #import "TDSNetControlCenter.h"
 #import "ASINetworkQueue.h"
-#import "TDSResponseObject.h"
 #import "ASIFormDataRequest.h"
 #import "TDSRequestObject.h"
 #import "TDSPhotoViewItem.h"
@@ -49,7 +48,7 @@
 }
 
 - (void) sendRequestWithObject:(id)reqObj{
-    TDSLOG_info(@"sendRequestWithObject %@",reqObj);
+//    TDSLOG_info(@"sendRequestWithObject %@",reqObj);
     if (reqObj == nil) {
         return;
     }
@@ -86,7 +85,7 @@
 }
 
 - (void)requestDidStartSelector:(ASIHTTPRequest *)request{
-    TDSLOG_info(@" requestDidStartSelector withUserInfo:%@",request.userInfo);
+//    TDSLOG_info(@" requestDidStartSelector withUserInfo:%@",request.userInfo);
     // 回调
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(tdsNetControlCenter:requestDidFinishedLoad:)]) {
         [self.delegate tdsNetControlCenter:self requestDidStartRequest:nil];
@@ -94,9 +93,10 @@
 }
 
 - (void)requestDidFinishSelector:(ASIHTTPRequest *)request{
-    TDSLOG_info(@" requestDidFinishSelector withUserInfo:%@",request.userInfo);
+//    TDSLOG_info(@" requestDidFinishSelector withUserInfo:%@",request.userInfo);
     
-    TDSResponseObject *responseObject = [TDSResponseObject response];
+    TDSRequestObject *responseObject = [TDSRequestObject request];
+    responseObject.userInfo = request.userInfo;
     // json 格式
     responseObject.rootObject = [request.responseString JSONValue];
     // 回调
@@ -105,8 +105,8 @@
     }
 }
 - (void)requestDidFailSelector:(ASIHTTPRequest *)request{
-    TDSLOG_info(@" requestDidFailSelector withUserInfo:%@",request.userInfo);
-    TDSResponseObject *responseObject = [TDSResponseObject response];
+//    TDSLOG_info(@" requestDidFailSelector withUserInfo:%@",request.userInfo);
+    TDSRequestObject *responseObject = [TDSRequestObject request];
     responseObject.error = request.error;
     TDSLOG_error(@"error:%@ === 【%@】",request.responseString,responseObject.error);    
     // 回调

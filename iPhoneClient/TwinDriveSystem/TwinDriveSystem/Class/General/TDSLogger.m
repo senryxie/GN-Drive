@@ -7,6 +7,7 @@
 //
 
 #import "TDSLogger.h"
+#import "TDSLoggerView.h"
 
 @implementation TDSLogger
 
@@ -29,7 +30,11 @@
 	print = [[NSString alloc] initWithFormat:format arguments:ap];
 	
 	va_end(ap);
-
+    
+    if ([UIApplication sharedApplication].keyWindow != nil && [level isEqualToString:@"info:"]) {
+        [[TDSLoggerView getInstance] appendString:[NSString stringWithFormat:@"%@\n",print]];
+    }
+    
     NSDate *date = [NSDate date];
     NSString *logString = [NSString stringWithFormat:@"[%@]\r\n%@ ==> %@:%d %@:\n%@\n\n",date,level, [file lastPathComponent], lineNumber, function, print];
     const char *logInfo = [logString UTF8String];

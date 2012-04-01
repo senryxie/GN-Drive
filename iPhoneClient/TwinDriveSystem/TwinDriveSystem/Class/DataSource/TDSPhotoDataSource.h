@@ -31,5 +31,7 @@
 - (void)setPhotos:(NSArray *)photos inRange:(NSRange)range;
 
 - (void)removePhotos:(NSArray *)photos inRange:(NSRange)range;
+
+- (id)objectAtIndex:(int)index;
 @end
 
