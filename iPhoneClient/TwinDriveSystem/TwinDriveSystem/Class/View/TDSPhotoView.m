@@ -33,8 +33,9 @@
     if (self = [super init]) {
         
 		_URL=[[NSURL URLWithString:item.photoUrl] retain];
-		_caption=[item.caption retain];
-		
+        // TODO:暂时改成pid显示，用作调试
+//		_caption=[item.caption retain];
+		_caption=[[item.pid stringValue] retain];
 	}
 	
 	return self;

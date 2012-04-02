@@ -8,7 +8,6 @@
 
 #import "TDSNetControlCenter.h"
 #import "ASINetworkQueue.h"
-#import "TDSResponseObject.h"
 #import "ASIFormDataRequest.h"
 #import "TDSRequestObject.h"
 #import "TDSPhotoViewItem.h"
@@ -49,7 +48,7 @@
 }
 
 - (void) sendRequestWithObject:(id)reqObj{
-    TDSLOG_info(@"sendRequestWithObject %@",reqObj);
+//    TDSLOG_info(@"sendRequestWithObject %@",reqObj);
     if (reqObj == nil) {
         return;
     }
@@ -63,6 +62,7 @@
     }else if ([reqObj isKindOfClass:[TDSRequestObject class]]){
         TDSRequestObject *requestObject = (TDSRequestObject*)reqObj;
         asiRequest = [ASIHTTPRequest requestWithURL:requestObject.URL];
+        asiRequest.userInfo = requestObject.userInfo;
     }
     if (asiRequest != nil) {
         [asiRequest setDelegate:self];
@@ -85,7 +85,7 @@
 }
 
 - (void)requestDidStartSelector:(ASIHTTPRequest *)request{
-    TDSLOG_info(@" requestDidStartSelector");
+//    TDSLOG_info(@" requestDidStartSelector withUserInfo:%@",request.userInfo);
     // 回调
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(tdsNetControlCenter:requestDidFinishedLoad:)]) {
         [self.delegate tdsNetControlCenter:self requestDidStartRequest:nil];
@@ -93,8 +93,10 @@
 }
 
 - (void)requestDidFinishSelector:(ASIHTTPRequest *)request{
-    TDSLOG_info(@" requestDidFinishSelector");
-    TDSResponseObject *responseObject = [TDSResponseObject response];
+//    TDSLOG_info(@" requestDidFinishSelector withUserInfo:%@",request.userInfo);
+    
+    TDSRequestObject *responseObject = [TDSRequestObject request];
+    responseObject.userInfo = request.userInfo;
     // json 格式
     responseObject.rootObject = [request.responseString JSONValue];
     // 回调
@@ -103,10 +105,10 @@
     }
 }
 - (void)requestDidFailSelector:(ASIHTTPRequest *)request{
-    TDSLOG_info(@" requestDidFailSelector");    
-    TDSLOG_error(@"error:%@",request.responseString);
-    TDSResponseObject *responseObject = [TDSResponseObject response];
+//    TDSLOG_info(@" requestDidFailSelector withUserInfo:%@",request.userInfo);
+    TDSRequestObject *responseObject = [TDSRequestObject request];
     responseObject.error = request.error;
+    TDSLOG_error(@"error:%@ === 【%@】",request.responseString,responseObject.error);    
     // 回调
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(tdsNetControlCenter:requestDidFailedLoad:)]) {
         [self.delegate tdsNetControlCenter:self requestDidFailedLoad:responseObject];

@@ -10,7 +10,6 @@
 
 @class ASINetworkQueue;
 @class TDSNetControlCenter;
-@class TDSResponseObject;
 
 @protocol TDSNetControlCenterDelegate <NSObject>
 - (void)tdsNetControlCenter:(TDSNetControlCenter*)netControlCenter requestDidStartRequest:(id)response;
