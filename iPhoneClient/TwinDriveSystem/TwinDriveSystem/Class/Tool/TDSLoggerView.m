@@ -99,7 +99,9 @@ static TDSLoggerView *_instance = nil;
         _containerView = [[UIView alloc] initWithFrame:frame];
         _containerView.backgroundColor = [UIColor clearColor];
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
-        [window addSubview:_containerView];
+        if (window!= nil && ![window.subviews containsObject:_containerView]) {
+            [window addSubview:_containerView];
+        }
         
         CGRect textFrame = CGRectZero;
         textFrame.size = _containerView.frame.size;

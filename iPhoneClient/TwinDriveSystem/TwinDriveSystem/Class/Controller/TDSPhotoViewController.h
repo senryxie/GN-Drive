@@ -17,10 +17,12 @@
     
     NSInteger _startPage;   // 开始页面，配合无线前后翻滚逻辑
 
-    // TODO:持久化数据
-    // 配合显示历史页面
+    // 记录历史页面
     NSInteger _recordPageSection; // (nowIndex/5)+requestPage-requestPrePageCount
     NSInteger _recordPageIndex;   // (nowIndex%5)
+    
+    // 收藏建
+    UIButton *_collectButton;
     
     BOOL _firstLoad;
     
