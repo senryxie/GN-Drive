@@ -25,13 +25,11 @@
 #pragma mark - debug
 - (void)testAction:(id)sender{
     [TDSDataPersistenceAssistant clearAllData];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil
-                                                        message:@"清除缓存成功"
-                                                       delegate:nil
-                                              cancelButtonTitle:@"确定"
-                                              otherButtonTitles:nil];
-    [alertView show];
-    [alertView release];
+    [[TDSHudView getInstance] showHudOnView:self.view
+                                    caption:@"     暂时清除缓存成功     "
+                                      image:[UIImage imageNamed:@"hudDefault.png"] 
+                                  acitivity:NO
+                               autoHideTime:1.0f];
 }
 
 - (void)viewDidLoad
@@ -81,24 +79,26 @@
 }
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    // dirty code
     
+    // dirty code
     NSString *cellInfo = [_aboutArray objectAtIndex:indexPath.row];
-    NSMutableString *message= [NSMutableString stringWithString:cellInfo];
+    NSMutableString *message= [NSMutableString stringWithFormat:@"%@\n",cellInfo];
     if ([cellInfo isEqualToString:AboutInfo_Version]) {
-        [message appendFormat:@":%@",[TDSConfig getInstance].version];
+        [message appendFormat:@"%@",[TDSConfig getInstance].version];
     }else if([cellInfo isEqualToString:AboutInfo_Feedback]) {
-        [message appendString:@":魂淡"];        
+        [message appendString:@"魂淡"];   
+        UIViewController *webViewController = [[UIViewController alloc] init];
+        webViewController.navigationItem.title = cellInfo;
+        [self.navigationController pushViewController:webViewController animated:YES];
+        [webViewController release];
     }else if([cellInfo isEqualToString:AboutInfo_ContactInfo]) {
-        [message appendFormat:@":%@",CONTACT_INFO];        
+        [message appendFormat:@"%@",CONTACT_INFO];        
     }
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil
-                                                        message:message
-                                                       delegate:nil
-                                              cancelButtonTitle:@"确定"
-                                              otherButtonTitles:nil];
-    [alertView show];
-    [alertView release];
+    [[TDSHudView getInstance] showHudOnView:self.view
+                                    caption:message
+                                      image:nil
+                                  acitivity:NO
+                               autoHideTime:1.0f];
 }
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{

@@ -23,6 +23,8 @@
     NSInteger _recordPageIndex;   // (nowIndex%5)
     
     BOOL _firstLoad;
+    
+    BOOL _noMore;
 }
 @property (nonatomic, retain)TDSNetControlCenter *photoViewNetControlCenter;
 - (TDSPhotoDataSource *)photoSource; // 这尼玛为啥会是readOnly，暴露出来
