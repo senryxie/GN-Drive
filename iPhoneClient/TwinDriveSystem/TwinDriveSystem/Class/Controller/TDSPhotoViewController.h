@@ -24,7 +24,13 @@
     
     BOOL _firstLoad;
     
-    BOOL _noMore;
+    BOOL _isExtremity;
+    
+    BOOL _isError; // 可能需要一个枚举
+    
+    BOOL _isNoNext;
+    
+    BOOL _isNoPrevious;    
 }
 @property (nonatomic, retain)TDSNetControlCenter *photoViewNetControlCenter;
 - (TDSPhotoDataSource *)photoSource; // 这尼玛为啥会是readOnly，暴露出来

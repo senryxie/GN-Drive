@@ -13,11 +13,16 @@
 #import "TDSPhotoViewItem.h"
 
 #define ONCE_REQUEST_COUNT_LIMIT 5
-#define MAC_COUNT_LIMIT 20
+#define MAC_COUNT_LIMIT 200
 
 @interface TDSPhotoViewController(Private)
 - (void)photosLoadMore:(BOOL)more inPage:(NSInteger)page;
 - (void)updatePhotosByResponseDic:(NSDictionary *)responseDic;
+
+- (void)showError:(BOOL)value;
+- (void)showExtremity:(BOOL)value;
+- (void)showNoPrevious:(BOOL)value;
+- (void)showNoNext:(BOOL)value;
 @end
 
 @interface TDSPhotoViewController(Super)
@@ -78,7 +83,13 @@
         
         _firstLoad = YES;
         
-        _noMore = NO;
+        _isExtremity = NO;
+        
+        _isNoPrevious = NO;
+        
+        _isNoNext = NO;
+        
+        _isError = NO;
     }
     return self;
 }
@@ -194,66 +205,65 @@
     // TODO:<前提有网>
     BOOL haveNet = YES;
     if (!haveNet) {
-        [[TDSHudView getInstance] showHudOnView:self.view
-                                        caption:@"似乎没网了"
-                                          image:nil
-                                      acitivity:NO
-                                   autoHideTime:1.0f];
+        [self showError:YES];
         return;
     }
 
     // 超过一天能看的总数了
-    if(index == [self.photoViews count]-1 && [self.photoViews count] >= MAC_COUNT_LIMIT){
-        _noMore = YES;
-        [[TDSHudView getInstance] showHudOnView:self.view
-                                        caption:@"轻撸！流量受不了了"
-                                          image:nil
-                                      acitivity:NO
-                                   autoHideTime:1.0f];
+    if ([self.photoViews count] >= MAC_COUNT_LIMIT) {
+        _isExtremity = YES;
     }
     // 到起点了
-    else if (index == 0 && 0 == (_startPage-_requestPrePageCount)) {
-        [[TDSHudView getInstance] showHudOnView:self.view
-                                        caption:@"page == 0"
-                                          image:nil
-                                      acitivity:NO
-                                   autoHideTime:1.0f];    
+    if (index == 0 && 0 == (_startPage-_requestPrePageCount)){
+        _isNoPrevious = YES;
     }
     
     // 无限前滚逻辑
     // 在浏览到第一张照片的时候添加loadingView和请求
-    if (!_noMore && index == 0 && _startPage-_requestPrePageCount > 0) 
+    if (index == 0 && _startPage-_requestPrePageCount > 0) 
     {
         NSLog(@" ### now index = 0");
-        TDSLOG_info(@"previous===================================");
-        ++_requestPrePageCount;
-        [[self photoSource] addLoadingPhotosOfCount:ONCE_REQUEST_COUNT_LIMIT atIndex:0];
-        NSRange range;
-        range.location = 0;
-        range.length = ONCE_REQUEST_COUNT_LIMIT;
-        for (unsigned i = 0; i < ONCE_REQUEST_COUNT_LIMIT; i++) {
-            [self.photoViews insertObject:[NSNull null] atIndex:0];
+        if (_isExtremity) {
+            [self showExtremity:YES];
+        }else if(_isNoPrevious){
+            [self showNoPrevious:YES];
+        }else {
+            TDSLOG_info(@"previous===================================");
+            ++_requestPrePageCount;
+            [[self photoSource] addLoadingPhotosOfCount:ONCE_REQUEST_COUNT_LIMIT atIndex:0];
+            NSRange range;
+            range.location = 0;
+            range.length = ONCE_REQUEST_COUNT_LIMIT;
+            for (unsigned i = 0; i < ONCE_REQUEST_COUNT_LIMIT; i++) {
+                [self.photoViews insertObject:[NSNull null] atIndex:0];
+            }
+            [self setupScrollViewContentSize];
+            [self moveToPhotoAtIndex:ONCE_REQUEST_COUNT_LIMIT animated:NO];
+            // send request
+            [self photosLoadMore:YES inPage:(_startPage-_requestPrePageCount)];
+            return;    
         }
-        [self setupScrollViewContentSize];
-        [self moveToPhotoAtIndex:ONCE_REQUEST_COUNT_LIMIT animated:NO];
-        // send request
-        [self photosLoadMore:YES inPage:(_startPage-_requestPrePageCount)];
-        return;
     }
     // 无限后滚逻辑
     // 在最后2个内的时候重新请求
-	else if (!_noMore && index + 1 >= [self.photoSource numberOfPhotos]-1) {
-        @synchronized(self){
-            TDSLOG_info(@"next===================================");
-            // load photoSource first
-            [[self photoSource] addLoadingPhotosOfCount:ONCE_REQUEST_COUNT_LIMIT];
-            for (unsigned i = 0; i < ONCE_REQUEST_COUNT_LIMIT; i++) {
-                [self.photoViews addObject:[NSNull null]];
-            }
-            [self setupScrollViewContentSize];
-            // send request
-            ++_requestNextPageCount;
-            [self photosLoadMore:YES inPage:(_startPage+_requestNextPageCount)];
+	else if (index + 1 >= [self.photoSource numberOfPhotos]-1) {
+        if (_isExtremity && index == [self.photoSource numberOfPhotos]-1) {
+            [self showExtremity:YES];
+        }else if(_isNoNext && index == [self.photoSource numberOfPhotos]-1){
+            [self showNoNext:YES];
+        }else {
+            @synchronized(self){
+                TDSLOG_info(@"next===================================");
+                // load photoSource first
+                [[self photoSource] addLoadingPhotosOfCount:ONCE_REQUEST_COUNT_LIMIT];
+                for (unsigned i = 0; i < ONCE_REQUEST_COUNT_LIMIT; i++) {
+                    [self.photoViews addObject:[NSNull null]];
+                }
+                [self setupScrollViewContentSize];
+                // send request
+                ++_requestNextPageCount;
+                [self photosLoadMore:YES inPage:(_startPage+_requestNextPageCount)];
+            }            
         }
 	} 
 
@@ -271,6 +281,43 @@
     
 }
 #pragma mark - Private Function
+- (void)showError:(BOOL)value{
+    if (value) {
+        [[TDSHudView getInstance] showHudOnView:self.view
+                                        caption:@"<error>\n一定是打开的方式有问题"
+                                          image:nil
+                                      acitivity:NO
+                                   autoHideTime:1.0f];        
+    }
+}
+- (void)showExtremity:(BOOL)value{
+    if (value) {
+        [[TDSHudView getInstance] showHudOnView:self.view
+                                        caption:@"轻撸！流量受不了了"
+                                          image:nil
+                                      acitivity:NO
+                                   autoHideTime:1.0f];
+    }
+}
+- (void)showNoPrevious:(BOOL)value{
+    if (value) {
+        [[TDSHudView getInstance] showHudOnView:self.view
+                                        caption:@"page == 0"
+                                          image:nil
+                                      acitivity:NO
+                                   autoHideTime:1.0f];        
+    } 
+}
+- (void)showNoNext:(BOOL)value{
+    if (value) {
+        [[TDSHudView getInstance] showHudOnView:self.view
+                                        caption:@"服务器表示没有下一页了"
+                                          image:nil
+                                      acitivity:NO
+                                   autoHideTime:1.0f];    
+    }
+}
+
 - (TDSNetControlCenter*)photoViewNetControlCenter{
     if (!_photoViewNetControlCenter) {
         _photoViewNetControlCenter = [[TDSNetControlCenter alloc] init];
@@ -315,7 +362,9 @@
                 [photoArray addObject:photoView];
                 nowId = [infoDic objectForKey:@"id"];
             }
-            /////
+            
+            
+            ////// dirty code
             int requestPage = ([nowId intValue]/ONCE_REQUEST_COUNT_LIMIT)-1;
             // 获取到图片后重置loadingPhoto为有效Photo
             NSRange range ;
@@ -339,7 +388,7 @@
             }
         }
     }else {
-        _noMore = YES;
+        _isNoNext = YES;
         // TODO:没有更多照片了
         [[TDSHudView getInstance] showHudOnView:self.view
                                         caption:[NSString stringWithFormat:@"没有了@%d",(_startPage+_requestNextPageCount)]
