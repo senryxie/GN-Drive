@@ -17,6 +17,7 @@
 #import "UIDevice+UIDeviceExt.h"
 #import "TDSDataPersistenceAssistant.h"
 #import "ATMHud.h"
+#import "TDSHudView.h"
 
 // notification
 #define TDSNewPhotoNotification           @"TDSNewPhotoNotification"

@@ -28,9 +28,9 @@
 
 - (void)insertPhotos:(NSArray *)photos inRange:(NSRange)range;
 
-- (void)setPhotos:(NSArray *)photos inRange:(NSRange)range;
+- (void)updatePhotos:(NSArray *)photos inRange:(NSRange)range;
 
-- (void)removePhotos:(NSArray *)photos inRange:(NSRange)range;
+- (void)removePhotosInRange:(NSRange)range;
 
 - (id)objectAtIndex:(int)index;
 @end

@@ -38,10 +38,12 @@ static TDSLoggerView *_instance = nil;
         CGRect frame = _containerView.frame;
         CGRect textFrame = _textView.frame;
         if (CGSizeEqualToSize(_textView.frame.size, SMALL_LOGGER_SIZE) ) {
+            _textView.text = _logText;
             textFrame.size = BIG_LOGGER_SIZE;
             frame.origin = CGPointMake(0.0f, 20.0f);
             _textView.scrollEnabled = YES;            
         }else {
+            _textView.text = LOGVIEW_DEFALUT_STRING;
             textFrame.size = SMALL_LOGGER_SIZE;
             frame.origin = CAP_POINT;
             _textView.scrollEnabled = NO;
@@ -50,20 +52,20 @@ static TDSLoggerView *_instance = nil;
         
         frame.size = _textView.frame.size;
         _containerView.frame = frame;
-        
-        [self updateDebugTextAnimated:NO];
+    
         [UIView commitAnimations];
+        
+        [self updateDebugTextAnimated:NO];            
     }
+
 }
 - (void)updateDebugTextAnimated:(BOOL)animated{
-    if (CGSizeEqualToSize(_textView.frame.size, BIG_LOGGER_SIZE) ){
-        _textView.text = _logText;        
-    }else {
-        _textView.text = LOGVIEW_DEFALUT_STRING;
+    if (!CGSizeEqualToSize(_textView.frame.size, SMALL_LOGGER_SIZE) ) {
+        _textView.text = _logText;
+        CGRect visibleFrame = CGRectZero;
+        visibleFrame.size = _textView.contentSize;
+        [_textView scrollRectToVisible:visibleFrame animated:animated];
     }
-    CGRect visibleFrame = CGRectZero;
-    visibleFrame.size = _textView.contentSize;
-    [_textView scrollRectToVisible:visibleFrame animated:animated];
 }
 
 #pragma mark - 
@@ -97,7 +99,9 @@ static TDSLoggerView *_instance = nil;
         _containerView = [[UIView alloc] initWithFrame:frame];
         _containerView.backgroundColor = [UIColor clearColor];
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
-        [window addSubview:_containerView];
+        if (window!= nil && ![window.subviews containsObject:_containerView]) {
+            [window addSubview:_containerView];
+        }
         
         CGRect textFrame = CGRectZero;
         textFrame.size = _containerView.frame.size;

@@ -16,26 +16,27 @@
 @synthesize image=_image;
 @synthesize size=_size;
 @synthesize failed=_failed;
-
+@synthesize item = _item;
 - (void)dealloc{
     
 	[_URL release], _URL=nil;
 	[_image release], _image=nil;
 	[_caption release], _caption=nil;
-	
+    self.item = nil;
 	[super dealloc];
 }
+
 + (TDSPhotoView*)photoWithItem:(TDSPhotoViewItem*)item{
     TDSPhotoView *photoView = [[TDSPhotoView alloc] initWithPhotoViewItem:item]; 
     return [photoView autorelease];
 }
 - (id)initWithPhotoViewItem:(TDSPhotoViewItem*)item{
     if (self = [super init]) {
-        
-		_URL=[[NSURL URLWithString:item.photoUrl] retain];
+        self.item = item;
+		_URL=[[NSURL URLWithString:_item.photoUrl] retain];
         // TODO:暂时改成pid显示，用作调试
-//		_caption=[item.caption retain];
-		_caption=[[item.pid stringValue] retain];
+//		_caption=[_item.caption retain];
+		_caption=[[_item.pid stringValue] retain];
 	}
 	
 	return self;

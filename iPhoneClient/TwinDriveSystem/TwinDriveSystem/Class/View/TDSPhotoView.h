@@ -16,8 +16,11 @@
     UIImage *_image;
     
     BOOL _failed;
-    
+   
+    TDSPhotoViewItem *_item;
 }
+@property (nonatomic, retain)TDSPhotoViewItem *item;
+
 + (TDSPhotoView*)photoWithItem:(TDSPhotoViewItem*)item;
 - (id)initWithPhotoViewItem:(TDSPhotoViewItem*)item;
 

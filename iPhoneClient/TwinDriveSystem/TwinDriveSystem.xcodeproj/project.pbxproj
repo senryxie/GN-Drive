@@ -26,6 +26,8 @@
 		2F0E43FA15261FEA00010CDD /* ATMTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F0E43F415261FEA00010CDD /* ATMTextLayer.m */; };
 		2F0E43FF1526215F00010CDD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F0E43FD1526213F00010CDD /* AudioToolbox.framework */; };
 		2F10B2791528C6AF000CCFF9 /* TDSLoggerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F10B2781528C6AF000CCFF9 /* TDSLoggerView.m */; };
+		2F10B2BC15295975000CCFF9 /* TDSHudView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F10B2BB15295974000CCFF9 /* TDSHudView.m */; };
+		2F10B2BF15295F86000CCFF9 /* hudDefault.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F10B2BE15295F86000CCFF9 /* hudDefault.png */; };
 		2F7F5B2414E7859F0010F670 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7F5B2314E7859F0010F670 /* UIKit.framework */; };
 		2F7F5B2614E7859F0010F670 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7F5B2514E7859F0010F670 /* Foundation.framework */; };
 		2F7F5B2814E7859F0010F670 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7F5B2714E7859F0010F670 /* CoreGraphics.framework */; };
@@ -96,7 +98,6 @@
 		2FB4DE1E15025D0200FC5D56 /* TDSPhotoDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB4DE1D15025D0200FC5D56 /* TDSPhotoDataSource.m */; };
 		2FFD7243151983A50050DB12 /* UIDevice+UIDeviceExt.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFD7242151983A50050DB12 /* UIDevice+UIDeviceExt.m */; };
 		2FFD72471519846F0050DB12 /* NSString+NSStringExt.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFD72461519846F0050DB12 /* NSString+NSStringExt.m */; };
-		2FFD7249151988FB0050DB12 /* TDSGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFD7248151988FB0050DB12 /* TDSGlobal.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -172,6 +173,9 @@
 		2F0E43FD1526213F00010CDD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		2F10B2771528C6AF000CCFF9 /* TDSLoggerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSLoggerView.h; sourceTree = "<group>"; };
 		2F10B2781528C6AF000CCFF9 /* TDSLoggerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSLoggerView.m; sourceTree = "<group>"; };
+		2F10B2BA15295974000CCFF9 /* TDSHudView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSHudView.h; sourceTree = "<group>"; };
+		2F10B2BB15295974000CCFF9 /* TDSHudView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSHudView.m; sourceTree = "<group>"; };
+		2F10B2BE15295F86000CCFF9 /* hudDefault.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hudDefault.png; sourceTree = "<group>"; };
 		2F7F5B1F14E7859F0010F670 /* TwinDriveSystem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwinDriveSystem.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F7F5B2314E7859F0010F670 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2F7F5B2514E7859F0010F670 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -295,7 +299,6 @@
 		2FFD7242151983A50050DB12 /* UIDevice+UIDeviceExt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+UIDeviceExt.m"; sourceTree = "<group>"; };
 		2FFD72451519846F0050DB12 /* NSString+NSStringExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+NSStringExt.h"; sourceTree = "<group>"; };
 		2FFD72461519846F0050DB12 /* NSString+NSStringExt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+NSStringExt.m"; sourceTree = "<group>"; };
-		2FFD7248151988FB0050DB12 /* TDSGlobal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSGlobal.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -332,6 +335,7 @@
 		2F0C572B15241E0500E0B91F /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				2F10B2BE15295F86000CCFF9 /* hudDefault.png */,
 				2F0C572C15241E0500E0B91F /* feed.png */,
 				2F0C572D15241E0500E0B91F /* heart.png */,
 				2F0C572E15241E0500E0B91F /* more.png */,
@@ -388,6 +392,15 @@
 				2F0E43F415261FEA00010CDD /* ATMTextLayer.m */,
 			);
 			path = ATMHub;
+			sourceTree = "<group>";
+		};
+		2F10B2BD1529597A000CCFF9 /* hudView */ = {
+			isa = PBXGroup;
+			children = (
+				2F10B2BA15295974000CCFF9 /* TDSHudView.h */,
+				2F10B2BB15295974000CCFF9 /* TDSHudView.m */,
+			);
+			name = hudView;
 			sourceTree = "<group>";
 		};
 		2F7F5B1414E7859F0010F670 = {
@@ -727,7 +740,6 @@
 			isa = PBXGroup;
 			children = (
 				2FB05F3B14FD509600AD77AB /* TDSGlobal.h */,
-				2FFD7248151988FB0050DB12 /* TDSGlobal.m */,
 				2F021C7C14E80FCD003388B6 /* TDSConfigDelegate.h */,
 				2F021C5E14E80B79003388B6 /* TDSConfig.h */,
 				2F021C5F14E80B79003388B6 /* TDSConfig.m */,
@@ -741,6 +753,7 @@
 		2F7F5C5514E789730010F670 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2F10B2BD1529597A000CCFF9 /* hudView */,
 				2FB05F3E14FD555000AD77AB /* TabView */,
 				2F7F5C6B14E790940010F670 /* PhotoView */,
 			);
@@ -941,6 +954,7 @@
 				2F0C573315241E0500E0B91F /* more.png in Resources */,
 				2F0C573415241E0500E0B91F /* tabbar_background.png in Resources */,
 				2F0C573515241E0500E0B91F /* thumbView.png in Resources */,
+				2F10B2BF15295F86000CCFF9 /* hudDefault.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -996,7 +1010,6 @@
 				2FB4DE1E15025D0200FC5D56 /* TDSPhotoDataSource.m in Sources */,
 				2FFD7243151983A50050DB12 /* UIDevice+UIDeviceExt.m in Sources */,
 				2FFD72471519846F0050DB12 /* NSString+NSStringExt.m in Sources */,
-				2FFD7249151988FB0050DB12 /* TDSGlobal.m in Sources */,
 				2F0C575115242E2C00E0B91F /* TDSAboutViewController.m in Sources */,
 				2F0C576E15243F5E00E0B91F /* TDSPhotoViewItem.m in Sources */,
 				2F0C576F15243F5E00E0B91F /* TDSRequestObject.m in Sources */,
@@ -1008,6 +1021,7 @@
 				2F0E43F915261FEA00010CDD /* ATMSoundFX.m in Sources */,
 				2F0E43FA15261FEA00010CDD /* ATMTextLayer.m in Sources */,
 				2F10B2791528C6AF000CCFF9 /* TDSLoggerView.m in Sources */,
+				2F10B2BC15295975000CCFF9 /* TDSHudView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
