@@ -10,7 +10,6 @@
 #import "ASINetworkQueue.h"
 #import "ASIFormDataRequest.h"
 #import "TDSRequestObject.h"
-#import "TDSPhotoViewItem.h"
 
 
 #define RETRY_TIMES 3

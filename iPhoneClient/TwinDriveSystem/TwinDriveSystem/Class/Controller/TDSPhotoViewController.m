@@ -99,7 +99,7 @@
         [_collectButton setImage:[UIImage imageNamed:@"heart.png"]
                         forState:UIControlStateNormal];
         [_collectButton addTarget:self
-                           action:@selector(colloctAction:)
+                           action:@selector(collectAction:)
                  forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:_collectButton];
     }
@@ -229,7 +229,8 @@
 #pragma mark - Super Function
 - (void)setStatusBarHidden:(BOOL)hidden animated:(BOOL)animated{
 	if (UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPad) return; 
-	
+    
+    NSLog(@" $$$$ inTDS setStatusBarHidden:%d",hidden);
 	if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 3.2) {
 		
 		[[UIApplication sharedApplication] setStatusBarHidden:hidden withAnimation:UIStatusBarAnimationFade];
@@ -244,7 +245,7 @@
 
 - (void)setBarsHidden:(BOOL)hidden animated:(BOOL)animated{
     if (hidden&&_barsHidden) return;
-    
+    NSLog(@" $$$$ inTDS setBarsHidden:%d",hidden);
 	_collectButton.hidden = hidden;// my added
     
 	if (_popover && [self.photoSource numberOfPhotos] == 0) {
@@ -377,9 +378,18 @@
 
 #pragma mark - Private Function
 
-- (void)colloctAction:(id)sender{
+- (void)collectAction:(id)sender{
+    TDSPhotoView *photoView = (TDSPhotoView*)[[self photoSource] objectAtIndex:_pageIndex];
+    TDSConfig *config = [TDSConfig getInstance];
+    NSString *collectRequestUrl = [NSString stringWithFormat:@"%@/v/%@/snap/%@",config.mApiUrl,config.version,photoView.item.pid];
+    NSMutableArray *savedCollectPhotoUrls = [NSMutableArray arrayWithArray:[TDSDataPersistenceAssistant getCollectPhotos]];
+    [savedCollectPhotoUrls addObject:collectRequestUrl];
+    [TDSDataPersistenceAssistant saveCollectPhotos:savedCollectPhotoUrls];
+    TDSLOG_info(@"====================");
+    TDSLOG_info(@"savedCollectUrls:%@",savedCollectPhotoUrls);    
+    TDSLOG_info(@"====================");    
     [[TDSHudView getInstance] showHudOnView:self.view
-                                    caption:@"收藏成功!"
+                                    caption:[NSString stringWithFormat:@"[%@]收藏成功!",photoView.item.pid]
                                       image:nil
                                   acitivity:NO
                                autoHideTime:1.0f];

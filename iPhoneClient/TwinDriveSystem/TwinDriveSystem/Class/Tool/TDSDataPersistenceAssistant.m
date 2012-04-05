@@ -60,7 +60,7 @@
     NSString *oldVersion = [[NSUserDefaults standardUserDefaults] objectForKey:kDataVersion];
     if (!oldVersion || ![oldVersion isEqualToString:nowVersion] ) {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:kReadedPhotoIndexPath];
-        return [NSIndexPath indexPathForRow:0 inSection:0];
+        return [NSIndexPath indexPathForRow:0 inSection:-1];
     }
     NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:kReadedPhotoIndexPath];
     NSIndexPath *indexPath = [NSKeyedUnarchiver unarchiveObjectWithData:data];
