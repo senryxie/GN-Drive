@@ -18,9 +18,11 @@
 #import "TDSDataPersistenceAssistant.h"
 #import "ATMHud.h"
 #import "TDSHudView.h"
+#import "TDSEGOPhotoViewController.h"
 
 // notification
 #define TDSNewPhotoNotification           @"TDSNewPhotoNotification"
+#define TDSRecordPhotoNotification           @"TDSRecordPhotoNotification"
 
 // string
 #define ResponseAction_Version        @"version"

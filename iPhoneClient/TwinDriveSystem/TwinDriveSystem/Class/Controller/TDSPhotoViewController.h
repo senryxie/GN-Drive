@@ -9,7 +9,7 @@
 #import "EGOPhotoViewController.h"
 #import "TDSNetControlCenter.h"
 @class TDSPhotoDataSource;
-@interface TDSPhotoViewController : EGOPhotoViewController <TDSNetControlCenterDelegate>{
+@interface TDSPhotoViewController : TDSEGOPhotoViewController <TDSNetControlCenterDelegate>{
     TDSNetControlCenter *_photoViewNetControlCenter;
     
     NSInteger _requestNextPageCount; // 向后请求page计数    
@@ -35,6 +35,5 @@
     BOOL _isNoPrevious;    
 }
 @property (nonatomic, retain)TDSNetControlCenter *photoViewNetControlCenter;
-- (TDSPhotoDataSource *)photoSource; // 这尼玛为啥会是readOnly，暴露出来
 
 @end

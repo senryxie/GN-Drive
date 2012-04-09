@@ -12,9 +12,9 @@
 
 + (void)clearAllData;
 
-+ (void)saveCollectPhotos:(NSArray *)array;
++ (void)saveCollectPhotos:(NSDictionary *)collectPhotos;
 + (void)clearCollectPhotos;
-+ (NSArray *)getCollectPhotos;
++ (NSDictionary *)getCollectPhotos;
 
 
 + (void)saveReadedPhotoIndexPath:(NSIndexPath *)indexPath;

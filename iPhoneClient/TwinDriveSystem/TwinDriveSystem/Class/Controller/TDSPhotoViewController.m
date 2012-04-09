@@ -26,11 +26,6 @@
 - (void)showNoNext:(BOOL)value;
 @end
 
-@interface TDSPhotoViewController(Super)
-- (void)setupScrollViewContentSize;
-- (void)loadScrollViewWithPage:(NSInteger)page;
-@end
-
 @implementation TDSPhotoViewController
 @synthesize photoViewNetControlCenter = _photoViewNetControlCenter;
 
@@ -53,14 +48,6 @@
 - (id)init{
     self = [super init];
     if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleBarsNotification:) name:@"EGOPhotoViewToggleBars" object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoViewDidFinishLoading:) name:@"EGOPhotoDidFinishLoading" object:nil];
-		
-		self.hidesBottomBarWhenPushed = YES;
-		self.wantsFullScreenLayout = YES;		
-		_photoSource = [[TDSPhotoDataSource alloc] init];
-		_pageIndex = 0;
-        
         //====================================================================================================
         // 应用失去焦点时存下当前浏览到哪一页
         [[NSNotificationCenter defaultCenter] addObserver:self 
@@ -104,9 +91,6 @@
         [self.view addSubview:_collectButton];
     }
     return self;
-}
-- (TDSPhotoDataSource *)photoSource{
-    return (TDSPhotoDataSource*)_photoSource;
 }
 
 #pragma mark - View lifecycle
@@ -310,64 +294,6 @@
 	
 }
 
-- (void)loadScrollViewWithPage:(NSInteger)page {
-	
-    if (page < 0) return;
-    if (page >= [self.photoSource numberOfPhotos]) return;
-	
-	EGOPhotoImageView * photoView = [self.photoViews objectAtIndex:page];
-	if ((NSNull*)photoView == [NSNull null]) {
-		
-		photoView = [self dequeuePhotoView];
-		if (photoView != nil) {
-			[self.photoViews exchangeObjectAtIndex:photoView.tag withObjectAtIndex:page];
-			photoView = [self.photoViews objectAtIndex:page];
-		}
-		
-	}
-	
-	if (photoView == nil || (NSNull*)photoView == [NSNull null]) {
-		
-		photoView = [[EGOPhotoImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height)];
-		[self.photoViews replaceObjectAtIndex:page withObject:photoView];
-		[photoView release];
-		
-	} 
-	
-	[photoView setPhoto:[self.photoSource photoAtIndex:page]];
-	
-    if (photoView.superview == nil) {
-		[self.scrollView addSubview:photoView];
-	}
-	
-	CGRect frame = self.scrollView.frame;
-	NSInteger centerPageIndex = _pageIndex;
-	CGFloat xOrigin = (frame.size.width * page);
-	if (page > centerPageIndex) {
-		xOrigin = (frame.size.width * page) + EGOPV_IMAGE_GAP;
-	} else if (page < centerPageIndex) {
-		xOrigin = (frame.size.width * page) - EGOPV_IMAGE_GAP;
-	}
-	
-	frame.origin.x = xOrigin;
-	frame.origin.y = 0;
-	photoView.frame = frame;
-}
-
-- (void)setupScrollViewContentSize{
-	
-	CGFloat toolbarSize = _popover ? 0.0f : self.navigationController.toolbar.frame.size.height;	
-	
-	CGSize contentSize = self.view.bounds.size;
-	contentSize.width = (contentSize.width * [self.photoSource numberOfPhotos]);
-	
-	if (!CGSizeEqualToSize(contentSize, self.scrollView.contentSize)) {
-		self.scrollView.contentSize = contentSize;
-	}
-	
-	_captionView.frame = CGRectMake(0.0f, self.view.bounds.size.height - (toolbarSize + 40.0f), self.view.bounds.size.width, 40.0f);
-    
-}
 
 #pragma mark - Notification Action
 - (void)saveReadedPhotoInfo{
@@ -380,16 +306,24 @@
 
 - (void)collectAction:(id)sender{
     TDSPhotoView *photoView = (TDSPhotoView*)[[self photoSource] objectAtIndex:_pageIndex];
-    TDSConfig *config = [TDSConfig getInstance];
-    NSString *collectRequestUrl = [NSString stringWithFormat:@"%@/v/%@/snap/%@",config.mApiUrl,config.version,photoView.item.pid];
-    NSMutableArray *savedCollectPhotoUrls = [NSMutableArray arrayWithArray:[TDSDataPersistenceAssistant getCollectPhotos]];
-    [savedCollectPhotoUrls addObject:collectRequestUrl];
-    [TDSDataPersistenceAssistant saveCollectPhotos:savedCollectPhotoUrls];
+    NSMutableDictionary *savedCollectPhotos = [NSMutableDictionary dictionaryWithDictionary:[TDSDataPersistenceAssistant getCollectPhotos]];
+    NSNumber *pid = photoView.item.pid;
+    NSString *message = nil;
+    if (![savedCollectPhotos.allKeys containsObject:pid]) {
+        [savedCollectPhotos addEntriesFromDictionary:[NSDictionary dictionaryWithObject:photoView.item forKey:pid]];
+        message = [NSString stringWithFormat:@"[%@]收藏成功!",photoView.item.pid];
+    }else {
+        // TODO:remove collectPhotos
+//        [savedCollectPhotos removeObjectForKey:pid];
+        message = [NSString stringWithFormat:@"TODO:\N[%@]取消收藏!",photoView.item.pid];
+    }
+    [TDSDataPersistenceAssistant saveCollectPhotos:savedCollectPhotos];
+    [[NSNotificationCenter defaultCenter] postNotificationName:TDSRecordPhotoNotification object:nil];
     TDSLOG_info(@"====================");
-    TDSLOG_info(@"savedCollectUrls:%@",savedCollectPhotoUrls);    
+    TDSLOG_info(@"savedCollectUrls:%@",[savedCollectPhotos allKeys]);    
     TDSLOG_info(@"====================");    
     [[TDSHudView getInstance] showHudOnView:self.view
-                                    caption:[NSString stringWithFormat:@"[%@]收藏成功!",photoView.item.pid]
+                                    caption:message
                                       image:nil
                                   acitivity:NO
                                autoHideTime:1.0f];
@@ -442,6 +376,7 @@
             
             
             ////// dirty code
+            // TODO:替换正确逻辑
             int requestPage = ([nowId intValue]/ONCE_REQUEST_COUNT_LIMIT)-1;
             // 获取到图片后重置loadingPhoto为有效Photo
             NSRange range ;

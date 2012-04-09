@@ -14,6 +14,8 @@
 #import "TDSPhotoView.h"
 #import "TDSMainScreenViewController.h"
 #import "TDSAboutViewController.h"
+#import "TDSCollectPhotoViewController.h"
+
 @implementation GNViewController
 
 - (void)didReceiveMemoryWarning
@@ -36,9 +38,8 @@
 	TDSPhotoViewController *photoViewController = [[TDSPhotoViewController alloc] init];
     photoViewController.view.backgroundColor = [UIColor clearColor];
     
-    EGOPhotoViewController *collectViewController = [[EGOPhotoViewController alloc] initWithImage:[UIImage imageNamed:@"Default.png"]];
-    collectViewController.view.backgroundColor = [UIColor redColor];
-
+    TDSCollectPhotoViewController *collectViewController = [[TDSCollectPhotoViewController alloc] initWithImage:[UIImage imageNamed:@"Default.png"]];
+    collectViewController.view.backgroundColor = [UIColor clearColor];
 
     TDSAboutViewController *aboutViewController = [[TDSAboutViewController alloc] init];
     aboutViewController.view.backgroundColor = [UIColor clearColor];

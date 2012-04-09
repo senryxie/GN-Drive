@@ -12,6 +12,7 @@
 @synthesize pid = _pid;
 @synthesize photoUrl = _photoUrl;
 @synthesize caption = _caption;
+@synthesize collected = _collected;
 
 - (id)initWithDictionary:(NSDictionary *)dictionary{
     self = [super init];
@@ -19,6 +20,7 @@
         self.pid = [dictionary objectForKey:@"id"];        
         self.photoUrl = [dictionary objectForKey:@"url"];
         self.caption = [dictionary objectForKey:@"text"];
+        self.collected = NO;
     }
     return self;
 }
@@ -27,4 +29,25 @@
     TDSPhotoViewItem *photoViewItem = [[TDSPhotoViewItem alloc] initWithDictionary:dictionary]; 
     return [photoViewItem autorelease];
 }
+
+#pragma mark -NSCoding methods
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (id)initWithCoder:(NSCoder *)decoder {
+    self = [self init];
+	if (self) {		
+		self.pid = [decoder decodeObjectForKey:@"pid"];
+		self.caption = [decoder decodeObjectForKey:@"caption"];
+		self.photoUrl = [decoder decodeObjectForKey:@"photoUrl"];
+        self.collected = [decoder decodeBoolForKey:@"collected"];
+	}
+	return self;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)encodeWithCoder:(NSCoder*)encoder {
+	[encoder encodeObject:self.pid forKey:@"pid"];
+	[encoder encodeObject:self.caption forKey:@"caption"];
+	[encoder encodeObject:self.photoUrl forKey:@"photoUrl"];    
+    [encoder encodeBool:self.collected forKey:@"collected"];
+}
+
 @end
