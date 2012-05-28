@@ -10,4 +10,5 @@
 @class TDSPhotoDataSource;
 @interface TDSCollectPhotoViewController : TDSEGOPhotoViewController
 - (void)updatePhotoSource;
+- (TDSPhotoDataSource *)photoSource;
 @end
