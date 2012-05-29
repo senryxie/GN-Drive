@@ -17,4 +17,5 @@
 - (void)appendString:(NSString*)string;
 - (void)appendFormat:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
 - (void)clear;
+- (void)updateDebugTextAnimated:(BOOL)animated;
 @end

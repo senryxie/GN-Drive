@@ -8,15 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TDSPhotoViewItem : NSObject{
+@interface TDSPhotoViewItem : NSObject <NSCoding>{
     NSNumber *_pid;
     NSString *_caption;
     NSString *_photoUrl;
+    BOOL _collected;
 }
 @property (nonatomic, retain) NSNumber *pid;
 @property (nonatomic, copy) NSString *caption;
 @property (nonatomic, copy) NSString *photoUrl;
-
+@property (nonatomic) BOOL collected;
 - (id)initWithDictionary:(NSDictionary *)dictionary;
 + (TDSPhotoViewItem *)objectWithDictionary:(NSDictionary *)dictionary;
 

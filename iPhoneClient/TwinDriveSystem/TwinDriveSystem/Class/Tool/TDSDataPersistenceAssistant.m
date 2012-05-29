@@ -18,17 +18,17 @@
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kReadedPhotoIndexPath];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
-+ (void)saveCollectPhotos:(NSArray *)array{
++ (void)saveCollectPhotos:(NSDictionary *)collectPhotos{
     TDSConfig *config = [TDSConfig getInstance];
     NSString *productVersion = config.version; //用产品版本号作为数据版本号。
     [[NSUserDefaults standardUserDefaults] setObject:productVersion forKey:kDataVersion];
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:array];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:collectPhotos];
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:kCollectPhotos];
 }
 + (void)clearCollectPhotos{
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kCollectPhotos];    
 }
-+ (NSArray *)getCollectPhotos{
++ (NSDictionary *)getCollectPhotos{
     TDSConfig *config = [TDSConfig getInstance];
     NSString *nowVersion = config.version; // 也可以从info.plist中读取
     NSString *oldVersion = [[NSUserDefaults standardUserDefaults] objectForKey:kDataVersion];
@@ -37,7 +37,7 @@
         return nil;
     }
     NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:kCollectPhotos];
-    NSArray *collectPhotos = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    NSDictionary *collectPhotos = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     
 	return collectPhotos;    
 }
