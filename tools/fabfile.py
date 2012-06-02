@@ -1,3 +1,4 @@
+from time import sleep
 from fabric.api import sudo, cd, env, run
 
 env.hosts=['ofshellohicy@gundam00']
@@ -15,6 +16,7 @@ def update_drive():
     with cd('/home/nginx/GN-Drive'):
         sudo('git fetch origin',user='nginx')
         sudo('git rebase origin/master',user='nginx')
+        sleep(5)
         sudo('/etc/init.d/snap-fastcgi restart',user='root')
 
 def see_letter():
