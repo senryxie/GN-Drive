@@ -158,6 +158,7 @@
     if (index == 0 && 0 == (_startPage-_requestPrePageCount)){
         _isNoPrevious = YES;
     }
+
     
     // 无限前滚逻辑
     // 在浏览到第一张照片的时候添加loadingView和请求
@@ -188,11 +189,16 @@
     // 无限后滚逻辑
     // 在最后2个内的时候重新请求
 	else if (index + 1 >= [self.photoSource numberOfPhotos]-1) {
-        if (_isExtremity && index == [self.photoSource numberOfPhotos]-1) {
-            [self showExtremity:YES];
-        }else if(_isNoNext && index == [self.photoSource numberOfPhotos]-1){
-            [self showNoNext:YES];
-        }else {
+        if (_isExtremity) {
+            if (index == [self.photoSource numberOfPhotos]-1) {
+                [self showExtremity:YES];                
+            }
+        }else if(_isNoNext){
+            if (index == [self.photoSource numberOfPhotos]-1) {
+                [self showNoNext:YES];
+            }
+        }
+        else{
             @synchronized(self){
                 TDSLOG_info(@"next===================================");
                 // load photoSource first
@@ -204,8 +210,8 @@
                 // send request
                 ++_requestNextPageCount;
                 [self photosLoadMore:YES inPage:(_startPage+_requestNextPageCount)];
-            }            
-        }
+            }   
+        }            
 	}// TODO:需要重试的page _retryRequestPageDic <pageNum,boolOfRetry>
     
     _recordPageSection = (NSInteger)ceilf(index/ONCE_REQUEST_COUNT_LIMIT)+_startPage-_requestPrePageCount;
@@ -324,6 +330,9 @@
 
 - (void)collectAction:(id)sender{
     TDSPhotoView *photoView = (TDSPhotoView*)[[self photoSource] objectAtIndex:_pageIndex];
+    if (photoView == nil) {
+        return;
+    }
     NSMutableDictionary *savedCollectPhotos = [NSMutableDictionary dictionaryWithDictionary:[TDSDataPersistenceAssistant getCollectPhotos]];
     NSNumber *pid = photoView.item.pid;
     NSString *message = nil;
@@ -378,37 +387,8 @@
 
 - (void)updatePhotosByResponseDic:(NSDictionary *)responseDic andPage:(NSInteger)page{
     BOOL more = [[responseDic objectForKey:@"more"]  boolValue];
-    NSArray *pics = nil;
-    if (more) {
-        pics = [responseDic objectForKey:@"pics"];
-        if ([pics isKindOfClass:[NSArray class]]) {
-            
-            NSMutableArray *photoArray = [NSMutableArray arrayWithCapacity:[(NSArray*)pics count]];
-            NSNumber *nowId = nil;
-            for (NSDictionary *infoDic in (NSArray*)pics) {
-                TDSPhotoViewItem *photoItem = [TDSPhotoViewItem objectWithDictionary:infoDic];
-                TDSPhotoView *photoView = [TDSPhotoView photoWithItem:photoItem];
-                [photoArray addObject:photoView];
-                nowId = [infoDic objectForKey:@"id"];
-            }
-
-            ////// 更新对应页面的dataSource
-            NSRange range ;
-            range.location = (page - (_startPage-_requestPrePageCount))*ONCE_REQUEST_COUNT_LIMIT;
-            range.length = ONCE_REQUEST_COUNT_LIMIT;
-            NSLog(@" ### range:(%d,%d)",range.location,range.length);
-            [[self photoSource] updatePhotos:photoArray inRange:range];
-            ///////
-            
-            
-            // 如果当前页面得到数据了，则刷新下显示
-            if (_pageIndex>=range.location && _pageIndex<=(range.location+range.length)) {
-                [self loadScrollViewWithPage:_pageIndex-1];                        
-                [self loadScrollViewWithPage:_pageIndex];            
-                [self loadScrollViewWithPage:_pageIndex+1];            
-            }
-        }
-    }else {
+    NSArray *pics = [responseDic objectForKey:@"pics"];;
+    if (!more) {
         _isNoNext = YES;
         // TODO:没有更多照片了
         [[TDSHudView getInstance] showHudOnView:self.view
@@ -416,6 +396,39 @@
                                           image:nil
                                       acitivity:NO
                                    autoHideTime:1.0f];
+    }
+    if (pics.count>0) {
+        
+        NSMutableArray *photoArray = [NSMutableArray arrayWithCapacity:[(NSArray*)pics count]];
+        NSNumber *nowId = nil;
+        for (NSDictionary *infoDic in (NSArray*)pics) {
+            TDSPhotoViewItem *photoItem = [TDSPhotoViewItem objectWithDictionary:infoDic];
+            TDSPhotoView *photoView = [TDSPhotoView photoWithItem:photoItem];
+            [photoArray addObject:photoView];
+            nowId = [infoDic objectForKey:@"id"];
+        }
+        
+        ////// 更新对应页面的dataSource
+        NSRange range ;
+        range.location = (page - (_startPage-_requestPrePageCount))*ONCE_REQUEST_COUNT_LIMIT;
+        range.length = photoArray.count;
+        NSLog(@" ### range:(%d,%d)",range.location,range.length);
+        [[self photoSource] updatePhotos:photoArray inRange:range];
+        if (range.length < ONCE_REQUEST_COUNT_LIMIT) {
+            range.location += range.length;
+            range.length = ONCE_REQUEST_COUNT_LIMIT - range.length;
+            [[self photoSource] removePhotosInRange:range];
+            [self.photoViews removeObjectsInRange:range];
+            [self setupScrollViewContentSize];
+        }
+        ///////
+        
+        // 如果当前页面得到数据了，则刷新下显示
+        if (_pageIndex>=range.location && _pageIndex<=(range.location+range.length)) {
+            [self loadScrollViewWithPage:_pageIndex-1];                        
+            [self loadScrollViewWithPage:_pageIndex];            
+            [self loadScrollViewWithPage:_pageIndex+1];            
+        }
     }
 }
 - (void)showError:(BOOL)value{
@@ -430,7 +443,7 @@
 - (void)showExtremity:(BOOL)value{
     if (value) {
         [[TDSHudView getInstance] showHudOnView:self.view
-                                        caption:@"轻撸！流量受不了了"
+                                        caption:@"轻撸！流量会受不了"
                                           image:nil
                                       acitivity:NO
                                    autoHideTime:1.0f];

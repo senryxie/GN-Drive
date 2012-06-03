@@ -48,20 +48,41 @@
 - (void)updatePhotoSourceNotication:(NSNotification*)notication{
 
     NSDictionary *collectPhotos = [TDSDataPersistenceAssistant getCollectPhotos];
-    
+    NSRange range;    
     if ([collectPhotos.allKeys count] > 0) {
         NSMutableArray *photoViews = [NSMutableArray arrayWithCapacity:collectPhotos.count];
         for (TDSPhotoViewItem *photoViewItem in collectPhotos.allValues) {
             TDSPhotoView *photoView = [TDSPhotoView photoWithItem:photoViewItem];
             [photoViews addObject:photoView];
         }
-        NSRange range;    
+        
         range.location = 0;
         range.length = collectPhotos.count;
-        [(TDSPhotoDataSource*)[self photoSource] updatePhotos:photoViews inRange:range];
-        for (unsigned i = 0; i < range.length; i++) {
-            [self.photoViews insertObject:[NSNull null] atIndex:0];
+        [[self photoSource] updatePhotos:photoViews inRange:range];
+        if (range.length < [_photoSource numberOfPhotos]) {
+            if (_pageIndex > range.length) {
+                [self moveToPhotoAtIndex:range.length-1 animated:NO]; 
+            }
+            range.location = collectPhotos.count;
+            range.length = [_photoSource numberOfPhotos] - collectPhotos.count;
+            [[self photoSource] removePhotosInRange:range];    
         }
+        for (unsigned i = self.photoViews.count; i < collectPhotos.count; i++) {
+            [self.photoViews addObject:[NSNull null]];
+        }
+    }else if(self.photoViews.count > 0){
+
+//        range.location = 1;
+//        range.length = [_photoSource numberOfPhotos];
+//        [[self photoSource] removePhotosInRange:range];
+//        [self.photoViews removeAllObjects];
+//        [self.photoViews addObject:[NSNull null]];
+//        range.location = 0;
+//        range.length = 1;
+//        TDSPhotoView *photoView = [[TDSPhotoView alloc] initWithImage:[UIImage imageNamed:@"Default.png"]];
+//        [[self photoSource] insertPhotos:[NSArray arrayWithObject:photoView] inRange:range];
+//        
+//        [self moveToPhotoAtIndex:0 animated:NO]; 
     }
     
     [self setupScrollViewContentSize];
