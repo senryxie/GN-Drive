@@ -100,6 +100,8 @@
 		2FB4DE1E15025D0200FC5D56 /* TDSPhotoDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB4DE1D15025D0200FC5D56 /* TDSPhotoDataSource.m */; };
 		2FFD7243151983A50050DB12 /* UIDevice+UIDeviceExt.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFD7242151983A50050DB12 /* UIDevice+UIDeviceExt.m */; };
 		2FFD72471519846F0050DB12 /* NSString+NSStringExt.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFD72461519846F0050DB12 /* NSString+NSStringExt.m */; };
+		83EBC187157BA22E00C69E84 /* libUMFeedback.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83EBC184157BA22E00C69E84 /* libUMFeedback.a */; };
+		83EBC188157BA22E00C69E84 /* umFeedback.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 83EBC185157BA22E00C69E84 /* umFeedback.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -305,6 +307,9 @@
 		2FFD7242151983A50050DB12 /* UIDevice+UIDeviceExt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+UIDeviceExt.m"; sourceTree = "<group>"; };
 		2FFD72451519846F0050DB12 /* NSString+NSStringExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+NSStringExt.h"; sourceTree = "<group>"; };
 		2FFD72461519846F0050DB12 /* NSString+NSStringExt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+NSStringExt.m"; sourceTree = "<group>"; };
+		83EBC184157BA22E00C69E84 /* libUMFeedback.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libUMFeedback.a; sourceTree = "<group>"; };
+		83EBC185157BA22E00C69E84 /* umFeedback.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = umFeedback.bundle; sourceTree = "<group>"; };
+		83EBC186157BA22E00C69E84 /* UMFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMFeedback.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -323,6 +328,7 @@
 				2F7F5B2414E7859F0010F670 /* UIKit.framework in Frameworks */,
 				2F7F5B2614E7859F0010F670 /* Foundation.framework in Frameworks */,
 				2F7F5B2814E7859F0010F670 /* CoreGraphics.framework in Frameworks */,
+				83EBC187157BA22E00C69E84 /* libUMFeedback.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -483,6 +489,7 @@
 		2F7F5B9314E7895B0010F670 /* DriveSystem */ = {
 			isa = PBXGroup;
 			children = (
+				83EBC183157BA22E00C69E84 /* Feedback */,
 				2F7F5BEB14E7895B0010F670 /* EGOPhotoViewer */,
 				2F7F5B9414E7895B0010F670 /* ASIHttpRequest */,
 			);
@@ -869,6 +876,16 @@
 			name = CocoaExt;
 			sourceTree = "<group>";
 		};
+		83EBC183157BA22E00C69E84 /* Feedback */ = {
+			isa = PBXGroup;
+			children = (
+				83EBC184157BA22E00C69E84 /* libUMFeedback.a */,
+				83EBC185157BA22E00C69E84 /* umFeedback.bundle */,
+				83EBC186157BA22E00C69E84 /* UMFeedback.h */,
+			);
+			path = Feedback;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -981,6 +998,7 @@
 				2F0C573415241E0500E0B91F /* tabbar_background.png in Resources */,
 				2F0C573515241E0500E0B91F /* thumbView.png in Resources */,
 				2F10B2BF15295F86000CCFF9 /* hudDefault.png in Resources */,
+				83EBC188157BA22E00C69E84 /* umFeedback.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1139,6 +1157,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/TwinDriveSystem/DriveSystem/Feedback\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lxml2",
@@ -1173,6 +1192,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/TwinDriveSystem/DriveSystem/Feedback\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lxml2",

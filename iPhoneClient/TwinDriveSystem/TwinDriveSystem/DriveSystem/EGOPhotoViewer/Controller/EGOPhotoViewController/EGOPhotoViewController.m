@@ -404,11 +404,11 @@
 	
 	if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 3.2) {
 		
-		[[UIApplication sharedApplication] setStatusBarHidden:hidden withAnimation:UIStatusBarAnimationFade];
+//		[[UIApplication sharedApplication] setStatusBarHidden:hidden withAnimation:UIStatusBarAnimationFade];
 		
 	} else {
 #if __IPHONE_OS_VERSION_MAX_ALLOWED < 30200
-		[[UIApplication sharedApplication] setStatusBarHidden:hidden animated:animated];
+//		[[UIApplication sharedApplication] setStatusBarHidden:hidden animated:animated];
 #endif
 	}
 
