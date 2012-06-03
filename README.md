@@ -7,13 +7,21 @@ A "Gundam Nucleus Drive" (or GN Drive (GNドライヴ GN Doraivu?) in short) is 
 
 http://en.wikipedia.org/wiki/GN_Drive
 
-***
-后端
+功能
 ---
-Flask + Nginx，运行在Gentoo Linux上的基于API的应用
-***
+以上为开玩笑，本项目实际是：
 
-iOS客户端
+1. 带有机器学习附加属性的微博抓取系统；
+2. 包括抓取草稿，样本，最终成品库的便于操作WEB端；
+3. 一个iOS客户端，可以浏览最终结果；
+
+
+技术
 ---
-浏览发现、分享图片
+1. Linux, Nginx, Fabric
+2. Mysql, Memcached
+3. Flask, Fast-cgi
+4. libsvm, smallseg
+5. python, html, javascript, css, objective-C
+
 

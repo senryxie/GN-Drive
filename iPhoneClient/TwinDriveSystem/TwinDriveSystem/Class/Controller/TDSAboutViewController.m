@@ -7,6 +7,7 @@
 //
 
 #import "TDSAboutViewController.h"
+#import "UMFeedback.h"
 #define CONTACT_INFO @"icephone@gmail.com"
 
 @interface TDSAboutViewController ()
@@ -80,6 +81,7 @@
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    BOOL show = true;
     // dirty code
     NSString *cellInfo = [_aboutArray objectAtIndex:indexPath.row];
     NSMutableString *message= [NSMutableString stringWithFormat:@"%@\n",cellInfo];
@@ -91,15 +93,20 @@
         webViewController.navigationItem.title = cellInfo;
         [self.navigationController pushViewController:webViewController animated:YES];
         [webViewController release];
+        [UMFeedback showFeedback:self.navigationController withAppkey:@"4f4648ca52701523130000d0"];
+        show = false;
     }else if([cellInfo isEqualToString:AboutInfo_ContactInfo]) {
         [message appendFormat:@"%@",CONTACT_INFO];        
     }
-    [[TDSHudView getInstance] showHudOnView:self.view
-                                    caption:message
-                                      image:nil
-                                  acitivity:NO
-                               autoHideTime:1.0f];
-}
+    if (show) {
+        [[TDSHudView getInstance] showHudOnView:self.view
+                                        caption:message
+                                          image:nil
+                                      acitivity:NO
+                                   autoHideTime:1.0f];
+
+    }
+  }
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if(_aboutArray != nil && [_aboutArray count]>0)

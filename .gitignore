@@ -6,3 +6,8 @@ iPhoneClient/TwinDriveSystem/TwinDriveSystem.xcodeproj/project.xcworkspace/xcuse
 iPhoneClient/TwinDriveSystem/TwinDriveSystem.xcodeproj/project.xcworkspace/xcuserdata/zhongsheng.xcuserdatad/UserInterfaceState.xcuserstate
 
 iPhoneClient/TwinDriveSystem/TwinDriveSystem.xcodeproj/xcuserdata/zhongsheng.xcuserdatad/xcdebugger/Breakpoints.xcbkptlist
+*.pyc
+
+www/libs/smallseg/*
+www/snap.html
+www/trash.html
