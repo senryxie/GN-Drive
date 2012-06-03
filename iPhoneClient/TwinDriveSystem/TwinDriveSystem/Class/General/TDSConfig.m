@@ -43,7 +43,8 @@ static TDSConfig *_globalConfig = nil;
     if (self) {
         
 //        self.mApiUrl = @"http://ofshellohicy.sinaapp.com/api_photo.php";//?start=0
-        self.mApiUrl = @"http://morelife.sinaapp.com";
+//        self.mApiUrl = @"http://morelife.sinaapp.com";
+        self.mApiUrl = @"http://gn.ofshellohicy.info";
 //        self.mApiUrl = @"gn.ofshellohicy.info";
         //应用在appStore的ID
         self.appStoreId = @"1010101";

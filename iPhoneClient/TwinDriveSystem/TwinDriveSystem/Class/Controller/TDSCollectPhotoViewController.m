@@ -40,7 +40,7 @@
 //            [self.photoViews insertObject:[NSNull null] atIndex:0];
 //        }
         
-        self = [super initWithPhotoSource:[[EGOQuickPhotoSource alloc] initWithPhotos:photoViews]];
+        self = [super initWithPhotoSource:[[TDSPhotoDataSource alloc] initWithPhotos:photoViews]];
         
     }else {
         self = [super initWithImage:anImage];
@@ -52,8 +52,8 @@
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated {
     [super moveToPhotoAtIndex:index animated:animated];
 }
-- (void)updatePhotoSource{
-    
+- (void)updatePhotoSourceNotication:(NSNotification*)notication{
+
     NSDictionary *collectPhotos = [TDSDataPersistenceAssistant getCollectPhotos];
     
     if ([collectPhotos.allKeys count] > 0) {
@@ -65,7 +65,7 @@
         NSRange range;    
         range.location = 0;
         range.length = collectPhotos.count;
-        [[self photoSource] updatePhotos:photoViews inRange:range];
+        [(TDSPhotoDataSource*)[self photoSource] updatePhotos:photoViews inRange:range];
         for (unsigned i = 0; i < range.length; i++) {
             [self.photoViews insertObject:[NSNull null] atIndex:0];
         }
@@ -79,7 +79,7 @@
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(updatePhotoSource) 
+                                             selector:@selector(updatePhotoSourceNotication:) 
                                                  name:TDSRecordPhotoNotification 
                                                object:nil];
 }
