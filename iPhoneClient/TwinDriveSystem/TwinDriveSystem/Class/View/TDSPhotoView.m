@@ -36,7 +36,8 @@
 		_URL=[[NSURL URLWithString:_item.photoUrl] retain];
         // TODO:暂时改成pid显示，用作调试
 //		_caption=[_item.caption retain];
-		_caption=[[_item.pid stringValue] retain];
+        NSString *caption = [NSString stringWithFormat:@"%@\n%@",_item.pid.stringValue,_item.caption];
+		_caption=[caption retain];
 	}
 	
 	return self;

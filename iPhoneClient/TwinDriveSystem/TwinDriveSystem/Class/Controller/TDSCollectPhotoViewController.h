@@ -8,7 +8,9 @@
 
 #import "EGOPhotoViewController.h"
 @class TDSPhotoDataSource;
-@interface TDSCollectPhotoViewController : TDSEGOPhotoViewController
-- (void)updatePhotoSource;
+@interface TDSCollectPhotoViewController : TDSEGOPhotoViewController{
+    BOOL _isEmpty;
+}
+- (void)updatePhotoSourceNotication:(NSNotification*)notication;
 - (TDSPhotoDataSource *)photoSource;
 @end
