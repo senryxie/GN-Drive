@@ -38,7 +38,7 @@
 	TDSPhotoViewController *photoViewController = [[TDSPhotoViewController alloc] init];
     photoViewController.view.backgroundColor = [UIColor clearColor];
     
-    TDSCollectPhotoViewController *collectViewController = [[TDSCollectPhotoViewController alloc] initWithImage:[UIImage imageNamed:@"Default.png"]];
+    TDSCollectPhotoViewController *collectViewController = [[TDSCollectPhotoViewController alloc] initWithImage:[UIImage imageNamed:@"collect.png"]];
     collectViewController.view.backgroundColor = [UIColor clearColor];
 
     TDSAboutViewController *aboutViewController = [[TDSAboutViewController alloc] init];

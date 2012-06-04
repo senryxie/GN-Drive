@@ -28,6 +28,10 @@
 		2F10B2791528C6AF000CCFF9 /* TDSLoggerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F10B2781528C6AF000CCFF9 /* TDSLoggerView.m */; };
 		2F10B2BC15295975000CCFF9 /* TDSHudView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F10B2BB15295974000CCFF9 /* TDSHudView.m */; };
 		2F10B2BF15295F86000CCFF9 /* hudDefault.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F10B2BE15295F86000CCFF9 /* hudDefault.png */; };
+		2F46F412157D1D730011D616 /* collect.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F46F410157D1D730011D616 /* collect.png */; };
+		2F46F413157D1D730011D616 /* collect@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F46F411157D1D730011D616 /* collect@2x.png */; };
+		2F46F416157D1E120011D616 /* likeIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F46F414157D1E120011D616 /* likeIcon.png */; };
+		2F46F417157D1E120011D616 /* likeIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F46F415157D1E120011D616 /* likeIcon@2x.png */; };
 		2F7F5B2414E7859F0010F670 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7F5B2314E7859F0010F670 /* UIKit.framework */; };
 		2F7F5B2614E7859F0010F670 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7F5B2514E7859F0010F670 /* Foundation.framework */; };
 		2F7F5B2814E7859F0010F670 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7F5B2714E7859F0010F670 /* CoreGraphics.framework */; };
@@ -97,6 +101,7 @@
 		2FB05F1414FD0B7200AD77AB /* TDSNetControlCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB05F1314FD0B7200AD77AB /* TDSNetControlCenter.m */; };
 		2FB05F2114FD1F4E00AD77AB /* TDSMainScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB05F2014FD1F4E00AD77AB /* TDSMainScreenViewController.m */; };
 		2FB05F4114FD556D00AD77AB /* TDSMainScreenTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB05F4014FD556D00AD77AB /* TDSMainScreenTabBar.m */; };
+		2FB34252157BC6B300CB7E41 /* TDSFeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB34251157BC6B300CB7E41 /* TDSFeedBackViewController.m */; };
 		2FB4DE1E15025D0200FC5D56 /* TDSPhotoDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB4DE1D15025D0200FC5D56 /* TDSPhotoDataSource.m */; };
 		2FFD7243151983A50050DB12 /* UIDevice+UIDeviceExt.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFD7242151983A50050DB12 /* UIDevice+UIDeviceExt.m */; };
 		2FFD72471519846F0050DB12 /* NSString+NSStringExt.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFD72461519846F0050DB12 /* NSString+NSStringExt.m */; };
@@ -180,6 +185,10 @@
 		2F10B2BA15295974000CCFF9 /* TDSHudView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSHudView.h; sourceTree = "<group>"; };
 		2F10B2BB15295974000CCFF9 /* TDSHudView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSHudView.m; sourceTree = "<group>"; };
 		2F10B2BE15295F86000CCFF9 /* hudDefault.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hudDefault.png; sourceTree = "<group>"; };
+		2F46F410157D1D730011D616 /* collect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = collect.png; sourceTree = "<group>"; };
+		2F46F411157D1D730011D616 /* collect@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "collect@2x.png"; sourceTree = "<group>"; };
+		2F46F414157D1E120011D616 /* likeIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = likeIcon.png; sourceTree = "<group>"; };
+		2F46F415157D1E120011D616 /* likeIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "likeIcon@2x.png"; sourceTree = "<group>"; };
 		2F7F5B1F14E7859F0010F670 /* TwinDriveSystem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwinDriveSystem.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F7F5B2314E7859F0010F670 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2F7F5B2514E7859F0010F670 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -301,6 +310,8 @@
 		2FB05F3B14FD509600AD77AB /* TDSGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSGlobal.h; sourceTree = "<group>"; };
 		2FB05F3F14FD556D00AD77AB /* TDSMainScreenTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSMainScreenTabBar.h; sourceTree = "<group>"; };
 		2FB05F4014FD556D00AD77AB /* TDSMainScreenTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSMainScreenTabBar.m; sourceTree = "<group>"; };
+		2FB34250157BC6B300CB7E41 /* TDSFeedBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSFeedBackViewController.h; sourceTree = "<group>"; };
+		2FB34251157BC6B300CB7E41 /* TDSFeedBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSFeedBackViewController.m; sourceTree = "<group>"; };
 		2FB4DE1C15025D0200FC5D56 /* TDSPhotoDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSPhotoDataSource.h; sourceTree = "<group>"; };
 		2FB4DE1D15025D0200FC5D56 /* TDSPhotoDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSPhotoDataSource.m; sourceTree = "<group>"; };
 		2FFD7241151983A50050DB12 /* UIDevice+UIDeviceExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+UIDeviceExt.h"; sourceTree = "<group>"; };
@@ -347,6 +358,10 @@
 		2F0C572B15241E0500E0B91F /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				2F46F414157D1E120011D616 /* likeIcon.png */,
+				2F46F415157D1E120011D616 /* likeIcon@2x.png */,
+				2F46F410157D1D730011D616 /* collect.png */,
+				2F46F411157D1D730011D616 /* collect@2x.png */,
 				2F10B2BE15295F86000CCFF9 /* hudDefault.png */,
 				2F0C572C15241E0500E0B91F /* feed.png */,
 				2F0C572D15241E0500E0B91F /* heart.png */,
@@ -362,6 +377,8 @@
 			children = (
 				2F0C574F15242E2C00E0B91F /* TDSAboutViewController.h */,
 				2F0C575015242E2C00E0B91F /* TDSAboutViewController.m */,
+				2FB34250157BC6B300CB7E41 /* TDSFeedBackViewController.h */,
+				2FB34251157BC6B300CB7E41 /* TDSFeedBackViewController.m */,
 			);
 			name = AboutViewController;
 			sourceTree = "<group>";
@@ -999,6 +1016,10 @@
 				2F0C573515241E0500E0B91F /* thumbView.png in Resources */,
 				2F10B2BF15295F86000CCFF9 /* hudDefault.png in Resources */,
 				83EBC188157BA22E00C69E84 /* umFeedback.bundle in Resources */,
+				2F46F412157D1D730011D616 /* collect.png in Resources */,
+				2F46F413157D1D730011D616 /* collect@2x.png in Resources */,
+				2F46F416157D1E120011D616 /* likeIcon.png in Resources */,
+				2F46F417157D1E120011D616 /* likeIcon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1068,6 +1089,7 @@
 				2F10B2BC15295975000CCFF9 /* TDSHudView.m in Sources */,
 				2F989D1C15331CFF00FFF4EE /* TDSCollectPhotoViewController.m in Sources */,
 				2F989D2015331DCF00FFF4EE /* TDSEGOPhotoViewController.m in Sources */,
+				2FB34252157BC6B300CB7E41 /* TDSFeedBackViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

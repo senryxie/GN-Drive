@@ -12,5 +12,4 @@
     BOOL _isEmpty;
 }
 - (void)updatePhotoSourceNotication:(NSNotification*)notication;
-- (TDSPhotoDataSource *)photoSource;
 @end

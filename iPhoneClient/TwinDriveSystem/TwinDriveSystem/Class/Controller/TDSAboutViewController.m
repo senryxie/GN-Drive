@@ -8,6 +8,8 @@
 
 #import "TDSAboutViewController.h"
 #import "UMFeedback.h"
+#import "TDSFeedBackViewController.h"
+
 #define CONTACT_INFO @"icephone@gmail.com"
 
 @interface TDSAboutViewController ()
@@ -15,8 +17,8 @@
 @end
 
 @implementation TDSAboutViewController
-
 @synthesize tableView = _tableView;
+
 - (void)dealloc{
     [_aboutArray release];
     self.tableView = nil;
@@ -32,6 +34,7 @@
                                   acitivity:NO
                                autoHideTime:1.0f];
 }
+
 
 - (void)viewDidLoad
 {
@@ -81,20 +84,19 @@
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    BOOL show = true;
+    BOOL show = YES;
     // dirty code
     NSString *cellInfo = [_aboutArray objectAtIndex:indexPath.row];
     NSMutableString *message= [NSMutableString stringWithFormat:@"%@\n",cellInfo];
     if ([cellInfo isEqualToString:AboutInfo_Version]) {
         [message appendFormat:@"%@",[TDSConfig getInstance].version];
     }else if([cellInfo isEqualToString:AboutInfo_Feedback]) {
-        [message appendString:@"魂淡"];   
-        UIViewController *webViewController = [[UIViewController alloc] init];
-        webViewController.navigationItem.title = cellInfo;
-        [self.navigationController pushViewController:webViewController animated:YES];
-        [webViewController release];
-        [UMFeedback showFeedback:self.navigationController withAppkey:@"4f4648ca52701523130000d0"];
-        show = false;
+        TDSFeedBackViewController *feedbackViewController = [[TDSFeedBackViewController alloc] init];
+        feedbackViewController.view.frame = self.view.bounds;
+        feedbackViewController.navigationItem.title = cellInfo;
+        [self.navigationController pushViewController:feedbackViewController animated:YES];
+        [feedbackViewController release];
+        show = NO;
     }else if([cellInfo isEqualToString:AboutInfo_ContactInfo]) {
         [message appendFormat:@"%@",CONTACT_INFO];        
     }

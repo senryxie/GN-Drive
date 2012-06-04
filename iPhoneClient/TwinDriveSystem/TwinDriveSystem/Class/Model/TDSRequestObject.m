@@ -15,8 +15,10 @@
 @synthesize error = _error;
 @synthesize rootObject = _rootObject;
 @synthesize responseString = _responseString;
+@synthesize postBody = _postBody;
 
 - (void)dealloc{
+    self.postBody = nil;
     self.URL = nil;
     self.parametersDic = nil;
     self.userInfo = nil;
@@ -28,6 +30,7 @@
 - (id)init{
     self = [super init];
     if (self) {
+        self.postBody = nil;
         self.URL = nil;
         self.parametersDic = nil;
         self.userInfo = nil;
