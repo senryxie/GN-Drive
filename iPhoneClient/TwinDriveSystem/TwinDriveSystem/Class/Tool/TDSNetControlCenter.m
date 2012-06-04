@@ -62,6 +62,10 @@
         TDSRequestObject *requestObject = (TDSRequestObject*)reqObj;
         asiRequest = [ASIHTTPRequest requestWithURL:requestObject.URL];
         asiRequest.userInfo = requestObject.userInfo;
+        if (requestObject.postBody!= nil) {
+            [asiRequest setRequestMethod:@"POST"];
+            [asiRequest appendPostData:requestObject.postBody];
+        }
     }
     if (asiRequest != nil) {
         [asiRequest setDelegate:self];

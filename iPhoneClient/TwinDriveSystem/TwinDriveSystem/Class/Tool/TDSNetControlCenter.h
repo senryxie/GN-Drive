@@ -12,6 +12,7 @@
 @class TDSNetControlCenter;
 
 @protocol TDSNetControlCenterDelegate <NSObject>
+@optional
 - (void)tdsNetControlCenter:(TDSNetControlCenter*)netControlCenter requestDidStartRequest:(id)response;
 - (void)tdsNetControlCenter:(TDSNetControlCenter*)netControlCenter requestDidFinishedLoad:(id)response;
 - (void)tdsNetControlCenter:(TDSNetControlCenter*)netControlCenter requestDidFailedLoad:(id)response;

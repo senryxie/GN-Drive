@@ -83,9 +83,9 @@
         _isError = NO;
         
         _collectButton = [[UIButton alloc] initWithFrame:COLLECT_BUTTON_FRAME];
-        _collectButton.backgroundColor = [UIColor redColor];
+        _collectButton.backgroundColor = [UIColor clearColor];
         _collectButton.alpha = .7f;
-        [_collectButton setImage:[UIImage imageNamed:@"heart.png"]
+        [_collectButton setImage:[UIImage imageNamed:@"likeIcon.png"]
                         forState:UIControlStateNormal];
         [_collectButton addTarget:self
                            action:@selector(collectAction:)
@@ -155,7 +155,7 @@
         _isExtremity = YES;
     }
     // 到起点了
-    if (index == 0 && 0 == (_startPage-_requestPrePageCount)){
+    if ( index == 0 && 0 == (_startPage-_requestPrePageCount)){
         _isNoPrevious = YES;
     }
 
@@ -391,11 +391,11 @@
     if (!more) {
         _isNoNext = YES;
         // TODO:没有更多照片了
-        [[TDSHudView getInstance] showHudOnView:self.view
-                                        caption:[NSString stringWithFormat:@"没有了@%d",(_startPage+_requestNextPageCount)]
-                                          image:nil
-                                      acitivity:NO
-                                   autoHideTime:1.0f];
+//        [[TDSHudView getInstance] showHudOnView:self.view
+//                                        caption:[NSString stringWithFormat:@"没有了@%d",(_startPage+_requestNextPageCount)]
+//                                          image:nil
+//                                      acitivity:NO
+//                                   autoHideTime:1.0f];
     }
     if (pics.count>0) {
         

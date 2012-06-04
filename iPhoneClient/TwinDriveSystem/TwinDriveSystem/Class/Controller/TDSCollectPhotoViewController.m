@@ -32,7 +32,9 @@
             [photoViews addObject:photoView];
         }        
     }else {
-        TDSPhotoView *photoView = [[TDSPhotoView alloc] initWithImage:anImage];
+        TDSPhotoView *photoView = [[TDSPhotoView alloc] initWithImageURL:nil
+                                                                    name:@"可以点击红心收藏街拍图片"
+                                                                   image:anImage];
         [photoViews addObject:photoView];
         [photoView release];        
     }
