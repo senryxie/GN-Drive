@@ -63,8 +63,10 @@
 - (void)updatePhotoSourceNotication:(NSNotification*)notication{
 
     NSDictionary *collectPhotos = [TDSDataPersistenceAssistant getCollectPhotos];
-    NSRange range;    
+    NSRange range;   
+    
     if ([collectPhotos.allKeys count] > 0) {
+        
         NSMutableArray *photoViews = [NSMutableArray arrayWithCapacity:collectPhotos.count];
         for (TDSPhotoViewItem *photoViewItem in collectPhotos.allValues) {
             TDSPhotoView *photoView = [TDSPhotoView photoWithItem:photoViewItem];
@@ -85,19 +87,23 @@
         for (unsigned i = self.photoViews.count; i < collectPhotos.count; i++) {
             [self.photoViews addObject:[NSNull null]];
         }
-    }else if(self.photoViews.count > 0){
-
-//        range.location = 1;
-//        range.length = [_photoSource numberOfPhotos];
-//        [[self photoSource] removePhotosInRange:range];
-//        [self.photoViews removeAllObjects];
-//        [self.photoViews addObject:[NSNull null]];
-//        range.location = 0;
-//        range.length = 1;
-//        TDSPhotoView *photoView = [[TDSPhotoView alloc] initWithImage:[UIImage imageNamed:@"Default.png"]];
-//        [[self photoSource] insertPhotos:[NSArray arrayWithObject:photoView] inRange:range];
-//        
-//        [self moveToPhotoAtIndex:0 animated:NO]; 
+        
+    }else if([collectPhotos.allKeys count] <= 0
+             && self.photoViews.count > 0)
+    {
+        
+        range.location = 0;
+        range.length = [_photoSource numberOfPhotos];
+        [[self photoSource] removePhotosInRange:range];
+        [self.photoViews removeAllObjects];
+        [self.photoViews addObject:[NSNull null]];
+        range.location = 0;
+        range.length = 1;
+        TDSPhotoView *photoView = [[TDSPhotoView alloc] initWithImage:[UIImage imageNamed:@"collect.png"]];
+        [[self photoSource] insertPhotos:[NSArray arrayWithObject:photoView] inRange:range];
+        [self setupScrollViewContentSize];
+        [self moveToPhotoAtIndex:0 animated:NO]; 
+                
     }
     
     [self setupScrollViewContentSize];
@@ -178,21 +184,27 @@
     NSMutableDictionary *savedCollectPhotos = [NSMutableDictionary dictionaryWithDictionary:[TDSDataPersistenceAssistant getCollectPhotos]];
     NSNumber *pid = photoView.item.pid;
     NSString *message = nil;
-    if (![savedCollectPhotos.allKeys containsObject:pid]) {
-        [savedCollectPhotos addEntriesFromDictionary:[NSDictionary dictionaryWithObject:photoView.item forKey:pid]];
-        message = [NSString stringWithFormat:@"收藏成功!",photoView.item.pid];
-        [_collectButton setImage:[UIImage imageNamed:@"likeIconGray.png"] 
-                        forState:UIControlStateNormal];
-    }else {
+    if ([savedCollectPhotos.allKeys containsObject:pid]) {
         [savedCollectPhotos removeObjectForKey:pid];
         message = [NSString stringWithFormat:@"取消收藏!",photoView.item.pid];
-        [_collectButton setImage:[UIImage imageNamed:@"likeIcon.png"]
-                        forState:UIControlStateNormal];
         
+        [self.photoViews removeObjectAtIndex:_pageIndex];
+        NSRange range;
+        range.location = _pageIndex;
+        range.length = 1;
+        [[self photoSource] removePhotosInRange:range];            
+     
+        if ([[self photoSource] numberOfPhotos] == 0) {
+            
+            TDSPhotoView *photoView = [[TDSPhotoView alloc] initWithImage:[UIImage imageNamed:@"collect.png"]];
+            [[self photoSource] addPhotos:[NSArray arrayWithObject:photoView]];
+            [self.photoViews addObject:[NSNull null]];
+            [self setupScrollViewContentSize];
+            [self moveToPhotoAtIndex:0 animated:NO]; 
+            
+        }
     }
     [TDSDataPersistenceAssistant saveCollectPhotos:savedCollectPhotos];
-    [[NSNotificationCenter defaultCenter] postNotificationName:TDSRecordPhotoNotification 
-                                                        object:nil];
     TDSLOG_info(@"====================");
     TDSLOG_info(@"savedCollectUrls:%@",[savedCollectPhotos allKeys]);    
     TDSLOG_info(@"====================");    
