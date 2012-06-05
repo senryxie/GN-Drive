@@ -32,7 +32,7 @@
 	va_end(ap);
     
     if ([UIApplication sharedApplication].keyWindow != nil && [level isEqualToString:@"info:"]) {
-        [[TDSLoggerView getInstance] appendString:[NSString stringWithFormat:@"%@\n",print]];
+//        [[TDSLoggerView getInstance] appendString:[NSString stringWithFormat:@"%@\n",print]];
     }
     
     NSDate *date = [NSDate date];

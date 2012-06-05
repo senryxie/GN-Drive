@@ -33,3 +33,5 @@
 #define AboutInfo_Version @"版本"
 #define AboutInfo_Feedback @"意见反馈"
 #define AboutInfo_ContactInfo @"联系方式"
+
+#define COLLECT_BUTTON_FRAME CGRectMake(260, 10, 40, 40)

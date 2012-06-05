@@ -10,6 +10,7 @@
 @class TDSPhotoDataSource;
 @interface TDSCollectPhotoViewController : TDSEGOPhotoViewController{
     BOOL _isEmpty;
+    UIButton *_collectButton;
 }
 - (void)updatePhotoSourceNotication:(NSNotification*)notication;
 @end

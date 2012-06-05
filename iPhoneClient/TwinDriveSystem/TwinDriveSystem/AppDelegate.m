@@ -30,7 +30,7 @@
     self.viewController = [[[GNViewController alloc] init] autorelease];
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
-    [TDSLoggerView getInstance];
+//    [TDSLoggerView getInstance];
     return YES;
 }
 
