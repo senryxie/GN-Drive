@@ -15,9 +15,9 @@
 #define RETRY_TIMES 3
 
 @interface TDSNetControlCenter (Private)
-- (void)requestDidStartSelector:(ASIHTTPRequest *)request;
-- (void)requestDidFinishSelector:(ASIHTTPRequest *)request;
-- (void)requestDidFailSelector:(ASIHTTPRequest *)request;
+- (void)requestDidStartSelector:(ASIFormDataRequest *)request;
+- (void)requestDidFinishSelector:(ASIFormDataRequest *)request;
+- (void)requestDidFailSelector:(ASIFormDataRequest *)request;
 
 @end
 @implementation TDSNetControlCenter
@@ -26,7 +26,7 @@
 - (void)dealloc{
     
     NSArray * array = _operationQueue.operations;
-    for (ASIHTTPRequest* op in array) {
+    for (ASIFormDataRequest* op in array) {
         [op setDelegate:nil];
     }
     [self.operationQueue reset];
@@ -54,17 +54,23 @@
     
     TDSConfig *config = [TDSConfig getInstance];
     
-    ASIHTTPRequest *asiRequest = nil;
+    ASIFormDataRequest *asiRequest = nil;
     
     if ([reqObj isKindOfClass:[NSURL class]]) {
-        asiRequest = [ASIHTTPRequest requestWithURL:reqObj];
+        asiRequest = [ASIFormDataRequest requestWithURL:reqObj];
     }else if ([reqObj isKindOfClass:[TDSRequestObject class]]){
         TDSRequestObject *requestObject = (TDSRequestObject*)reqObj;
-        asiRequest = [ASIHTTPRequest requestWithURL:requestObject.URL];
+        asiRequest = [ASIFormDataRequest requestWithURL:requestObject.URL];
         asiRequest.userInfo = requestObject.userInfo;
-        if (requestObject.postBody!= nil) {
+        [asiRequest setRequestMethod:@"GET"];
+        if (requestObject.postBody!= nil && requestObject.postBody.count > 0) {
+            for (id key in requestObject.postBody.allKeys) {
+                id value = [requestObject.postBody objectForKey:key];
+                if (key && value) {
+                    [asiRequest addPostValue:value forKey:key];                
+                }
+            }
             [asiRequest setRequestMethod:@"POST"];
-            [asiRequest appendPostData:requestObject.postBody];
         }
     }
     if (asiRequest != nil) {
@@ -87,7 +93,7 @@
     }
 }
 
-- (void)requestDidStartSelector:(ASIHTTPRequest *)request{
+- (void)requestDidStartSelector:(ASIFormDataRequest *)request{
 //    TDSLOG_info(@" requestDidStartSelector withUserInfo:%@",request.userInfo);
     // 回调
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(tdsNetControlCenter:requestDidFinishedLoad:)]) {
@@ -95,19 +101,21 @@
     }
 }
 
-- (void)requestDidFinishSelector:(ASIHTTPRequest *)request{
+- (void)requestDidFinishSelector:(ASIFormDataRequest *)request{
 //    TDSLOG_info(@" requestDidFinishSelector withUserInfo:%@",request.userInfo);
     
     TDSRequestObject *responseObject = [TDSRequestObject request];
     responseObject.userInfo = request.userInfo;
+    responseObject.responseString = request.responseString;
     // json 格式
     responseObject.rootObject = [request.responseString JSONValue];
+    
     // 回调
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(tdsNetControlCenter:requestDidFinishedLoad:)]) {
         [self.delegate tdsNetControlCenter:self requestDidFinishedLoad:responseObject];
     }
 }
-- (void)requestDidFailSelector:(ASIHTTPRequest *)request{
+- (void)requestDidFailSelector:(ASIFormDataRequest *)request{
 //    TDSLOG_info(@" requestDidFailSelector withUserInfo:%@",request.userInfo);
     TDSRequestObject *responseObject = [TDSRequestObject request];
     responseObject.error = request.error;

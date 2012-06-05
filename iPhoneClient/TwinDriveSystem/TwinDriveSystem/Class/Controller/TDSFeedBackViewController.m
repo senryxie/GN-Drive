@@ -63,8 +63,9 @@
     TDSRequestObject *requestObject = [TDSRequestObject requestWithURL:requestURL 
                                                            andUserInfo:nil];
 
-    NSData* data=[_textView.text dataUsingEncoding:NSUTF8StringEncoding];
-    requestObject.postBody = [NSMutableData dataWithData:data];
+    requestObject.postBody = [NSMutableDictionary dictionaryWithDictionary:
+                              [NSDictionary dictionaryWithObject:_textView.text
+                                                          forKey:@"feedback"]];
     
     _netWorkHelper = [[TDSNetControlCenter alloc] init];
     _netWorkHelper.delegate = self;
@@ -85,8 +86,16 @@
 }
 - (void)tdsNetControlCenter:(TDSNetControlCenter*)netControlCenter requestDidFinishedLoad:(id)response{
     TDSRequestObject *requestObject = (TDSRequestObject *)response;
+    NSMutableDictionary *responseDic = requestObject.rootObject;
+    NSString *message = @"已发送";
+    NSNumber *statusCode = [responseDic objectForKey:@"r"];
+    if ([statusCode.stringValue isEqualToString:@"0"]) {
+        message = @"发送成功";
+    }else {
+        message = [NSString stringWithFormat:@"<status code:%@>\n请重新发送",statusCode];
+    }
     [[TDSHudView getInstance] showHudOnView:self.parentViewController.view
-                                    caption:@"发送成功"
+                                    caption:message
                                       image:nil
                                   acitivity:NO
                                autoHideTime:1.0f];
