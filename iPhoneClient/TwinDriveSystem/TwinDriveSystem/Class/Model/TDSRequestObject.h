@@ -13,13 +13,13 @@
     NSMutableDictionary *_parametersDic;
     NSURL *_URL;
     NSDictionary *_userInfo;
-    NSMutableData *_postBody;
+    NSMutableDictionary *_postBody;
     // response
     id _rootObject;
     NSError *_error;
     NSString *_responseString;
 }
-@property (nonatomic, retain) NSMutableData *postBody;
+@property (nonatomic, retain) NSMutableDictionary *postBody;
 @property (nonatomic, retain) NSURL *URL;
 @property (nonatomic, retain) NSMutableDictionary *parametersDic;
 @property (nonatomic, retain) NSDictionary *userInfo;
