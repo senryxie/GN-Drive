@@ -434,37 +434,37 @@
 - (void)showError:(BOOL)value{
     if (value) {
         [[TDSHudView getInstance] showHudOnView:self.view
-                                        caption:@"<error>\n一定是打开的方式有问题"
+                                        caption:@"<error>\n一定是打开的方式有问题，请再试试吧！"
                                           image:nil
                                       acitivity:NO
-                                   autoHideTime:1.0f];        
+                                   autoHideTime:1.5f];        
     }
 }
 - (void)showExtremity:(BOOL)value{
     if (value) {
         [[TDSHudView getInstance] showHudOnView:self.view
-                                        caption:@"轻撸！流量会受不了"
+                                        caption:@"似乎看了太多图\n流量会受不了的"
                                           image:nil
                                       acitivity:NO
-                                   autoHideTime:1.0f];
+                                   autoHideTime:1.5f];
     }
 }
 - (void)showNoPrevious:(BOOL)value{
     if (value) {
         [[TDSHudView getInstance] showHudOnView:self.view
-                                        caption:@"前面没有了"
+                                        caption:@"非常遗憾\n这是最后一张了"
                                           image:nil
                                       acitivity:NO
-                                   autoHideTime:1.0f];        
+                                   autoHideTime:1.5f];        
     } 
 }
 - (void)showNoNext:(BOOL)value{
     if (value) {
         [[TDSHudView getInstance] showHudOnView:self.view
-                                        caption:@"今日到此为止"
+                                        caption:@"今日的街拍图\n已被您鉴赏完毕了"
                                           image:nil
                                       acitivity:NO
-                                   autoHideTime:1.0f];    
+                                   autoHideTime:1.5f];    
     }
 }
 #pragma mark - TDSNetControlCenterDelegate

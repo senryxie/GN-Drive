@@ -98,7 +98,7 @@
                                     caption:message
                                       image:nil
                                   acitivity:NO
-                               autoHideTime:1.0f];
+                               autoHideTime:1.5f];
     [self.navigationController popViewControllerAnimated:YES];
     NSLog(@"success response:%@",requestObject.responseString);
 }
@@ -109,7 +109,7 @@
                                     caption:@"发送失败"
                                       image:nil
                                   acitivity:NO
-                               autoHideTime:1.0f];
+                               autoHideTime:1.5f];
 }
 
 
