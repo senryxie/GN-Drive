@@ -35,6 +35,7 @@
     
     
     _textView = [[UITextView alloc] initWithFrame:self.view.bounds];
+    _textView.font = [UIFont systemFontOfSize:16.0f];
     _textView.delegate = self;
     [self.view addSubview:_textView];
     [_textView becomeFirstResponder];
