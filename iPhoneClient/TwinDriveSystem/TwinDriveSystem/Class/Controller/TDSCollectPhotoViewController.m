@@ -199,10 +199,15 @@
             TDSPhotoView *photoView = [[TDSPhotoView alloc] initWithImage:[UIImage imageNamed:@"collect.png"]];
             [[self photoSource] addPhotos:[NSArray arrayWithObject:photoView]];
             [self.photoViews addObject:[NSNull null]];
-            [self setupScrollViewContentSize];
-            [self moveToPhotoAtIndex:0 animated:NO]; 
             
         }
+        _pageIndex -= 1;
+        if (_pageIndex < 0) {
+            _pageIndex = 0;
+        }
+        
+        [self setupScrollViewContentSize];
+        [self moveToPhotoAtIndex:_pageIndex animated:NO]; 
     }
     [TDSDataPersistenceAssistant saveCollectPhotos:savedCollectPhotos];
     TDSLOG_info(@"====================");
