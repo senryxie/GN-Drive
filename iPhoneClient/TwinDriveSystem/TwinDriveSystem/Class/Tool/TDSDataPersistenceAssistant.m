@@ -63,7 +63,11 @@
         return [NSIndexPath indexPathForRow:0 inSection:-1];
     }
     NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:kReadedPhotoIndexPath];
-    NSIndexPath *indexPath = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:-1];
+    if (data) {
+        indexPath = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    }
+    
     
 	return indexPath;        
 }

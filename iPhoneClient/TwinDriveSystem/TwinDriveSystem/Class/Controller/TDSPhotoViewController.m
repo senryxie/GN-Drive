@@ -8,13 +8,14 @@
 
 #import "TDSPhotoViewController.h"
 #import "TDSPhotoView.h"
+#import "TDSPhotoViewItem.h"
 #import "TDSPhotoDataSource.h"
 #import "TDSRequestObject.h"
-#import "TDSPhotoViewItem.h"
+
 
 #define ONCE_REQUEST_COUNT_LIMIT 5
 #define MAC_COUNT_LIMIT 200
-#define COLLECT_BUTTON_FRAME CGRectMake(260, 10, 40, 40)
+
 
 @interface TDSPhotoViewController(Private)
 - (void)photosLoadMore:(BOOL)more inPage:(NSInteger)page;
@@ -130,6 +131,7 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self setBarsHidden:YES animated:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -256,6 +258,20 @@
     NSLog(@" $$$$ inTDS setBarsHidden:%d",hidden);
 	_collectButton.hidden = hidden;// my added
     
+    TDSPhotoView *photoView = (TDSPhotoView*)[[self photoSource] objectAtIndex:_pageIndex];
+    if (photoView == nil) {
+        return;
+    }
+    NSMutableDictionary *savedCollectPhotos = [NSMutableDictionary dictionaryWithDictionary:
+                                               [TDSDataPersistenceAssistant getCollectPhotos]];
+    if (![savedCollectPhotos.allKeys containsObject:photoView.item.pid]) {
+        [_collectButton setImage:[UIImage imageNamed:@"likeIcon.png"]
+                        forState:UIControlStateNormal];
+    }else {
+        [_collectButton setImage:[UIImage imageNamed:@"likeIconGray.png"] 
+                        forState:UIControlStateNormal];
+    }
+            
 	if (_popover && [self.photoSource numberOfPhotos] == 0) {
 		[_captionView setCaptionHidden:hidden];
 		return;
@@ -338,10 +354,15 @@
     NSString *message = nil;
     if (![savedCollectPhotos.allKeys containsObject:pid]) {
         [savedCollectPhotos addEntriesFromDictionary:[NSDictionary dictionaryWithObject:photoView.item forKey:pid]];
-        message = [NSString stringWithFormat:@"[%@]收藏成功!",photoView.item.pid];
+        message = [NSString stringWithFormat:@"收藏成功!",photoView.item.pid];
+        [_collectButton setImage:[UIImage imageNamed:@"likeIconGray.png"] 
+                        forState:UIControlStateNormal];
     }else {
         [savedCollectPhotos removeObjectForKey:pid];
-        message = [NSString stringWithFormat:@"TODO:\n[%@]取消收藏!",photoView.item.pid];
+        message = [NSString stringWithFormat:@"取消收藏!",photoView.item.pid];
+        [_collectButton setImage:[UIImage imageNamed:@"likeIcon.png"]
+                        forState:UIControlStateNormal];
+
     }
     [TDSDataPersistenceAssistant saveCollectPhotos:savedCollectPhotos];
     [[NSNotificationCenter defaultCenter] postNotificationName:TDSRecordPhotoNotification 
@@ -423,12 +444,10 @@
         }
         ///////
         
-        // 如果当前页面得到数据了，则刷新下显示
-        if (_pageIndex>=range.location && _pageIndex<=(range.location+range.length)) {
-            [self loadScrollViewWithPage:_pageIndex-1];                        
-            [self loadScrollViewWithPage:_pageIndex];            
-            [self loadScrollViewWithPage:_pageIndex+1];            
-        }
+        // 则刷新下显示
+        [self loadScrollViewWithPage:_pageIndex-1];                        
+        [self loadScrollViewWithPage:_pageIndex];            
+        [self loadScrollViewWithPage:_pageIndex+1];            
     }
 }
 - (void)showError:(BOOL)value{
@@ -452,7 +471,7 @@
 - (void)showNoPrevious:(BOOL)value{
     if (value) {
         [[TDSHudView getInstance] showHudOnView:self.view
-                                        caption:@"非常遗憾\n这是最后一张了"
+                                        caption:@"这边翻到头了\n每日更新在另一边"
                                           image:nil
                                       acitivity:NO
                                    autoHideTime:1.5f];        
