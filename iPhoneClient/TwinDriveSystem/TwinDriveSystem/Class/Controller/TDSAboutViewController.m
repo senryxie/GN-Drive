@@ -10,7 +10,7 @@
 #import "UMFeedback.h"
 #import "TDSFeedBackViewController.h"
 
-#define CONTACT_INFO @"icephone@gmail.com"
+#define CONTACT_INFO @"jiepaikong@gmail.com"
 
 @interface TDSAboutViewController ()
 - (void)setDataSource;
@@ -32,7 +32,7 @@
                                     caption:@"     暂时清除缓存成功     "
                                       image:[UIImage imageNamed:@"hudDefault.png"] 
                                   acitivity:NO
-                               autoHideTime:1.0f];
+                               autoHideTime:1.5f];
 }
 
 
@@ -105,7 +105,7 @@
                                         caption:message
                                           image:nil
                                       acitivity:NO
-                                   autoHideTime:1.0f];
+                                   autoHideTime:1.5f];
 
     }
   }

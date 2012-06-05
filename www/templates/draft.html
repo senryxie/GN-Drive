@@ -34,7 +34,7 @@
                                     <a href="#" class="btn-blue trash-sample" data-sid="{{row.sid}}">举报垃圾</a>
                                     <span class="error"></span>
                                 </div>
-                                <a class="pic-item" href="{{row.pic}}" title="{{row.text.decode('utf-8', 'ignore')}}" data-sid="{{row.sid}}">
+                                <a class="pic-item" href="{{row.pic}}" title="{{row.text}}" data-sid="{{row.sid}}">
                                     {% if row.status == 0 %}
                                         <img src="{{row.pic}}" class="img-pending">
                                     {% else %}
@@ -79,11 +79,15 @@
                     sid = target.data('sid'),
                     oImg = $('img', target);
                 $.getJSON('/classification/' + sid + '/', {}, function(ret){
-                    if(ret.status == 0){
+                    if(!ret.status){
                         oImg.removeClass('img-entry').addClass('img-pending');
                     }
                     else{
                         oImg.removeClass('img-pending').addClass('img-entry');
+                    }
+
+                    if(!ret.sina){
+                        $('.error', target.parent()).text('加入sinaapp!!!').delay(1500).fadeIn(function(){ $(this).text('')});
                     }
                 });
             });
