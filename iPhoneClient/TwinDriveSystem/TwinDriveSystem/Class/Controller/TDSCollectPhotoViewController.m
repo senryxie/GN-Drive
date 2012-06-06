@@ -46,7 +46,7 @@
         _collectButton.backgroundColor = [UIColor clearColor];
         _collectButton.alpha = .7f;
         _collectButton.hidden = YES;
-        [_collectButton setImage:[UIImage imageNamed:@"likeIconGray.png"]
+        [_collectButton setImage:[UIImage imageNamed:@"likeIcon.png"]
                         forState:UIControlStateNormal];
         [_collectButton addTarget:self
                            action:@selector(collectAction:)
@@ -122,10 +122,10 @@
     NSMutableDictionary *savedCollectPhotos = [NSMutableDictionary dictionaryWithDictionary:
                                                [TDSDataPersistenceAssistant getCollectPhotos]];
     if (![savedCollectPhotos.allKeys containsObject:photoView.item.pid]) {
-        [_collectButton setImage:[UIImage imageNamed:@"likeIcon.png"]
+        [_collectButton setImage:[UIImage imageNamed:@"likeIconGray.png"]
                         forState:UIControlStateNormal];
     }else {
-        [_collectButton setImage:[UIImage imageNamed:@"likeIconGray.png"] 
+        [_collectButton setImage:[UIImage imageNamed:@"likeIcon.png"] 
                         forState:UIControlStateNormal];
     }
     
@@ -227,6 +227,7 @@
     [super viewWillAppear:animated];
     [self setBarsHidden:YES animated:animated];
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
