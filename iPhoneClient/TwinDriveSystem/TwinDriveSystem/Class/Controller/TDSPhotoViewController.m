@@ -32,7 +32,7 @@
 
 #pragma mark - 
 - (void)dealloc{
-
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.photoViewNetControlCenter = nil;
     [_collectButton release];
     [_retryRequestPageDic release];    
@@ -57,6 +57,13 @@
                                                  selector:@selector(saveReadedPhotoInfo)
                                                      name:UIApplicationWillResignActiveNotification
                                                    object:nil];
+        // 网络状态变化
+        [[NSNotificationCenter defaultCenter] addObserver:self 
+                                                 selector:@selector(netWorkStatuesChanged:) 
+                                                     name:TDSNetStatueChangedNotication 
+                                                   object:nil];
+
+        
         
         _requestNextPageCount = 0;
         _requestPrePageCount = 0;
@@ -83,6 +90,8 @@
         
         _isError = NO;
         
+        _haveNet = NO;
+        
         _collectButton = [[UIButton alloc] initWithFrame:COLLECT_BUTTON_FRAME];
         _collectButton.backgroundColor = [UIColor clearColor];
         _collectButton.alpha = .7f;
@@ -95,6 +104,7 @@
         
         
         _retryRequestPageDic = [[NSMutableDictionary alloc] init];
+        
     }
     return self;
 }
@@ -141,16 +151,14 @@
 }
 #pragma mark - Public Function
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated {
+    // TODO:<前提有网>
+    if (!_haveNet) {
+        return;
+    }
+    
     [super moveToPhotoAtIndex:index animated:animated];
     
     TDSLOG_info(@"allCount:%d:%d    moveIndex:%d  ",[self.photoViews count],[self.photoSource numberOfPhotos],index);
-    
-    // TODO:<前提有网>
-    BOOL haveNet = YES;
-    if (!haveNet) {
-        [self showError:YES];
-        return;
-    }
     
     // 超过一天能看的总数了
     if ([self.photoViews count] >= MAC_COUNT_LIMIT) {
@@ -370,11 +378,13 @@
     TDSLOG_info(@"====================");
     TDSLOG_info(@"savedCollectUrls:%@",[savedCollectPhotos allKeys]);    
     TDSLOG_info(@"====================");    
-    [[TDSHudView getInstance] showHudOnView:self.view
-                                    caption:message
-                                      image:nil
-                                  acitivity:NO
-                               autoHideTime:1.0f];
+    if (message) {
+        [[TDSHudView getInstance] showHudOnView:self.view
+                                        caption:message
+                                          image:nil
+                                      acitivity:NO
+                                   autoHideTime:1.0f];
+    }
 }
 
 - (TDSNetControlCenter*)photoViewNetControlCenter{
@@ -448,6 +458,17 @@
         [self loadScrollViewWithPage:_pageIndex-1];                        
         [self loadScrollViewWithPage:_pageIndex];            
         [self loadScrollViewWithPage:_pageIndex+1];            
+    }
+}
+- (void)netWorkStatuesChanged:(NSNotification *)notification{
+    Reachability* curReach = [notification object];
+    NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
+    NetworkStatus status = [curReach currentReachabilityStatus];
+    if (status == kNotReachable) {
+        _haveNet = NO;
+    }else {
+        _haveNet = YES;
+        [self moveToPhotoAtIndex:_pageIndex animated:NO];
     }
 }
 - (void)showError:(BOOL)value{
@@ -541,7 +562,9 @@
         TDSLOG_info(@"---->get response with error:%@ inpage:%@",
                     responseObject.error,
                     errorRequestPage);    
-        [_retryRequestPageDic addEntriesFromDictionary:[NSDictionary dictionaryWithObject:@"1" forKey:errorRequestPage]];
+        if (errorRequestPage) {
+            [_retryRequestPageDic addEntriesFromDictionary:[NSDictionary dictionaryWithObject:@"1" forKey:errorRequestPage]];            
+        }
     }
 }
 

@@ -213,11 +213,14 @@
     TDSLOG_info(@"====================");
     TDSLOG_info(@"savedCollectUrls:%@",[savedCollectPhotos allKeys]);    
     TDSLOG_info(@"====================");    
-    [[TDSHudView getInstance] showHudOnView:self.view
-                                    caption:message
-                                      image:nil
-                                  acitivity:NO
-                               autoHideTime:1.0f];
+    if (message) {
+        [[TDSHudView getInstance] showHudOnView:self.view
+                                        caption:message
+                                          image:nil
+                                      acitivity:NO
+                                   autoHideTime:1.0f];
+        
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated{

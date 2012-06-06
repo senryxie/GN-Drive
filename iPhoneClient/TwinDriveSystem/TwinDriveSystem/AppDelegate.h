@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Reachability.h"
 
 @class GNViewController;
 
@@ -15,5 +16,7 @@
 @property (strong, nonatomic) UIWindow *window;
 
 @property (strong, nonatomic) GNViewController *viewController;
+
+@property (strong, nonatomic) Reachability *reachabilityObj;
 
 @end

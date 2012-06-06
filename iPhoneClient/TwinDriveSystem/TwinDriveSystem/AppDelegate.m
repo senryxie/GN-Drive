@@ -15,12 +15,46 @@
 
 @synthesize window = _window;
 @synthesize viewController = _viewController;
+@synthesize reachabilityObj;
 
 - (void)dealloc
 {
-    [_window release];
-    [_viewController release];
+    self.reachabilityObj = nil;
+    self.window = nil;
+    self.viewController = nil;
     [super dealloc];
+}
+
+- (void)reachabilityChanged:(NSNotification *)note {
+    
+    Reachability* curReach = [note object];
+    NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
+    NetworkStatus status = [curReach currentReachabilityStatus];
+    
+    switch (status) 
+    {
+        case NotReachable:
+            NSLog(@"网络不可用，请打开蜂窝数据或者WIFI.");
+            [[TDSHudView getInstance] showHudOnWindow:@"网络不可用，\n请打开蜂窝数据或者WIFI."
+                                                image:nil
+                                            acitivity:NO
+                                         autoHideTime:1.5f];    
+            [[NSNotificationCenter defaultCenter] postNotificationName:TDSNetStatueChangedNotication 
+                                                                object:self.reachabilityObj];
+            break;
+        case ReachableViaWiFi:
+            NSLog(@"正在使用WIFI.");
+            [[NSNotificationCenter defaultCenter] postNotificationName:TDSNetStatueChangedNotication 
+                                                                object:self.reachabilityObj];
+            break;
+        case ReachableViaWWAN:
+            NSLog(@"正在使用WWAN.");
+            [[NSNotificationCenter defaultCenter] postNotificationName:TDSNetStatueChangedNotication 
+                                                                object:self.reachabilityObj];            
+            break;
+        default:
+            break;
+    }
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -31,6 +65,15 @@
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
 //    [TDSLoggerView getInstance];
+    
+    // 监听网络
+    self.reachabilityObj = [Reachability reachabilityWithHostName:@"sae.sina.com.cn"];
+    [self.reachabilityObj startNotifier];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reachabilityChanged:)
+                                                 name: kReachabilityChangedNotification
+                                               object: nil];
+    
     return YES;
 }
 
@@ -72,5 +115,7 @@
      See also applicationDidEnterBackground:.
      */
 }
+
+
 
 @end
