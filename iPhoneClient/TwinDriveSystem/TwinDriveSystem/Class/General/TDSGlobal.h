@@ -19,10 +19,12 @@
 #import "ATMHud.h"
 #import "TDSHudView.h"
 #import "TDSEGOPhotoViewController.h"
+#import "Reachability.h"
 
 // notification
-#define TDSNewPhotoNotification           @"TDSNewPhotoNotification"
+#define TDSNewPhotoNotification              @"TDSNewPhotoNotification"
 #define TDSRecordPhotoNotification           @"TDSRecordPhotoNotification"
+#define TDSNetStatueChangedNotication        @"TDSNetStatueChangedNotication"
 
 // string
 #define ResponseAction_Version        @"version"

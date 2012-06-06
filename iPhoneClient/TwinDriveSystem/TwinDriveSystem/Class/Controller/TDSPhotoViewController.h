@@ -35,6 +35,8 @@
     BOOL _isNoPrevious;    
     
     NSMutableDictionary *_retryRequestPageDic;
+    
+    BOOL _haveNet;
 }
 @property (nonatomic, retain)TDSNetControlCenter *photoViewNetControlCenter;
 
