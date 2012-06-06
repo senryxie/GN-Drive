@@ -273,10 +273,10 @@
     NSMutableDictionary *savedCollectPhotos = [NSMutableDictionary dictionaryWithDictionary:
                                                [TDSDataPersistenceAssistant getCollectPhotos]];
     if (![savedCollectPhotos.allKeys containsObject:photoView.item.pid]) {
-        [_collectButton setImage:[UIImage imageNamed:@"likeIcon.png"]
+        [_collectButton setImage:[UIImage imageNamed:@"likeIconGray.png"]
                         forState:UIControlStateNormal];
     }else {
-        [_collectButton setImage:[UIImage imageNamed:@"likeIconGray.png"] 
+        [_collectButton setImage:[UIImage imageNamed:@"likeIcon.png"] 
                         forState:UIControlStateNormal];
     }
             
@@ -363,12 +363,12 @@
     if (![savedCollectPhotos.allKeys containsObject:pid]) {
         [savedCollectPhotos addEntriesFromDictionary:[NSDictionary dictionaryWithObject:photoView.item forKey:pid]];
         message = [NSString stringWithFormat:@"收藏成功!",photoView.item.pid];
-        [_collectButton setImage:[UIImage imageNamed:@"likeIconGray.png"] 
+        [_collectButton setImage:[UIImage imageNamed:@"likeIcon.png"] 
                         forState:UIControlStateNormal];
     }else {
         [savedCollectPhotos removeObjectForKey:pid];
         message = [NSString stringWithFormat:@"取消收藏!",photoView.item.pid];
-        [_collectButton setImage:[UIImage imageNamed:@"likeIcon.png"]
+        [_collectButton setImage:[UIImage imageNamed:@"likeIconGray.png"]
                         forState:UIControlStateNormal];
 
     }

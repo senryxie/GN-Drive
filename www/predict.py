@@ -53,8 +53,11 @@ def build_x(text):
             features.append(0)
     return features
 
-def predict(x):
-    m = svm_model(HOME_PATH + '/snap.svm')
+def get_model():
+    return svm_model(HOME_PATH + '/snap.svm')
+
+
+def predict(x, m):
     label = m.predict(x)
     label = int(label)
     if label == 1:
