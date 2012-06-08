@@ -317,7 +317,7 @@
 }
 
 - (void)setupToolbar {
-	
+	return;// 下面有野指针错误，反正没用到toolbar，但是屏蔽了，呵呵呵呵
 	[self setupViewForPopover];
 
 	if(_popover && [self.photoSource numberOfPhotos] == 1) {
