@@ -33,12 +33,14 @@
             TDSPhotoView *photoView = [TDSPhotoView photoWithItem:photoViewItem];
             [photoViews addObject:photoView];
         }        
+        _isEmpty = NO;
     }else {
         TDSPhotoView *photoView = [[TDSPhotoView alloc] initWithImageURL:nil
                                                                     name:@"可以点击红心收藏街拍图片"
                                                                    image:anImage];
         [photoViews addObject:photoView];
         [photoView release];        
+        _isEmpty = YES;
     }
     self = [super initWithPhotoSource:[[TDSPhotoDataSource alloc] initWithPhotos:photoViews]];
     if (self) {
@@ -59,14 +61,19 @@
 #pragma mark - Public Function
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated {
     [super moveToPhotoAtIndex:index animated:animated];
+    if (_isEmpty) {
+        self.scrollView.userInteractionEnabled = NO;
+    }else {
+        self.scrollView.userInteractionEnabled = YES;
+    }
 }
 - (void)updatePhotoSourceNotication:(NSNotification*)notication{
 
     NSDictionary *collectPhotos = [TDSDataPersistenceAssistant getCollectPhotos];
     NSRange range;   
-    
+    self.scrollView.userInteractionEnabled = YES;
     if ([collectPhotos.allKeys count] > 0) {
-        
+        _isEmpty = NO;
         NSMutableArray *photoViews = [NSMutableArray arrayWithCapacity:collectPhotos.count];
         for (TDSPhotoViewItem *photoViewItem in collectPhotos.allValues) {
             TDSPhotoView *photoView = [TDSPhotoView photoWithItem:photoViewItem];
@@ -91,7 +98,7 @@
     }else if([collectPhotos.allKeys count] <= 0
              && self.photoViews.count > 0)
     {
-        
+        _isEmpty = YES;
         range.location = 0;
         range.length = [_photoSource numberOfPhotos];
         [[self photoSource] removePhotosInRange:range];
@@ -99,14 +106,22 @@
         [self.photoViews addObject:[NSNull null]];
         range.location = 0;
         range.length = 1;
-        TDSPhotoView *photoView = [[TDSPhotoView alloc] initWithImage:[UIImage imageNamed:@"collect.png"]];
+        TDSPhotoView *photoView = [[TDSPhotoView alloc] initWithImageURL:nil 
+                                                                    name:@"可以点击红心收藏街拍图片"
+                                                                   image:[UIImage imageNamed:@"collect.png"]];
         [[self photoSource] insertPhotos:[NSArray arrayWithObject:photoView] inRange:range];
         [self setupScrollViewContentSize];
         [self moveToPhotoAtIndex:0 animated:NO]; 
-                
+        self.scrollView.userInteractionEnabled = NO;
     }
     
     [self setupScrollViewContentSize];
+    
+    if (_isEmpty) {
+        self.scrollView.userInteractionEnabled = NO;
+    }else {
+        self.scrollView.userInteractionEnabled = YES;
+    }
     
 }
 
@@ -187,16 +202,21 @@
     if ([savedCollectPhotos.allKeys containsObject:pid]) {
         [savedCollectPhotos removeObjectForKey:pid];
         message = [NSString stringWithFormat:@"取消收藏!",photoView.item.pid];
-        
         [self.photoViews removeObjectAtIndex:_pageIndex];
+        
         NSRange range;
         range.location = _pageIndex;
         range.length = 1;
+
         [[self photoSource] removePhotosInRange:range];            
-     
+        
+        self.scrollView.userInteractionEnabled = YES;
         if ([[self photoSource] numberOfPhotos] == 0) {
+            self.scrollView.userInteractionEnabled = NO;
+            TDSPhotoView *photoView = [[TDSPhotoView alloc] initWithImageURL:nil 
+                                                                        name:@"可以点击红心收藏街拍图片"
+                                                                       image:[UIImage imageNamed:@"collect.png"]];
             
-            TDSPhotoView *photoView = [[TDSPhotoView alloc] initWithImage:[UIImage imageNamed:@"collect.png"]];
             [[self photoSource] addPhotos:[NSArray arrayWithObject:photoView]];
             [self.photoViews addObject:[NSNull null]];
             
