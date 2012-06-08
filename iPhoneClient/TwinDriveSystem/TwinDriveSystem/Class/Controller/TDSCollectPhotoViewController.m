@@ -95,51 +95,40 @@
             [self.photoViews addObject:[NSNull null]];
         }
         
-    }else if([collectPhotos.allKeys count] <= 0
-             && self.photoViews.count > 0)
+    }else if([collectPhotos.allKeys count] <= 0)
     {
+        [self moveToPhotoAtIndex:0 animated:NO]; 
         _isEmpty = YES;
         range.location = 0;
         range.length = [_photoSource numberOfPhotos];
         [[self photoSource] removePhotosInRange:range];
         [self.photoViews removeAllObjects];
         [self.photoViews addObject:[NSNull null]];
-        range.location = 0;
-        range.length = 1;
+
         TDSPhotoView *photoView = [[TDSPhotoView alloc] initWithImageURL:nil 
                                                                     name:@"可以点击红心收藏街拍图片"
                                                                    image:[UIImage imageNamed:@"collect.png"]];
-        [[self photoSource] insertPhotos:[NSArray arrayWithObject:photoView] inRange:range];
+        [[self photoSource] addPhotos:[NSArray arrayWithObject:photoView]];
         [self setupScrollViewContentSize];
-        [self moveToPhotoAtIndex:0 animated:NO]; 
         self.scrollView.userInteractionEnabled = NO;
     }
     
     [self setupScrollViewContentSize];
     
-    if (_isEmpty) {
-        self.scrollView.userInteractionEnabled = NO;
-    }else {
-        self.scrollView.userInteractionEnabled = YES;
-    }
-    
 }
 
 - (void)setBarsHidden:(BOOL)hidden animated:(BOOL)animated{
-    if (hidden&&_barsHidden) return;
+    if ((hidden&&_barsHidden) || _isEmpty) return;
     NSLog(@" $$$$ inTDS setBarsHidden:%d",hidden);
 	_collectButton.hidden = hidden;// my added
-    
+
     TDSPhotoView *photoView = (TDSPhotoView*)[[self photoSource] objectAtIndex:_pageIndex];
     if (photoView == nil) {
         return;
     }
     NSMutableDictionary *savedCollectPhotos = [NSMutableDictionary dictionaryWithDictionary:
                                                [TDSDataPersistenceAssistant getCollectPhotos]];
-    if (![savedCollectPhotos.allKeys containsObject:photoView.item.pid]) {
-        [_collectButton setImage:[UIImage imageNamed:@"likeIconGray.png"]
-                        forState:UIControlStateNormal];
-    }else {
+    if ([savedCollectPhotos.allKeys containsObject:photoView.item.pid]) {
         [_collectButton setImage:[UIImage imageNamed:@"likeIcon.png"] 
                         forState:UIControlStateNormal];
     }
@@ -245,7 +234,6 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self setBarsHidden:YES animated:animated];
 }
 
 - (void)viewDidLoad
