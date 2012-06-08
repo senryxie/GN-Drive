@@ -73,7 +73,7 @@
     NSRange range;   
     self.scrollView.userInteractionEnabled = YES;
     if ([collectPhotos.allKeys count] > 0) {
-        
+        _isEmpty = NO;
         NSMutableArray *photoViews = [NSMutableArray arrayWithCapacity:collectPhotos.count];
         for (TDSPhotoViewItem *photoViewItem in collectPhotos.allValues) {
             TDSPhotoView *photoView = [TDSPhotoView photoWithItem:photoViewItem];
@@ -98,7 +98,7 @@
     }else if([collectPhotos.allKeys count] <= 0
              && self.photoViews.count > 0)
     {
-        
+        _isEmpty = YES;
         range.location = 0;
         range.length = [_photoSource numberOfPhotos];
         [[self photoSource] removePhotosInRange:range];
@@ -116,6 +116,12 @@
     }
     
     [self setupScrollViewContentSize];
+    
+    if (_isEmpty) {
+        self.scrollView.userInteractionEnabled = NO;
+    }else {
+        self.scrollView.userInteractionEnabled = YES;
+    }
     
 }
 
