@@ -24,7 +24,7 @@ client = APIClient(app_key=APP_KEY, app_secret=APP_SECRET)
 client.oauth_token = access_token
 client.oauth_token_secret = token_secret
 
-baned_list = ['皇冠', '聚美秀', '跑车街拍', '汽车街拍', '网友原创街拍', '手机摄影', '头条博客', '精品App推荐', '京东商城', '微电影', '爆笑街拍', 'Camera360', '时尚潮店', '店铺', '彩妆', '包邮', '外贸', '积分', '汽車', '￥', '这里逛']
+baned_list = ['皇冠', '聚美秀', '跑车街拍', '汽车街拍', '网友原创街拍', '手机摄影', '头条博客', '精品App推荐', '京东商城', '微电影', '爆笑街拍', 'Camera360', '时尚潮店', '店铺', '彩妆', '包邮', '外贸', '积分', '汽車', '￥', '这里逛', '笑喷']
 Draft = namedtuple('Draft', 'id, sid, pic, snum, lnum, author, text, utime, ctime, status')
 
 def download_snap_timeline():
