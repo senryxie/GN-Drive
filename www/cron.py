@@ -7,6 +7,8 @@ from os.path import dirname, abspath
 HOME_PATH = dirname(abspath(__file__))
 sys.path.insert(0, HOME_PATH)
 
+from collections import namedtuple
+
 from libs.sqlstore import engine
 from libs.weibo1 import APIClient
 from libs.core_image import open_pic
@@ -23,6 +25,7 @@ client.oauth_token = access_token
 client.oauth_token_secret = token_secret
 
 baned_list = ['皇冠', '聚美秀', '跑车街拍', '汽车街拍', '网友原创街拍', '手机摄影', '头条博客', '精品App推荐', '京东商城', '微电影', '爆笑街拍', 'Camera360', '时尚潮店']
+Draft = namedtuple('Draft', 'id, sid, pic, snum, lnum, author, text, utime, ctime, status')
 
 def download_snap_timeline():
     page = 1
@@ -50,6 +53,13 @@ def download_snap_timeline():
         if page > 5:
             break
 
+    #
+    #
+    #
+
+    #mysql engine
+    conn = engine.connect()
+
     #svm predict
     selected = set()
     for t in all:
@@ -61,6 +71,11 @@ def download_snap_timeline():
 
         #是否ban掉
         if is_ban:
+            continue
+
+        rs = conn.execute('select * from draft where sid=%s' % t[0])
+        rs = map(Draft._make, rs)
+        if len(rs):
             continue
 
         text = t[3]
@@ -81,10 +96,8 @@ def download_snap_timeline():
             if passed:
                 selected.add(t)
 
-
     #save to draft
     count = 0
-    conn = engine.connect()
     for line in selected:
         id, pic, author, text = line
         try:
