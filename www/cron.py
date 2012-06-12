@@ -96,7 +96,7 @@ def download_snap_timeline():
             pass
             #print '重复入库:', id, pic, author, text
     conn.close()
-    return count
+    return count, len(all)
 
 if __name__ == '__main__':
     #singleton job
@@ -115,11 +115,10 @@ if __name__ == '__main__':
     now = datetime.datetime.now()
     db = redis.StrictRedis()
     snow = datetime.datetime.strftime(now, "%Y-%m-%d %H:%M:%S")
-    print '开始时间:', snow
+    print 'start:', snow
     db.set('lastrun', snow)
-    count = download_snap_timeline() or 0
+    count, total = download_snap_timeline() or 0
     now = datetime.datetime.now()
     snow = datetime.datetime.strftime(now, "%Y-%m-%d %H:%M:%S")
-    print '结束时间:', snow
-    print '本次共抓取到新tweet数量:', count
-
+    print 'end:', snow
+    print 'from %s get %s' % (total, count)
