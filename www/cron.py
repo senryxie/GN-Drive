@@ -61,6 +61,7 @@ def download_snap_timeline():
     conn = engine.connect()
 
     #svm predict
+    dup = 0
     selected = set()
     for t in all:
         is_ban = False
@@ -76,6 +77,7 @@ def download_snap_timeline():
         rs = conn.execute('select * from draft where sid=%s' % t[0])
         rs = map(Draft._make, rs)
         if len(rs):
+            dup += 1
             continue
 
         text = t[3]
@@ -109,7 +111,7 @@ def download_snap_timeline():
             pass
             #print '重复入库:', id, pic, author, text
     conn.close()
-    return count, len(selected)-count, len(all)
+    return len(all), len(selected), dup
 
 if __name__ == '__main__':
     #singleton job
@@ -130,8 +132,8 @@ if __name__ == '__main__':
     snow = datetime.datetime.strftime(now, "%Y-%m-%d %H:%M:%S")
     print 'start:', snow
     db.set('lastrun', snow)
-    count, dup, total = download_snap_timeline() or 0
+    total, count, dup = download_snap_timeline()
     now = datetime.datetime.now()
     snow = datetime.datetime.strftime(now, "%Y-%m-%d %H:%M:%S")
     print 'end:', snow
-    print 'from: %s, get: %s, duplicate: %s' % (total, dup, count)
+    print 'from: %s, get: %s, duplicate: %s' % (total, count, dup)
