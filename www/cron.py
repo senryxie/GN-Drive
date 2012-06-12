@@ -83,17 +83,20 @@ def download_snap_timeline():
 
 
     #save to draft
+    count = 0
     conn = engine.connect()
     for line in selected:
         id, pic, author, text = line
         try:
             conn.execute('insert into draft (sid, pic, author, text, create_time) \
               values(%s,"%s",%s,"%s", now())' % line)
-            #print '入库:', id, pic, author, text
+            print '入库:', id, pic, author, text
+            count += 1
         except:
             pass
             #print '重复入库:', id, pic, author, text
     conn.close()
+    return count
 
 if __name__ == '__main__':
     #singleton job
@@ -112,6 +115,11 @@ if __name__ == '__main__':
     now = datetime.datetime.now()
     db = redis.StrictRedis()
     snow = datetime.datetime.strftime(now, "%Y-%m-%d %H:%M:%S")
-    print snow
+    print '开始时间:', snow
     db.set('lastrun', snow)
-    download_snap_timeline()
+    count = download_snap_timeline() or 0
+    now = datetime.datetime.now()
+    snow = datetime.datetime.strftime(now, "%Y-%m-%d %H:%M:%S")
+    print '结束时间:', snow
+    print '本次共抓取到新tweet数量:', count
+
