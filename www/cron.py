@@ -69,7 +69,7 @@ def download_snap_timeline():
             passed = True
 
             try:
-                r = urllib2.urlopen(pic)
+                r = urllib2.urlopen(pic.replace('bmiddle', 'thumbnail'))
                 im = open_pic(r.read())
                 width, height = im.size
                 if height / width > 1.7777 or width / height > 1.7777:
