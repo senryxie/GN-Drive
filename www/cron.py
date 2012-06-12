@@ -96,7 +96,7 @@ def download_snap_timeline():
             pass
             #print '重复入库:', id, pic, author, text
     conn.close()
-    return count, len(all)
+    return count, len(selected)-count, len(all)
 
 if __name__ == '__main__':
     #singleton job
@@ -117,8 +117,8 @@ if __name__ == '__main__':
     snow = datetime.datetime.strftime(now, "%Y-%m-%d %H:%M:%S")
     print 'start:', snow
     db.set('lastrun', snow)
-    count, total = download_snap_timeline() or 0
+    count, dup, total = download_snap_timeline() or 0
     now = datetime.datetime.now()
     snow = datetime.datetime.strftime(now, "%Y-%m-%d %H:%M:%S")
     print 'end:', snow
-    print 'from %s get %s' % (total, count)
+    print 'from: %s, get: %s, duplicate: %s' % (total, dup, count)
