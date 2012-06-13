@@ -3,6 +3,7 @@
 
 import sys
 import urllib2
+from urllib2 import HTTPError
 from os.path import dirname, abspath
 HOME_PATH = dirname(abspath(__file__))
 sys.path.insert(0, HOME_PATH)
@@ -49,7 +50,16 @@ def download_snap_timeline():
                 feature = (id, pic, author, text)
                 all.append(feature)
         page += 1
-        tweets = client.trends__statuses(trend_name='街拍', page=page)
+        tweets = []
+        try:
+            tweets = client.trends__statuses(trend_name='街拍', page=page)
+        except HTTPError as e:
+            if str(e.code) in ('400', '403', '401'):
+                '''bad request or forbidden'''
+                print '微博接口%s错误', e.code
+            else:
+                raise
+
         if page > 5:
             break
 
