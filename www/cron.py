@@ -33,7 +33,7 @@ baned_list = ['皇冠', '聚美秀', '跑车街拍', '汽车街拍', '网友原�
               '接拍的明星', '这几家可以', '免邮', '装逼', '性价比', '原味店', \
               '商城', '白富美', '淘宝', '大洋', '宝贝地址']
 
-baned_list = baned_list.sort(key=lambda x: len(x))
+baned_list.sort(key=lambda x: len(x))
 
 
 Draft = namedtuple('Draft', 'id, sid, pic, snum, lnum, author, text, utime, ctime, status')
