@@ -24,6 +24,10 @@ def teardown_request(exception):
     if hasattr(g, 'db'):
         g.db.close()
 
+@app.route('/apps')
+def apps():
+    return render_template('apps.html', **locals())
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
