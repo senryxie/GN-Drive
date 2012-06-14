@@ -7,7 +7,7 @@
 //
 
 #import "TDSMainScreenTabBar.h"
-#define EDGE_WIDTH 18
+#define EDGE_WIDTH 3
 #define DEFAULT_ANIMATION_DURATION 0.2
 #define TAB_TOOL_BAR_SIZE CGSizeMake(320.0f, 44.0);
 
@@ -43,7 +43,7 @@
                                                                                 size.height)];
     backgroundView.backgroundColor = [UIColor yellowColor];
     
-    UIImage *backgroundImg = [UIImage imageNamed:@"tabbar_background.png"];
+    UIImage *backgroundImg = [UIImage imageNamed:@"tab_background.png"];
     backgroundView.image = backgroundImg;
     
     self.backgroundView = backgroundView;
@@ -52,7 +52,7 @@
     
     UIImageView *thumbView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 
                                                                            0.0f, 
-                                                                           50.0, 
+                                                                           60.0, 
                                                                            size.height)];
     thumbView.backgroundColor = [UIColor clearColor];
     
@@ -85,8 +85,8 @@
         
         self.animationDuration = DEFAULT_ANIMATION_DURATION;
         _selfSize =  TAB_TOOL_BAR_SIZE;
-        _thumbWidth = 95.0f;//self.thumbView.image.size.width;
-        _thumbSpace = (_selfSize.width - 2*EDGE_WIDTH - self.normalTabs.count*_thumbWidth)/(self.normalTabs.count - 1);
+        _thumbWidth = 100;//self.thumbView.image.size.width;
+        _thumbSpace = 7;//(_selfSize.width - 2*EDGE_WIDTH - self.normalTabs.count*_thumbWidth)/(self.normalTabs.count - 1);
         
         // Initialization code
         [self setSkinResView];                
@@ -166,18 +166,18 @@
     
     self.thumbView.frame = CGRectIntegral(CGRectMake(EDGE_WIDTH + self.currentTabIndex*(_thumbSpace+_thumbWidth),
                                                      0,
-                                                     _thumbWidth,
-                                                     40.0f));//self.thumbView.image.size.height));
+                                                     100,
+                                                     self.thumbView.image.size.height));
     
     for (NSInteger idx = 0; idx < self.normalTabs.count; idx ++) {
         UIImageView *normalTab = [self.normalTabs objectAtIndex:idx];
         UIImageView *selectedTab = [self.selectedTabs objectAtIndex:idx];
         CGRect tabFrame = CGRectIntegral(CGRectMake(EDGE_WIDTH + idx * (_thumbSpace + _thumbWidth) + (_thumbWidth - normalTab.image.size.width)/2,
                                                     (_selfSize.height - normalTab.image.size.height)/2,
-                                                    40,
-                                                    40));
-//                                                    normalTab.image.size.width,
-//                                                    normalTab.image.size.height));
+//                                                    40,
+//                                                    40));
+                                                    normalTab.image.size.width,
+                                                    normalTab.image.size.height));
         normalTab.frame = tabFrame;
         selectedTab.frame = tabFrame;
         
@@ -230,7 +230,7 @@
         self.thumbView.frame = CGRectIntegral(CGRectMake(EDGE_WIDTH + self.currentTabIndex*(_thumbSpace+_thumbWidth),
                                                          0,
                                                          _thumbWidth,
-                                                         40.0f));//self.thumbView.image.size.height));
+                                                         self.thumbView.image.size.height));
         [self updateTabs];
         
         [UIView commitAnimations];
@@ -263,7 +263,7 @@
         CGRect idxThumbFrame = CGRectMake(EDGE_WIDTH + idx*(_thumbSpace+_thumbWidth) - 15,
                                           0,
                                           _thumbWidth + 15*2,
-                                          40.0f);//self.thumbView.image.size.height);
+                                          self.thumbView.image.size.height);
         if (CGRectContainsPoint(idxThumbFrame, location)) {
             selectIdx = idx;
             break;
