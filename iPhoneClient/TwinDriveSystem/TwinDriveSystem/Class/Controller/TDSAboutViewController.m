@@ -11,7 +11,7 @@
 #import "TDSFeedBackViewController.h"
 
 #define CONTACT_INFO @"jiepaikong@gmail.com"
-
+#define VERSION_INFO @"v1.0"
 @interface TDSAboutViewController ()
 - (void)setDataSource;
 @end
@@ -83,9 +83,9 @@
 }
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    BOOL show = YES;
     // dirty code
+    
+    BOOL show = NO;
     NSString *cellInfo = [_aboutArray objectAtIndex:indexPath.row];
     NSMutableString *message= [NSMutableString stringWithFormat:@"%@\n",cellInfo];
     if ([cellInfo isEqualToString:AboutInfo_Version]) {
@@ -117,16 +117,43 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
+    UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                                    reuseIdentifier:nil] autorelease];
     
-	if(_aboutArray != nil && [_aboutArray count]>0)
+    // dirty code
+	if(_aboutArray != nil && [_aboutArray count] > 0)
 	{
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;		
 		cell.textLabel.font = [UIFont fontWithName:@"Arial" size:17.0];
 		cell.textLabel.textAlignment = UITextAlignmentLeft;
-		NSString *aboutText = [_aboutArray objectAtIndex:indexPath.row];
-		cell.textLabel.text = [NSString stringWithFormat:@"%@",aboutText];
+
+        NSString *cellInfo = [_aboutArray objectAtIndex:indexPath.row];
+        cell.textLabel.text = [NSString stringWithFormat:@"%@",cellInfo];        
+        
+        UILabel *infoLabel = [[UILabel alloc] init];
+        infoLabel.font = cell.textLabel.font;
+        infoLabel.backgroundColor = [UIColor clearColor];
+        [cell.contentView addSubview:infoLabel];
+
+        if ([cellInfo isEqualToString:AboutInfo_Version]) {
+            infoLabel.text = VERSION_INFO;
+        }else if([cellInfo isEqualToString:AboutInfo_ContactInfo]) {   
+            infoLabel.text = CONTACT_INFO;
+        }else {
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        CGSize labelSize = [infoLabel.text sizeWithFont:infoLabel.font
+                                      constrainedToSize:CGSizeMake(cell.contentView.frame.size.width,
+                                                                   cell.contentView.frame.size.height)
+                                          lineBreakMode:UILineBreakModeWordWrap];
+        infoLabel.frame = CGRectMake(CGRectGetMaxX(cell.contentView.frame) - labelSize.width - 30, 
+                                     8.0, 
+                                     labelSize.width, 
+                                     labelSize.height);
+        [infoLabel release];
+        
 	}
 	return cell;
 }
