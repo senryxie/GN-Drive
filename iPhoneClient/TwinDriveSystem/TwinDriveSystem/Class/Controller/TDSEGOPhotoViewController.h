@@ -32,7 +32,7 @@
 // 暴露出来的
 - (void)loadScrollViewWithPage:(NSInteger)page;
 - (void)setupScrollViewContentSize;
-
+- (void)setBarsHidden:(BOOL)hidden animated:(BOOL)animated;
 - (TDSPhotoDataSource *)photoSource; // 这尼玛为啥会是readOnly，暴露出来
 
 @end

@@ -777,8 +777,6 @@
 
 - (void)setupScrollViewContentSize{
 	
-	CGFloat toolbarSize = _popover ? 0.0f : self.navigationController.toolbar.frame.size.height;	
-	
 	CGSize contentSize = self.view.bounds.size;
 	contentSize.width = (contentSize.width * [self.photoSource numberOfPhotos]);
 	
@@ -786,7 +784,7 @@
 		self.scrollView.contentSize = contentSize;
 	}
 	
-	_captionView.frame = CGRectMake(0.0f, self.view.bounds.size.height - (toolbarSize + 40.0f), self.view.bounds.size.width, 40.0f);
+	_captionView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 80.0f, self.view.bounds.size.width, 80.0f);
 
 }
 
@@ -842,7 +840,10 @@
 	
 	if (photoView == nil || (NSNull*)photoView == [NSNull null]) {
 		
-		photoView = [[EGOPhotoImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height)];
+		photoView = [[EGOPhotoImageView alloc] initWithFrame:CGRectMake(0.0f, 
+                                                                        0.0f,
+                                                                        self.scrollView.bounds.size.width,
+                                                                        self.scrollView.bounds.size.height)];
 		[self.photoViews replaceObjectAtIndex:page withObject:photoView];
 		[photoView release];
 		

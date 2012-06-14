@@ -29,6 +29,7 @@
 @private
 	UILabel *_textLabel;
 	BOOL _hidden;
+    CGRect _textLabelFrame;
 
 }
 
