@@ -79,4 +79,14 @@ CREATE TABLE IF NOT EXISTS `device` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `udid` (`udid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='用户设备表/2012-03-15' AUTO_INCREMENT=216331 ;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+DROP TABLE IF EXISTS `features`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE IF NOT EXISTS `features` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `word` varchar(40) CHARACTER SET ucs2 NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='特征表/2012-06-07';
+/*!40101 SET character_set_client = @saved_cs_client */;

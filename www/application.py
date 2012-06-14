@@ -4,13 +4,15 @@ from flask import Flask, g, request, render_template, jsonify, session, redirect
 
 app = Flask(__name__)
 app.secret_key = 'ssdofiuwexcvsfsjdlgkfjsdfu'
-from flup.server.fcgi import WSGIServer
+
+import json
+import redis
+import requests
 from user import User
 from collections import namedtuple
-import requests
-import json
 
 Draft = namedtuple('Draft', 'id, sid, pic, snum, lnum, author, text, utime, ctime, status')
+db = redis.StrictRedis()
 
 @app.before_request
 def before_request():
@@ -54,6 +56,7 @@ def index():
 
 @app.route('/draft')
 def draft():
+    lastrun = db.get('lastrun')
     if 'username' not in session and request.path != '/login':
         return redirect('/login')
 
@@ -283,12 +286,13 @@ def post_feedback(udid):
     return jsonify(ret)
 
 if __name__ == "__main__":
-    import sys
-    args = sys.argv
-    if len(args) == 2 and args[1] == 'test':
-        print 'test mode'
+    from optparse import OptionParser
+    u = 'app for snap'
+    parser = OptionParser(usage=u)
+    parser.add_option('-t', '--test', action='store_true')
+    options, args = parser.parse_args()
+    if options.test:
         app.debug = True
         app.run(host='0.0.0.0')
     else:
-        app.debug = True
-        WSGIServer(app,bindAddress='/var/www/gn-drive.sock').run()
+        app.run()
