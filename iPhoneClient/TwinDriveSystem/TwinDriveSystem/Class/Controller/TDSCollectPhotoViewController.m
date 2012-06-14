@@ -72,7 +72,7 @@
     range.location = 0;
     range.length = [[self photoSource] numberOfPhotos];
     for (int index = 0; index < self.photoViews.count ; index++) {        
-        if ([self.photoViews objectAtIndex:index]) {
+        if ([[self.photoViews objectAtIndex:index] isKindOfClass:[EGOPhotoImageView class]]) {
             EGOPhotoImageView *imageView = [self.photoViews objectAtIndex:index];
             [imageView removeFromSuperview];
         }
@@ -159,7 +159,7 @@
         [savedCollectPhotos removeObjectForKey:pid];
         message = [NSString stringWithFormat:@"取消收藏!"];
         
-        if ([self.photoViews objectAtIndex:_pageIndex]) {
+        if ([[self.photoViews objectAtIndex:_pageIndex] isKindOfClass:[EGOPhotoImageView class]]) {
             EGOPhotoImageView *imageView = [self.photoViews objectAtIndex:_pageIndex];
             [imageView removeFromSuperview];            
         }
