@@ -46,8 +46,7 @@
     if (self) {
         _collectButton = [[UIButton alloc] initWithFrame:COLLECT_BUTTON_FRAME];
         _collectButton.backgroundColor = [UIColor clearColor];
-        _collectButton.alpha = .7f;
-        _collectButton.hidden = YES;
+        _collectButton.alpha = 0.0f;
         [_collectButton setImage:[UIImage imageNamed:@"likeIcon.png"]
                         forState:UIControlStateNormal];
         [_collectButton addTarget:self
@@ -58,6 +57,7 @@
     return self;
     
 }
+
 #pragma mark - Public Function
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated {
     [super moveToPhotoAtIndex:index animated:animated];
@@ -68,9 +68,21 @@
     }
 }
 - (void)updatePhotoSourceNotication:(NSNotification*)notication{
-
-    NSDictionary *collectPhotos = [TDSDataPersistenceAssistant getCollectPhotos];
     NSRange range;   
+    range.location = 0;
+    range.length = [[self photoSource] numberOfPhotos];
+    for (int index = 0; index < self.photoViews.count ; index++) {        
+        if ([self.photoViews objectAtIndex:index]) {
+            EGOPhotoImageView *imageView = [self.photoViews objectAtIndex:index];
+            [imageView removeFromSuperview];
+        }
+
+    }
+    [self.photoViews removeAllObjects];
+    [[self photoSource] removePhotosInRange:range];
+    
+    NSDictionary *collectPhotos = [TDSDataPersistenceAssistant getCollectPhotos];
+    
     self.scrollView.userInteractionEnabled = YES;
     if ([collectPhotos.allKeys count] > 0) {
         _isEmpty = NO;
@@ -79,48 +91,36 @@
             TDSPhotoView *photoView = [TDSPhotoView photoWithItem:photoViewItem];
             [photoViews addObject:photoView];
         }
+        [[self photoSource] addPhotos:photoViews];
         
-        range.location = 0;
-        range.length = collectPhotos.count;
-        [[self photoSource] updatePhotos:photoViews inRange:range];
-        if (range.length < [_photoSource numberOfPhotos]) {
-            if (_pageIndex > range.length) {
-                [self moveToPhotoAtIndex:range.length-1 animated:NO]; 
-            }
-            range.location = collectPhotos.count;
-            range.length = [_photoSource numberOfPhotos] - collectPhotos.count;
-            [[self photoSource] removePhotosInRange:range];    
-        }
-        for (unsigned i = self.photoViews.count; i < collectPhotos.count; i++) {
+        for (unsigned i = 0.0f; i < collectPhotos.count; i++) {
             [self.photoViews addObject:[NSNull null]];
         }
-        
-    }else if([collectPhotos.allKeys count] <= 0)
+        [self setupScrollViewContentSize];
+    }
+    else if([collectPhotos.allKeys count] <= 0)
     {
-        [self moveToPhotoAtIndex:0 animated:NO]; 
         _isEmpty = YES;
-        range.location = 0;
-        range.length = [_photoSource numberOfPhotos];
-        [[self photoSource] removePhotosInRange:range];
-        [self.photoViews removeAllObjects];
         [self.photoViews addObject:[NSNull null]];
-
         TDSPhotoView *photoView = [[TDSPhotoView alloc] initWithImageURL:nil 
                                                                     name:@"可以点击红心收藏街拍图片"
                                                                    image:[UIImage imageNamed:@"collect.png"]];
         [[self photoSource] addPhotos:[NSArray arrayWithObject:photoView]];
         [self setupScrollViewContentSize];
         self.scrollView.userInteractionEnabled = NO;
+        
+        [self moveToPhotoAtIndex:0 animated:NO]; 
+        [self setBarsHidden:NO animated:NO];
     }
     
-    [self setupScrollViewContentSize];
+
     
 }
 
 - (void)setBarsHidden:(BOOL)hidden animated:(BOOL)animated{
-    if ((hidden&&_barsHidden) || _isEmpty) return;
+    if (hidden&&_barsHidden) return;
+    [super setBarsHidden:hidden animated:animated];
     NSLog(@" $$$$ inTDS setBarsHidden:%d",hidden);
-	_collectButton.hidden = hidden;// my added
 
     TDSPhotoView *photoView = (TDSPhotoView*)[[self photoSource] objectAtIndex:_pageIndex];
     if (photoView == nil) {
@@ -132,52 +132,19 @@
         [_collectButton setImage:[UIImage imageNamed:@"likeIcon.png"] 
                         forState:UIControlStateNormal];
     }
-    
-	if (_popover && [self.photoSource numberOfPhotos] == 0) {
-		[_captionView setCaptionHidden:hidden];
-		return;
-	}
-    
-    //	[self setStatusBarHidden:hidden animated:animated];
-	
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 30200
-	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-		
-		if (!_popover) {
-			
-			if (animated) {
-				[UIView beginAnimations:nil context:NULL];
-				[UIView setAnimationDuration:0.3f];
-				[UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-			}
-			
-			self.navigationController.navigationBar.alpha = hidden ? 0.0f : 1.0f;
-			self.navigationController.toolbar.alpha = hidden ? 0.0f : 1.0f;
-			
-			if (animated) {
-				[UIView commitAnimations];
-			}
-			
-		} 
-		
-	} else {
-		
-		[self.navigationController setNavigationBarHidden:hidden animated:animated];
-		[self.navigationController setToolbarHidden:hidden animated:animated];
-		
-	}
-#else
-	
-	[self.navigationController setNavigationBarHidden:hidden animated:animated];
-	[self.navigationController setToolbarHidden:hidden animated:animated];
-	
-#endif
-	
-	if (_captionView) {
-		[_captionView setCaptionHidden:hidden];
-	}
-	
-	_barsHidden=hidden;
+    if (animated) {
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.2f];        
+    }
+    if (_isEmpty) {    
+        _collectButton.alpha = 0.0f;
+    }else{        
+        _collectButton.alpha = !hidden;                             
+    }
+    if (animated) {
+        [UIView commitAnimations];
+    }
+
 }
 
 - (void)collectAction:(id)sender{
@@ -190,8 +157,12 @@
     NSString *message = nil;
     if ([savedCollectPhotos.allKeys containsObject:pid]) {
         [savedCollectPhotos removeObjectForKey:pid];
-        message = [NSString stringWithFormat:@"取消收藏!",photoView.item.pid];
-        [self.photoViews removeObjectAtIndex:_pageIndex];
+        message = [NSString stringWithFormat:@"取消收藏!"];
+        
+        if ([self.photoViews objectAtIndex:_pageIndex]) {
+            EGOPhotoImageView *imageView = [self.photoViews objectAtIndex:_pageIndex];
+            [imageView removeFromSuperview];            
+        }
         
         NSRange range;
         range.location = _pageIndex;
@@ -199,15 +170,18 @@
 
         [[self photoSource] removePhotosInRange:range];            
         
+        _isEmpty = NO;        
         self.scrollView.userInteractionEnabled = YES;
+
         if ([[self photoSource] numberOfPhotos] == 0) {
+            _isEmpty = YES;
             self.scrollView.userInteractionEnabled = NO;
             TDSPhotoView *photoView = [[TDSPhotoView alloc] initWithImageURL:nil 
                                                                         name:@"可以点击红心收藏街拍图片"
                                                                        image:[UIImage imageNamed:@"collect.png"]];
             
-            [[self photoSource] addPhotos:[NSArray arrayWithObject:photoView]];
-            [self.photoViews addObject:[NSNull null]];
+            [[self photoSource] updatePhotos:[NSArray arrayWithObject:photoView]
+                                     inRange:range];
             
         }
         _pageIndex -= 1;
@@ -217,6 +191,7 @@
         
         [self setupScrollViewContentSize];
         [self moveToPhotoAtIndex:_pageIndex animated:NO]; 
+        [self setBarsHidden:NO animated:NO];
     }
     [TDSDataPersistenceAssistant saveCollectPhotos:savedCollectPhotos];
     TDSLOG_info(@"====================");
@@ -234,6 +209,7 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self setBarsHidden:YES animated:NO];
 }
 
 - (void)viewDidLoad

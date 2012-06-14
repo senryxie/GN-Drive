@@ -94,7 +94,7 @@
         
         _collectButton = [[UIButton alloc] initWithFrame:COLLECT_BUTTON_FRAME];
         _collectButton.backgroundColor = [UIColor clearColor];
-        _collectButton.alpha = .7f;
+        _collectButton.alpha = 0.0f;
         [_collectButton setImage:[UIImage imageNamed:@"likeIcon.png"]
                         forState:UIControlStateNormal];
         [_collectButton addTarget:self
@@ -141,7 +141,7 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self setBarsHidden:YES animated:animated];
+    [self setBarsHidden:YES animated:NO];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -263,8 +263,9 @@
 
 - (void)setBarsHidden:(BOOL)hidden animated:(BOOL)animated{
     if (hidden&&_barsHidden) return;
+    [super setBarsHidden:hidden animated:animated];
     NSLog(@" $$$$ inTDS setBarsHidden:%d",hidden);
-	_collectButton.hidden = hidden;// my added
+    
     
     TDSPhotoView *photoView = (TDSPhotoView*)[[self photoSource] objectAtIndex:_pageIndex];
     if (photoView == nil) {
@@ -279,52 +280,12 @@
         [_collectButton setImage:[UIImage imageNamed:@"likeIcon.png"] 
                         forState:UIControlStateNormal];
     }
-            
-	if (_popover && [self.photoSource numberOfPhotos] == 0) {
-		[_captionView setCaptionHidden:hidden];
-		return;
-	}
     
-//	[self setStatusBarHidden:hidden animated:animated];
-	
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 30200
-	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-		
-		if (!_popover) {
-			
-			if (animated) {
-				[UIView beginAnimations:nil context:NULL];
-				[UIView setAnimationDuration:0.3f];
-				[UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-			}
-			
-			self.navigationController.navigationBar.alpha = hidden ? 0.0f : 1.0f;
-			self.navigationController.toolbar.alpha = hidden ? 0.0f : 1.0f;
-			
-			if (animated) {
-				[UIView commitAnimations];
-			}
-			
-		} 
-		
-	} else {
-		
-		[self.navigationController setNavigationBarHidden:hidden animated:animated];
-		[self.navigationController setToolbarHidden:hidden animated:animated];
-		
-	}
-#else
-	
-	[self.navigationController setNavigationBarHidden:hidden animated:animated];
-	[self.navigationController setToolbarHidden:hidden animated:animated];
-	
-#endif
-	
-	if (_captionView) {
-		[_captionView setCaptionHidden:hidden];
-	}
-	
-	_barsHidden=hidden;
+    [UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:0.2f];
+	_collectButton.alpha = !hidden;
+    [UIView commitAnimations];
+
 }
 - (EGOPhotoImageView*)dequeuePhotoView{
 	

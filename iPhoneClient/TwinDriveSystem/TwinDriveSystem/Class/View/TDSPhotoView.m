@@ -32,12 +32,12 @@
 }
 - (id)initWithPhotoViewItem:(TDSPhotoViewItem*)item{
     if (self = [super init]) {
-        self.item = item;
-		_URL=[[NSURL URLWithString:_item.photoUrl] retain];
-        // TODO:暂时改成pid显示，用作调试
-//		_caption=[_item.caption retain];
-        NSString *caption = [NSString stringWithFormat:@"%@",_item.caption];
-		_caption=[caption retain];
+        if (item) {
+            self.item = item;
+            _URL=[[NSURL URLWithString:_item.photoUrl] retain];
+            NSString *caption = [NSString stringWithFormat:@"%@",_item.caption];
+            _caption=[caption retain];            
+        }
 	}
 	
 	return self;

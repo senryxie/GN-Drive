@@ -35,10 +35,14 @@
 		
 		self.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.3f];
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-		
-		_textLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 0.0f, self.frame.size.width - 40.0f, 40.0f)];
+
+		_textLabelFrame = CGRectMake(20.0f, 0.0f, self.frame.size.width - 40.0f, 40.0f);
+		_textLabel = [[UILabel alloc] initWithFrame:_textLabelFrame];        
 		_textLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		_textLabel.backgroundColor = [UIColor clearColor];
+        _textLabel.lineBreakMode = UILineBreakModeWordWrap;
+        _textLabel.numberOfLines = 4;        
+        _textLabel.font = [UIFont fontWithName:@"Arial" size:15.0f];
 		_textLabel.textAlignment = UITextAlignmentCenter;
 		_textLabel.textColor = [UIColor whiteColor];
 		_textLabel.shadowColor = [UIColor blackColor];
@@ -54,7 +58,12 @@
 - (void)layoutSubviews{
 	
 	[self setNeedsDisplay];
-	_textLabel.frame = CGRectMake(20.0f, 0.0f, self.frame.size.width - 40.0f, 40.0f);
+    
+    [_textLabel setFrame:_textLabelFrame];
+    CGRect v_frame = self.frame;
+    v_frame.size.height = _textLabelFrame.size.height;
+    self.frame = v_frame;
+
 	
 }
 
@@ -73,13 +82,29 @@
 	if (text == nil || [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
 		
 		_textLabel.text = nil;	
-		[self setHidden:YES];
-		
+		[self setHidden:YES];		
+        
 	} else {
-		
+        
+        CGSize labelSize = [text sizeWithFont:_textLabel.font
+                            constrainedToSize:CGSizeMake(self.frame.size.width-40.0,
+                                                         80.0f)
+                                lineBreakMode:UILineBreakModeWordWrap];
+        if (labelSize.height<40.0) {
+            labelSize.height = 40.0f;
+        }
+        _textLabelFrame.size.height = labelSize.height;
+        [_textLabel setFrame:_textLabelFrame];
+        _textLabel.text = text;
+        
+        CGRect v_frame = self.frame;
+        v_frame.size.height = _textLabelFrame.size.height;
+        self.frame = v_frame;
+        
+        [self setNeedsLayout];
+        
 		[self setHidden:val];
-		_textLabel.text = text;
-		
+
 	}
 	
 	

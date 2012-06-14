@@ -146,17 +146,18 @@
 
 - (void)setupScrollViewContentSize{
 	
-	CGFloat toolbarSize = _popover ? 0.0f : self.navigationController.toolbar.frame.size.height;	
-	
-	CGSize contentSize = self.view.bounds.size;
+    CGSize contentSize = self.view.bounds.size;
 	contentSize.width = (contentSize.width * [self.photoSource numberOfPhotos]);
 	
 	if (!CGSizeEqualToSize(contentSize, self.scrollView.contentSize)) {
 		self.scrollView.contentSize = contentSize;
 	}
 	
-	_captionView.frame = CGRectMake(0.0f, self.view.bounds.size.height - (toolbarSize + 40.0f), self.view.bounds.size.width, 40.0f);
+	_captionView.frame = CGRectMake(0.0f, self.view.bounds.size.height, self.view.bounds.size.width, 80.0f);
     
 }
-
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self setBarsHidden:YES animated:YES];
+    [super scrollViewDidScroll:scrollView];
+}
 @end
