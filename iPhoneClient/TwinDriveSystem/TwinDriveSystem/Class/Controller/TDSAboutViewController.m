@@ -40,7 +40,7 @@
 {
     [super viewDidLoad];
     
-    self.navigationItem.title = @"关于街拍控";
+    self.navigationItem.title = @"设置";
     
     [self setDataSource];
 
