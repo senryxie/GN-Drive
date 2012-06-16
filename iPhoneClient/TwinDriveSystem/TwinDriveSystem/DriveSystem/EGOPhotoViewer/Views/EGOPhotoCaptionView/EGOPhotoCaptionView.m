@@ -36,7 +36,7 @@
 		self.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.3f];
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
 
-		_textLabelFrame = CGRectMake(20.0f, 0.0f, self.frame.size.width - 40.0f, 40.0f);
+		_textLabelFrame = CGRectMake(15.0f, 10.0f, self.frame.size.width - 30.0f, 40.0f);
 		_textLabel = [[UILabel alloc] initWithFrame:_textLabelFrame];        
 		_textLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		_textLabel.backgroundColor = [UIColor clearColor];
@@ -61,7 +61,7 @@
     
     [_textLabel setFrame:_textLabelFrame];
     CGRect v_frame = self.frame;
-    v_frame.size.height = _textLabelFrame.size.height;
+    v_frame.size.height = _textLabelFrame.size.height + 20;
     self.frame = v_frame;
 
 	
@@ -87,18 +87,18 @@
 	} else {
         
         CGSize labelSize = [text sizeWithFont:_textLabel.font
-                            constrainedToSize:CGSizeMake(self.frame.size.width-40.0,
+                            constrainedToSize:CGSizeMake(self.frame.size.width-15.0,
                                                          80.0f)
                                 lineBreakMode:UILineBreakModeWordWrap];
-        if (labelSize.height<40.0) {
-            labelSize.height = 40.0f;
-        }
+//        if (labelSize.height<40.0) {
+//            labelSize.height = 40.0f;
+//        }
         _textLabelFrame.size.height = labelSize.height;
         [_textLabel setFrame:_textLabelFrame];
         _textLabel.text = text;
         
         CGRect v_frame = self.frame;
-        v_frame.size.height = _textLabelFrame.size.height;
+        v_frame.size.height = _textLabelFrame.size.height + 20;
         self.frame = v_frame;
         
         [self setNeedsLayout];
@@ -134,13 +134,13 @@
 	if (hidden) {
 		
 		[UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
-		self.frame = CGRectMake(0.0f, self.superview.frame.size.height, self.frame.size.width, self.frame.size.height);
+		self.frame = CGRectMake(0.0f, self.superview.frame.size.height + 10, self.frame.size.width, self.frame.size.height);
 		
 	} else {
 		
 		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 		
-		self.frame = CGRectMake(0.0f, self.superview.frame.size.height - self.frame.size.height, self.frame.size.width, self.frame.size.height);
+		self.frame = CGRectMake(0.0f, self.superview.frame.size.height - self.frame.size.height - 10, self.frame.size.width, self.frame.size.height);
 
 	}
 	
