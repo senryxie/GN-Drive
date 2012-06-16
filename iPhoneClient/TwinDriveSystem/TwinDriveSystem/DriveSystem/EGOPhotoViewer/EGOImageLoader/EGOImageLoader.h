@@ -54,4 +54,5 @@
 @optional
 - (void)imageLoaderDidLoad:(NSNotification*)notification; // Object will be EGOImageLoader, userInfo will contain imageURL and image
 - (void)imageLoaderDidFailToLoad:(NSNotification*)notification; // Object will be EGOImageLoader, userInfo will contain error
+- (void)imageLoadderDidUpdated:(NSNotification*)notification;
 @end

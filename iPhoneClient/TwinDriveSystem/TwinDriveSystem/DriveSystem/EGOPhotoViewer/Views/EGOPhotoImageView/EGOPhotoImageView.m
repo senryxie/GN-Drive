@@ -25,6 +25,7 @@
 //
 
 #import "EGOPhotoImageView.h"
+#import "ATMHud.h"
 
 #define ZOOM_VIEW_TAG 0x101
 
@@ -55,6 +56,7 @@
 @synthesize imageView=_imageView;
 @synthesize scrollView=_scrollView;
 @synthesize loading=_loading;
+@synthesize hud;
 
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
@@ -80,12 +82,8 @@
 		_imageView = [imageView retain];
 		[imageView release];
 		
-		UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-		activityView.frame = CGRectMake((CGRectGetWidth(self.frame) / 2) - 11.0f, CGRectGetHeight(self.frame) - 100.0f , 22.0f, 22.0f);
-		activityView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
-		[self addSubview:activityView];
-		_activityView = [activityView retain];
-		[activityView release];
+        hud = [[ATMHud alloc] initWithDelegate:self];
+        [self addSubview:hud.view];
 		
 		RotateGesture *gesture = [[RotateGesture alloc] initWithTarget:self action:@selector(rotate:)];
 		[self addGestureRecognizer:gesture];
@@ -171,8 +169,8 @@
 	}
 	
 	if (self.imageView.image) {
-		
-		[_activityView stopAnimating];
+        [hud setProgress:0.99];
+        [hud hide];
 		self.userInteractionEnabled = YES;
 		
 		_loading=NO;
@@ -182,7 +180,8 @@
 	} else {
 		
 		_loading = YES;
-		[_activityView startAnimating];
+        [hud setProgress:0.25];
+        [hud show];
 		self.userInteractionEnabled= NO;
 		self.imageView.image = kEGOPhotoLoadingPlaceholder;
 	}
@@ -194,7 +193,8 @@
 	if (!aImage) return; 
 
 	_loading = NO;
-	[_activityView stopAnimating];
+    [hud setProgress:0.99];
+    [hud hide];
 	self.imageView.image = aImage; 
 	[self layoutScrollViewAnimated:NO];
 	
@@ -217,7 +217,8 @@
 	self.photo.failed = YES;
 	[self layoutScrollViewAnimated:NO];
 	self.userInteractionEnabled = NO;
-	[_activityView stopAnimating];
+    [hud setProgress:0.99];
+    [hud hide];
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"EGOPhotoDidFinishLoading" object:[NSDictionary dictionaryWithObjectsAndKeys:self.photo, @"photo", [NSNumber numberWithBool:YES], @"failed", nil]];
 	
 }
@@ -380,6 +381,13 @@
 	
 	[self handleFailedImage];
 	
+}
+
+- (void)imageLoadderDidUpdated:(NSNotification *)notification {
+    if ([notification userInfo] == nil) return;
+    if(![[[notification userInfo] objectForKey:@"imageURL"] isEqual:self.photo.URL]) return;
+//    NSNumber *progress = (NSNumber*)[[[notification userInfo] objectForKey:@"progress"];
+	NSLog(@"update!!!!!!!!!!!!!!");
 }
 
 
@@ -572,7 +580,7 @@
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
-	[_activityView release], _activityView=nil;
+    [hud release];
 	[_imageView release]; _imageView=nil;
 	[_scrollView release]; _scrollView=nil;
 	[_photo release]; _photo=nil;

@@ -36,6 +36,7 @@ inline static NSString* keyForURL(NSURL* url) {
 
 #define kImageNotificationLoaded(s) [@"kEGOImageLoaderNotificationLoaded-" stringByAppendingString:keyForURL(s)]
 #define kImageNotificationLoadFailed(s) [@"kEGOImageLoaderNotificationLoadFailed-" stringByAppendingString:keyForURL(s)]
+#define kImageNotificationUpdated(s) [@"kEGOImageLoaderNotificationUpdated-" stringByAppendingString:keyForURL(s)]
 
 @implementation EGOImageLoader
 @synthesize currentConnections=_currentConnections;
@@ -96,6 +97,12 @@ inline static NSString* keyForURL(NSURL* url) {
 	
 	if([observer respondsToSelector:@selector(imageLoaderDidFailToLoad:)]) {
 		[[NSNotificationCenter defaultCenter] addObserver:observer selector:@selector(imageLoaderDidFailToLoad:) name:kImageNotificationLoadFailed(aURL) object:self];
+	}
+    
+    NSLog(@"加入观察者................");
+    if([observer respondsToSelector:@selector(imageLoadderDidUpdated:)]) {
+        NSLog(@"已经加入observer中...............");
+		[[NSNotificationCenter defaultCenter] addObserver:observer selector:@selector(imageLoadderDidUpdated:) name:kImageNotificationUpdated(aURL) object:self];
 	}
 	
 	if([self loadingConnectionForURL:aURL]) {
@@ -168,6 +175,15 @@ inline static NSString* keyForURL(NSURL* url) {
 	[self cleanUpConnection:connection];
 }
 
+- (void)imageLoadConnectionUpdateProgress:(EGOImageLoadConnection *)connection{
+    NSNumber *progress = [NSNumber numberWithFloat:[connection get_progress]];
+    NSNotification* notification = [NSNotification notificationWithName:kImageNotificationUpdated(connection.imageURL)
+																 object:self
+															   userInfo:[NSDictionary dictionaryWithObjectsAndKeys:progress,@"progress",connection.imageURL,@"imageURL",nil]];
+	
+	[[NSNotificationCenter defaultCenter] performSelectorOnMainThread:@selector(postNotification:) withObject:notification waitUntilDone:YES];
+}
+
 - (void)imageLoadConnection:(EGOImageLoadConnection *)connection didFailWithError:(NSError *)error {
 	[currentConnections removeObjectForKey:connection.imageURL];
 	self.currentConnections = [[currentConnections copy] autorelease];
@@ -180,6 +196,7 @@ inline static NSString* keyForURL(NSURL* url) {
 
 	[self cleanUpConnection:connection];
 }
+
 
 #pragma mark -
 

@@ -48,6 +48,8 @@
 	[request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];  
 	_connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
 	[request release];
+    
+    received_length = 0;
 }
 
 - (void)cancel {
@@ -58,19 +60,38 @@
 	return _responseData;
 }
 
+- (float)get_progress {
+    NSLog(@"now progress is: %f", received_length / total_length);
+    return received_length / total_length;
+}
+
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
 	if(connection != _connection) return;
 	[_responseData appendData:data];
+    
+    received_length+= [data length];
+    
+    if([self.delegate respondsToSelector:@selector(imageLoadConnectionUpdateProgress:)]) {
+		[self.delegate imageLoadConnectionUpdateProgress:self];
+	}
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
 	if(connection != _connection) return;
 	self.response = response;
+    
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+    TDSLOG_info(@"接到图片响应-----------------------------");
+    if(httpResponse && [httpResponse respondsToSelector:@selector(allHeaderFields)]){
+        NSDictionary *httpResponseHeaderFields = [httpResponse allHeaderFields];
+        total_length = [[httpResponseHeaderFields objectForKey:@"Content-Length"] longLongValue];
+        TDSLOG_info(@"图片大小: %d", total_length);
+    }
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	if(connection != _connection) return;
-
+ TDSLOG_info(@"下载完成-----------------------------");
 	if([self.delegate respondsToSelector:@selector(imageLoadConnectionDidFinishLoading:)]) {
 		[self.delegate imageLoadConnectionDidFinishLoading:self];
 	}

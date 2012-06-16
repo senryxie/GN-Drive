@@ -35,6 +35,9 @@
 	NSMutableData* _responseData;
 	NSURLConnection* _connection;
 	NSTimeInterval _timeoutInterval;
+    
+    int total_length;
+    int received_length;
 	
 	id<EGOImageLoadConnectionDelegate> _delegate;
 }
@@ -43,6 +46,7 @@
 
 - (void)start;
 - (void)cancel;
+- (float)get_progress;
 
 @property(nonatomic,readonly) NSData* responseData;
 @property(nonatomic,readonly,getter=imageURL) NSURL* imageURL;
@@ -57,4 +61,5 @@
 @protocol EGOImageLoadConnectionDelegate<NSObject>
 - (void)imageLoadConnectionDidFinishLoading:(EGOImageLoadConnection *)connection;
 - (void)imageLoadConnection:(EGOImageLoadConnection *)connection didFailWithError:(NSError *)error;	
+- (void)imageLoadConnectionUpdateProgress:(EGOImageLoadConnection *)connection;
 @end
