@@ -169,7 +169,6 @@
 	}
 	
 	if (self.imageView.image) {
-        [hud setProgress:0.99];
         [hud hide];
 		self.userInteractionEnabled = YES;
 		
@@ -180,7 +179,8 @@
 	} else {
 		
 		_loading = YES;
-        [hud setProgress:0.25];
+        [hud setCaption:@"正在努力加载中"];
+        [hud setProgress:0];
         [hud show];
 		self.userInteractionEnabled= NO;
 		self.imageView.image = kEGOPhotoLoadingPlaceholder;
@@ -193,7 +193,6 @@
 	if (!aImage) return; 
 
 	_loading = NO;
-    [hud setProgress:0.99];
     [hud hide];
 	self.imageView.image = aImage; 
 	[self layoutScrollViewAnimated:NO];
@@ -217,7 +216,6 @@
 	self.photo.failed = YES;
 	[self layoutScrollViewAnimated:NO];
 	self.userInteractionEnabled = NO;
-    [hud setProgress:0.99];
     [hud hide];
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"EGOPhotoDidFinishLoading" object:[NSDictionary dictionaryWithObjectsAndKeys:self.photo, @"photo", [NSNumber numberWithBool:YES], @"failed", nil]];
 	
@@ -386,8 +384,9 @@
 - (void)imageLoadderDidUpdated:(NSNotification *)notification {
     if ([notification userInfo] == nil) return;
     if(![[[notification userInfo] objectForKey:@"imageURL"] isEqual:self.photo.URL]) return;
-//    NSNumber *progress = (NSNumber*)[[[notification userInfo] objectForKey:@"progress"];
+    NSNumber *progress = (NSNumber*)[[notification userInfo] objectForKey:@"progress"];
 	NSLog(@"update!!!!!!!!!!!!!!");
+    [hud setProgress:[progress floatValue]];
 }
 
 
