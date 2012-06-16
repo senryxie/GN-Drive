@@ -179,8 +179,8 @@
 	} else {
 		
 		_loading = YES;
-        [hud setCaption:@"正在努力加载中"];
-        [hud setProgress:0];
+        [hud setCaption:@"正在努力加载中，请稍后..."];
+        [hud setProgress:0.01f];
         [hud show];
 		self.userInteractionEnabled= NO;
 		self.imageView.image = kEGOPhotoLoadingPlaceholder;
