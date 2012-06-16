@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "Reachability.h"
+#import "WXApi.h"
 
 @class GNViewController;
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,WXApiDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

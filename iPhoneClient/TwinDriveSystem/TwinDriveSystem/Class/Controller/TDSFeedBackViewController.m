@@ -24,34 +24,44 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"反馈";
-    UIBarButtonItem *sendBtnItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" 
-                                                                    style:UIBarButtonItemStylePlain
-                                                                   target:self
-                                                                   action:@selector(sendAction:)];
-    self.navigationItem.rightBarButtonItem = sendBtnItem;
-    self.navigationItem.rightBarButtonItem.enabled = NO;
-    [sendBtnItem release];
+    self.title = @"意见反馈";
+    if (!self.navigationItem.rightBarButtonItem) {
+        UIBarButtonItem *sendBtnItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" 
+                                                                        style:UIBarButtonItemStylePlain
+                                                                       target:self
+                                                                       action:@selector(sendAction:)];
+        self.navigationItem.rightBarButtonItem = sendBtnItem;
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+        [sendBtnItem release];
+    }
     
-    
-    _textView = [[UITextView alloc] initWithFrame:self.view.bounds];
+    if (!_textView) {
+        _textView = [[UITextView alloc] initWithFrame:self.view.bounds];
+    }
+
     _textView.font = [UIFont systemFontOfSize:16.0f];
     _textView.delegate = self;
     [self.view addSubview:_textView];
     [_textView becomeFirstResponder];
 }
-
 - (void)viewDidUnload
 {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
+    if (!_textView) {
+        [_textView release];
+    }
+    self.navigationItem.rightBarButtonItem = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
-
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    _textView.text = @"";
+}
 #pragma mark - private
 - (void)sendAction:(id)sender{
     TDSConfig *config = [TDSConfig getInstance];

@@ -74,6 +74,9 @@
 		_scrollView = [scrollView retain];
 		[scrollView release];
 
+        hud = [[ATMHud alloc] initWithDelegate:self];
+        [self addSubview:hud.view];
+        
 		UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.bounds];
 		imageView.opaque = YES;
 		imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -82,9 +85,7 @@
 		_imageView = [imageView retain];
 		[imageView release];
 		
-        hud = [[ATMHud alloc] initWithDelegate:self];
-        [self addSubview:hud.view];
-		
+        
 		RotateGesture *gesture = [[RotateGesture alloc] initWithTarget:self action:@selector(rotate:)];
 		[self addGestureRecognizer:gesture];
 		[gesture release];
@@ -364,7 +365,8 @@
 #pragma mark EGOImageLoader Callbacks
 
 - (void)imageLoaderDidLoad:(NSNotification*)notification {	
-	
+	[hud hide];
+    [hud.view removeFromSuperview];
 	if ([notification userInfo] == nil) return;
 	if(![[[notification userInfo] objectForKey:@"imageURL"] isEqual:self.photo.URL]) return;
 	
@@ -373,7 +375,9 @@
 }
 
 - (void)imageLoaderDidFailToLoad:(NSNotification*)notification {
-	
+	[hud hide];
+    [hud.view removeFromSuperview];
+    
 	if ([notification userInfo] == nil) return;
 	if(![[[notification userInfo] objectForKey:@"imageURL"] isEqual:self.photo.URL]) return;
 	
@@ -382,6 +386,7 @@
 }
 
 - (void)imageLoadderDidUpdated:(NSNotification *)notification {
+
     if ([notification userInfo] == nil) return;
     if(![[[notification userInfo] objectForKey:@"imageURL"] isEqual:self.photo.URL]) return;
     NSNumber *progress = (NSNumber*)[[notification userInfo] objectForKey:@"progress"];
@@ -578,7 +583,7 @@
 	}
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	
+	hud.delegate = nil;
     [hud release];
 	[_imageView release]; _imageView=nil;
 	[_scrollView release]; _scrollView=nil;

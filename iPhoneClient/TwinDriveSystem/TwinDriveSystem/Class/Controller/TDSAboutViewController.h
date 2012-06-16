@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@class TDSFeedBackViewController;
 
 @interface TDSAboutViewController : UIViewController <UITableViewDelegate,UITableViewDataSource>{
     UITableView *_tableView;
@@ -14,6 +15,7 @@
 	NSArray *_sectionFooters;
 	NSArray *_cellCaptions;
     NSArray *_cellInfosLabels;
+    TDSFeedBackViewController *_feedbackViewController;
 }
 
 @property (nonatomic, retain) UITableView *tableView;

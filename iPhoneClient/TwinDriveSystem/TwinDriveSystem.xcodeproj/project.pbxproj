@@ -32,6 +32,7 @@
 		2F46F413157D1D730011D616 /* collect@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F46F411157D1D730011D616 /* collect@2x.png */; };
 		2F46F416157D1E120011D616 /* likeIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F46F414157D1E120011D616 /* likeIcon.png */; };
 		2F46F417157D1E120011D616 /* likeIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F46F415157D1E120011D616 /* likeIcon@2x.png */; };
+		2F4D8E66158C925000EF6E6C /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F4D8E63158C925000EF6E6C /* libWeChatSDK.a */; };
 		2F7F5B2414E7859F0010F670 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7F5B2314E7859F0010F670 /* UIKit.framework */; };
 		2F7F5B2614E7859F0010F670 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7F5B2514E7859F0010F670 /* Foundation.framework */; };
 		2F7F5B2814E7859F0010F670 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7F5B2714E7859F0010F670 /* CoreGraphics.framework */; };
@@ -112,8 +113,6 @@
 		83C2353E158A39EE00242571 /* tab_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 83C2353C158A39EE00242571 /* tab_background.png */; };
 		83C2353F158A39EE00242571 /* tab_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83C2353D158A39EE00242571 /* tab_background@2x.png */; };
 		83C23541158A3D6F00242571 /* thumbView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83C23540158A3D6F00242571 /* thumbView@2x.png */; };
-		83EBC187157BA22E00C69E84 /* libUMFeedback.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83EBC184157BA22E00C69E84 /* libUMFeedback.a */; };
-		83EBC188157BA22E00C69E84 /* umFeedback.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 83EBC185157BA22E00C69E84 /* umFeedback.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -196,6 +195,9 @@
 		2F46F411157D1D730011D616 /* collect@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "collect@2x.png"; sourceTree = "<group>"; };
 		2F46F414157D1E120011D616 /* likeIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = likeIcon.png; sourceTree = "<group>"; };
 		2F46F415157D1E120011D616 /* likeIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "likeIcon@2x.png"; sourceTree = "<group>"; };
+		2F4D8E63158C925000EF6E6C /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
+		2F4D8E64158C925000EF6E6C /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
+		2F4D8E65158C925000EF6E6C /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		2F7F5B1F14E7859F0010F670 /* TwinDriveSystem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwinDriveSystem.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F7F5B2314E7859F0010F670 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2F7F5B2514E7859F0010F670 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -332,9 +334,6 @@
 		83C2353C158A39EE00242571 /* tab_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_background.png; sourceTree = "<group>"; };
 		83C2353D158A39EE00242571 /* tab_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_background@2x.png"; sourceTree = "<group>"; };
 		83C23540158A3D6F00242571 /* thumbView@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumbView@2x.png"; sourceTree = "<group>"; };
-		83EBC184157BA22E00C69E84 /* libUMFeedback.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libUMFeedback.a; sourceTree = "<group>"; };
-		83EBC185157BA22E00C69E84 /* umFeedback.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = umFeedback.bundle; sourceTree = "<group>"; };
-		83EBC186157BA22E00C69E84 /* UMFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMFeedback.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -353,7 +352,7 @@
 				2F7F5B2414E7859F0010F670 /* UIKit.framework in Frameworks */,
 				2F7F5B2614E7859F0010F670 /* Foundation.framework in Frameworks */,
 				2F7F5B2814E7859F0010F670 /* CoreGraphics.framework in Frameworks */,
-				83EBC187157BA22E00C69E84 /* libUMFeedback.a in Frameworks */,
+				2F4D8E66158C925000EF6E6C /* libWeChatSDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,6 +452,16 @@
 			name = hudView;
 			sourceTree = "<group>";
 		};
+		2F4D8E62158C925000EF6E6C /* WeixinSDK */ = {
+			isa = PBXGroup;
+			children = (
+				2F4D8E63158C925000EF6E6C /* libWeChatSDK.a */,
+				2F4D8E64158C925000EF6E6C /* WXApi.h */,
+				2F4D8E65158C925000EF6E6C /* WXApiObject.h */,
+			);
+			path = WeixinSDK;
+			sourceTree = "<group>";
+		};
 		2F7F5B1414E7859F0010F670 = {
 			isa = PBXGroup;
 			children = (
@@ -527,7 +536,7 @@
 		2F7F5B9314E7895B0010F670 /* DriveSystem */ = {
 			isa = PBXGroup;
 			children = (
-				83EBC183157BA22E00C69E84 /* Feedback */,
+				2F4D8E62158C925000EF6E6C /* WeixinSDK */,
 				2F7F5BEB14E7895B0010F670 /* EGOPhotoViewer */,
 				2F7F5B9414E7895B0010F670 /* ASIHttpRequest */,
 			);
@@ -914,16 +923,6 @@
 			name = CocoaExt;
 			sourceTree = "<group>";
 		};
-		83EBC183157BA22E00C69E84 /* Feedback */ = {
-			isa = PBXGroup;
-			children = (
-				83EBC184157BA22E00C69E84 /* libUMFeedback.a */,
-				83EBC185157BA22E00C69E84 /* umFeedback.bundle */,
-				83EBC186157BA22E00C69E84 /* UMFeedback.h */,
-			);
-			path = Feedback;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1036,7 +1035,6 @@
 				2F0C573415241E0500E0B91F /* tabbar_background.png in Resources */,
 				2F0C573515241E0500E0B91F /* thumbView.png in Resources */,
 				2F10B2BF15295F86000CCFF9 /* hudDefault.png in Resources */,
-				83EBC188157BA22E00C69E84 /* umFeedback.bundle in Resources */,
 				2F46F412157D1D730011D616 /* collect.png in Resources */,
 				2F46F413157D1D730011D616 /* collect@2x.png in Resources */,
 				2F46F416157D1E120011D616 /* likeIcon.png in Resources */,
@@ -1201,13 +1199,14 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)\"/TwinDriveSystem/Dependencies/**",
 					"${SDK_DIR}/usr/include/libxml2/**",
+					"\"$(SRCROOT)/TwinDriveSystem/DriveSystem/WeixinSDK\"/**",
 				);
 				INFOPLIST_FILE = "TwinDriveSystem/TwinDriveSystem-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/TwinDriveSystem/DriveSystem/Feedback\"",
+					"\"$(SRCROOT)/TwinDriveSystem/DriveSystem/WeixinSDK\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lxml2",
@@ -1236,13 +1235,14 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)\"/TwinDriveSystem/Dependencies/**",
 					"${SDK_DIR}/usr/include/libxml2/**",
+					"\"$(SRCROOT)/TwinDriveSystem/DriveSystem/WeixinSDK\"/**",
 				);
 				INFOPLIST_FILE = "TwinDriveSystem/TwinDriveSystem-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/TwinDriveSystem/DriveSystem/Feedback\"",
+					"\"$(SRCROOT)/TwinDriveSystem/DriveSystem/WeixinSDK\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lxml2",

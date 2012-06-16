@@ -7,7 +7,6 @@
 //
 
 #import "TDSAboutViewController.h"
-#import "UMFeedback.h"
 #import "TDSFeedBackViewController.h"
 
 #define _FEEDBACK_SECTION 1
@@ -20,6 +19,16 @@
 #pragma mark View lifecycle
 - (id)init {
 	if ((self = [super init])) {
+
+        _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+        _tableView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleHeight;    
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        
+        [self.view addSubview:_tableView];
+        
+        _feedbackViewController = [[TDSFeedBackViewController alloc] init];
+        _feedbackViewController.navigationItem.title = @"意见反馈";
         
         _sectionHeaders = [[NSArray alloc] initWithObjects:@"新浪微博", @"意见反馈", @"关于", nil];
 		_sectionFooters = [[NSArray alloc] initWithObjects:@"", @"", @"©IcePhone Studio 2012", nil];
@@ -42,28 +51,23 @@
     [_sectionFooters release];
     [_cellCaptions release];
     [_cellInfosLabels release];
+    [_feedbackViewController release];
     self.tableView = nil;
     [super dealloc];
 }
-
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    _feedbackViewController.view.frame = self.view.bounds;
+}
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-    
+    [super viewDidLoad];    
     self.navigationItem.title = @"设置";
-    _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
-    _tableView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleHeight;    
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    
-    [self.view addSubview:_tableView];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    self.tableView = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -73,12 +77,9 @@
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if(indexPath.section == 1){
-        TDSFeedBackViewController *feedbackViewController = [[TDSFeedBackViewController alloc] init];
-        feedbackViewController.view.frame = self.view.bounds;
-        feedbackViewController.navigationItem.title = @"意见反馈";
-        [self.navigationController pushViewController:feedbackViewController animated:YES];
-        [feedbackViewController release];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if(indexPath.section == _FEEDBACK_SECTION){        
+        [self.navigationController pushViewController:_feedbackViewController animated:YES];
     }
 }
 
@@ -122,6 +123,7 @@
     
     //滑动到意见反馈页
     if (indexPath.section == _FEEDBACK_SECTION) {
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
