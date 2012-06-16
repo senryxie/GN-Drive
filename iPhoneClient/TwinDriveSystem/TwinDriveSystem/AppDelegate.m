@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-
 #import "GNViewController.h"
 #import "TDSLoggerView.h"
 
@@ -74,9 +73,19 @@
                                                  name: kReachabilityChangedNotification
                                                object: nil];
     
+    
+    // weixin SDK 注册本app 的 URL Scheme
+    [WXApi registerApp:@"icePhone-TDS"];
+    
     return YES;
 }
 
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
+    return [WXApi handleOpenURL:url delegate:self];
+}
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+    return [WXApi handleOpenURL:url delegate:self];
+}
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     /*

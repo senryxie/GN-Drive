@@ -7,7 +7,6 @@
 //
 
 #import "TDSAboutViewController.h"
-#import "UMFeedback.h"
 #import "TDSFeedBackViewController.h"
 
 #define _FEEDBACK_SECTION 1
