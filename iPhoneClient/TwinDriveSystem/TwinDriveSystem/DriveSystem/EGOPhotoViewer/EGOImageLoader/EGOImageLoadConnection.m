@@ -62,7 +62,7 @@
 
 - (float)get_progress {
     float progress = (float)((float)received_length / (float)total_length);
-    NSLog(@"now progress is: %f", progress);
+//    NSLog(@"now progress is: %f", progress);
     return progress;
 }
 
@@ -75,7 +75,7 @@
     if (len > 0 && len < (NSUInteger)(-1)) {
         received_length = _responseData.length;
         total_length = (NSUInteger)len;
-        NSLog(@"data received: %d/%d",received_length,total_length);
+//        NSLog(@"data received: %d/%d",received_length,total_length);
 
         if([self.delegate respondsToSelector:@selector(imageLoadConnectionUpdateProgress:)]) {
             [self.delegate imageLoadConnectionUpdateProgress:self];
@@ -90,11 +90,11 @@
 	self.response = response;
     
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-    TDSLOG_info(@"接到图片响应-----------------------------");
+//    TDSLOG_info(@"接到图片响应-----------------------------");
     if(httpResponse && [httpResponse respondsToSelector:@selector(allHeaderFields)]){
         NSDictionary *httpResponseHeaderFields = [httpResponse allHeaderFields];
         total_length = [[httpResponseHeaderFields objectForKey:@"Content-Length"] longLongValue];
-        TDSLOG_info(@"图片大小: %d", total_length);
+//        TDSLOG_info(@"图片大小: %d", total_length);
     }
 }
 
