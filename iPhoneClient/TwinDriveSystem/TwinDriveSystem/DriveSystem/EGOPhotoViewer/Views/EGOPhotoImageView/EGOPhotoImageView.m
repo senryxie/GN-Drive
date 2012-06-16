@@ -75,7 +75,7 @@
 		[scrollView release];
 
         hud = [[ATMHud alloc] initWithDelegate:self];
-        [_scrollView addSubview:hud.view];
+        [self addSubview:hud.view];
         
 		UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.bounds];
 		imageView.opaque = YES;
