@@ -44,7 +44,8 @@
     TDSAboutViewController *aboutViewController = [[TDSAboutViewController alloc] init];
     aboutViewController.view.backgroundColor = [UIColor clearColor];
     UINavigationController *navAboutViewController = [[UINavigationController alloc] initWithRootViewController:aboutViewController];     
-    navAboutViewController.navigationBar.tintColor = [UIColor blackColor];
+    navAboutViewController.navigationBar.tintColor = [UIColor clearColor];
+    [navAboutViewController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbar-background.png"] forBarMetrics:UIBarMetricsDefault];
 
     
     _mainScreenViewController = [[TDSMainScreenViewController alloc] init];

@@ -9,9 +9,9 @@
 #import "TDSEGOPhotoViewController.h"
 #import "TDSPhotoDataSource.h"
 
-@interface TDSEGOPhotoViewController ()
-
-@end
+//@interface TDSEGOPhotoViewController ()
+//
+//@end
 
 @implementation TDSEGOPhotoViewController
 

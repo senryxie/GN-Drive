@@ -28,15 +28,17 @@
 #import "EGOPhotoGlobal.h"
 #import "EGOPhotoSource.h"
 #import "EGOImageLoader.h"
+#import "ATMHudDelegate.h"
 
+@class ATMHud;
 @class EGOPhotoScrollView, EGOPhotoCaptionView;
 
-@interface EGOPhotoImageView : UIView <EGOImageLoaderObserver, UIScrollViewDelegate>{
+@interface EGOPhotoImageView : UIView <EGOImageLoaderObserver, UIScrollViewDelegate, ATMHudDelegate>{
 @private
 	EGOPhotoScrollView *_scrollView;
 	id <EGOPhoto> _photo;
 	UIImageView *_imageView;
-	UIActivityIndicatorView *_activityView;
+    ATMHud *hud;
 	
 	BOOL _loading;
 	CGRect _currentRect;
@@ -49,6 +51,7 @@
 @property(nonatomic,readonly) UIImageView *imageView;
 @property(nonatomic,readonly) EGOPhotoScrollView *scrollView;
 @property(nonatomic,assign,getter=isLoading) BOOL loading;
+@property(nonatomic, retain) ATMHud *hud;
 
 - (void)setPhoto:(id <EGOPhoto>)aPhoto;
 - (void)killScrollViewZoom;

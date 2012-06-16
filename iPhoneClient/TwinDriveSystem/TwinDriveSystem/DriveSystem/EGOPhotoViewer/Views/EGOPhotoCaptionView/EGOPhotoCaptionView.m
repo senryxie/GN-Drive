@@ -43,7 +43,7 @@
         _textLabel.lineBreakMode = UILineBreakModeWordWrap;
         _textLabel.numberOfLines = 4;        
         _textLabel.font = [UIFont fontWithName:@"Arial" size:15.0f];
-		_textLabel.textAlignment = UITextAlignmentCenter;
+		_textLabel.textAlignment = UITextAlignmentLeft;//UITextAlignmentCenter;
 		_textLabel.textColor = [UIColor whiteColor];
 		_textLabel.shadowColor = [UIColor blackColor];
 		_textLabel.shadowOffset = CGSizeMake(0.0f, 1.0f);

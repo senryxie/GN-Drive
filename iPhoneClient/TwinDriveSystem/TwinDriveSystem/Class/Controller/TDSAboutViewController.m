@@ -10,58 +10,53 @@
 #import "UMFeedback.h"
 #import "TDSFeedBackViewController.h"
 
-#define CONTACT_INFO @"jiepaikong@gmail.com"
-#define VERSION_INFO @"v1.0"
-@interface TDSAboutViewController ()
-- (void)setDataSource;
-@end
+#define _FEEDBACK_SECTION 1
 
 @implementation TDSAboutViewController
 @synthesize tableView = _tableView;
 
+
+#pragma mark -
+#pragma mark View lifecycle
+- (id)init {
+	if ((self = [super init])) {
+        
+        _sectionHeaders = [[NSArray alloc] initWithObjects:@"新浪微博", @"意见反馈", @"关于", nil];
+		_sectionFooters = [[NSArray alloc] initWithObjects:@"", @"", @"©IcePhone Studio 2012", nil];
+        
+		NSArray *section0 = [NSArray arrayWithObjects:@"登录用户", nil];
+		NSArray *section1 = [NSArray arrayWithObjects:@"欢迎大家积极反馈", nil];
+		NSArray *section2 = [NSArray arrayWithObjects:@"当前版本", @"联系方式", nil];
+        _cellCaptions = [[NSArray alloc] initWithObjects:section0, section1, section2, nil];
+		
+		NSArray *label0 = [NSArray arrayWithObjects:@"悬崖乐马", nil];
+		NSArray *label1 = [NSArray arrayWithObjects:@"", nil];
+		NSArray *label2 = [NSArray arrayWithObjects:@"1.0", @"jiepaikong@gmail.com", nil];
+        _cellInfosLabels = [[NSArray alloc] initWithObjects:label0, label1, label2, nil];
+	}
+	return self;
+}
+
 - (void)dealloc{
-    [_aboutArray release];
+    [_sectionHeaders release];
+    [_sectionFooters release];
+    [_cellCaptions release];
+    [_cellInfosLabels release];
     self.tableView = nil;
     [super dealloc];
 }
-
-#pragma mark - debug
-- (void)testAction:(id)sender{
-    [TDSDataPersistenceAssistant clearAllData];
-    [[TDSHudView getInstance] showHudOnView:self.view
-                                    caption:@"     暂时清除缓存成功     "
-                                      image:[UIImage imageNamed:@"hudDefault.png"] 
-                                  acitivity:NO
-                               autoHideTime:1.5f];
-}
-
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.navigationItem.title = @"关于街拍控";
-    
-    [self setDataSource];
-
+    self.navigationItem.title = @"设置";
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
-//    _tableView.backgroundColor = [UIColor clearColor];
     _tableView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleHeight;    
     _tableView.delegate = self;
     _tableView.dataSource = self;
     
     [self.view addSubview:_tableView];
-    
-    /* for debug
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(50, 50, 50, 50);
-    button.center = self.view.center;
-    button.backgroundColor = [UIColor redColor];
-    [button addTarget:self 
-               action:@selector(testAction:) 
-     forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:button];
-     //*/
 }
 
 - (void)viewDidUnload
@@ -75,86 +70,71 @@
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
-#pragma mark - Pirvate
-- (void)setDataSource{
-    // dirty code
-    // TODO:为了快点看到效果
-    _aboutArray = [[NSArray alloc] initWithObjects:AboutInfo_Version,AboutInfo_Feedback,AboutInfo_ContactInfo, nil];
-}
+
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    // dirty code
-    
-    BOOL show = NO;
-    NSString *cellInfo = [_aboutArray objectAtIndex:indexPath.row];
-    NSMutableString *message= [NSMutableString stringWithFormat:@"%@\n",cellInfo];
-    if ([cellInfo isEqualToString:AboutInfo_Version]) {
-        [message appendFormat:@"%@",[TDSConfig getInstance].version];
-    }else if([cellInfo isEqualToString:AboutInfo_Feedback]) {
+    if(indexPath.section == 1){
         TDSFeedBackViewController *feedbackViewController = [[TDSFeedBackViewController alloc] init];
         feedbackViewController.view.frame = self.view.bounds;
-        feedbackViewController.navigationItem.title = cellInfo;
+        feedbackViewController.navigationItem.title = @"意见反馈";
         [self.navigationController pushViewController:feedbackViewController animated:YES];
         [feedbackViewController release];
-        show = NO;
-    }else if([cellInfo isEqualToString:AboutInfo_ContactInfo]) {
-        [message appendFormat:@"%@",CONTACT_INFO];        
     }
-    if (show) {
-        [[TDSHudView getInstance] showHudOnView:self.view
-                                        caption:message
-                                          image:nil
-                                      acitivity:NO
-                                   autoHideTime:1.5f];
+}
 
-    }
-  }
 #pragma mark - UITableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return [_sectionHeaders count];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [_sectionHeaders objectAtIndex:section];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+	return [_sectionFooters objectAtIndex:section];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if(_aboutArray != nil && [_aboutArray count]>0)
-        return [_aboutArray count];
-    return 0;
+    int sec[3] = {1,1,2};
+    return sec[section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                     reuseIdentifier:nil] autorelease];
     
-    // dirty code
-	if(_aboutArray != nil && [_aboutArray count] > 0)
-	{
-        [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;		
-		cell.textLabel.font = [UIFont fontWithName:@"Arial" size:17.0];
-		cell.textLabel.textAlignment = UITextAlignmentLeft;
-
-        NSString *cellInfo = [_aboutArray objectAtIndex:indexPath.row];
-        cell.textLabel.text = [NSString stringWithFormat:@"%@",cellInfo];        
-        
-        UILabel *infoLabel = [[UILabel alloc] init];
-        infoLabel.font = cell.textLabel.font;
-        infoLabel.backgroundColor = [UIColor clearColor];
-        [cell.contentView addSubview:infoLabel];
-
-        if ([cellInfo isEqualToString:AboutInfo_Version]) {
-            infoLabel.text = VERSION_INFO;
-        }else if([cellInfo isEqualToString:AboutInfo_ContactInfo]) {   
-            infoLabel.text = CONTACT_INFO;
-        }else {
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
-        CGSize labelSize = [infoLabel.text sizeWithFont:infoLabel.font
-                                      constrainedToSize:CGSizeMake(cell.contentView.frame.size.width,
-                                                                   cell.contentView.frame.size.height)
-                                          lineBreakMode:UILineBreakModeWordWrap];
-        infoLabel.frame = CGRectMake(CGRectGetMaxX(cell.contentView.frame) - labelSize.width - 30, 
-                                     8.0, 
-                                     labelSize.width, 
-                                     labelSize.height);
-        [infoLabel release];
-        
-	}
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;		
+    cell.textLabel.font = [UIFont fontWithName:@"Arial" size:17.0];
+    cell.textLabel.textAlignment = UITextAlignmentLeft;
+    cell.textLabel.text = [[_cellCaptions objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    
+    UILabel *infoLabel = [[UILabel alloc] init];
+    infoLabel.font = cell.textLabel.font;
+    infoLabel.backgroundColor = [UIColor clearColor];
+    infoLabel.font =  [UIFont fontWithName:@"Arial" size:17.0];
+    [cell.contentView addSubview:infoLabel];
+    infoLabel.text = [[_cellInfosLabels objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    
+    //滑动到意见反馈页
+    if (indexPath.section == _FEEDBACK_SECTION) {
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+    
+    CGSize labelSize = [infoLabel.text sizeWithFont:infoLabel.font
+                                  constrainedToSize:CGSizeMake(cell.contentView.frame.size.width,
+                                                               cell.contentView.frame.size.height)
+                                      lineBreakMode:UILineBreakModeWordWrap];
+    infoLabel.frame = CGRectMake(CGRectGetMaxX(cell.contentView.frame) - labelSize.width - 30, 
+                                 11.0, 
+                                 labelSize.width, 
+                                 labelSize.height);
+    [infoLabel release];
+	
 	return cell;
 }
 @end
