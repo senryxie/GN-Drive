@@ -378,6 +378,8 @@
 
 - (void)imageLoaderDidLoad:(NSNotification*)notification {	
     [hud setProgress:1.0f];
+    // 抖一下？
+    [hud show];
 	[hud hide];
     [hud.view removeFromSuperview];
 	if ([notification userInfo] == nil) return;
