@@ -74,9 +74,6 @@
 		_scrollView = [scrollView retain];
 		[scrollView release];
 
-        hud = [[ATMHud alloc] initWithDelegate:self];
-        [self addSubview:hud.view];
-        
 		UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.bounds];
         imageView.backgroundColor = [UIColor clearColor];
 		imageView.opaque = YES;
@@ -86,6 +83,12 @@
 		_imageView = [imageView retain];
 		[imageView release];
 		
+        hud = [[ATMHud alloc] initWithDelegate:self];
+        [self addSubview:hud.view];
+        [self bringSubviewToFront:hud.view];
+        [hud setCaption:@"正在努力加载中，请稍后..."];
+        [hud setProgress:0.01f];
+        [hud show];
         
 		RotateGesture *gesture = [[RotateGesture alloc] initWithTarget:self action:@selector(rotate:)];
 		[self addGestureRecognizer:gesture];
@@ -186,6 +189,7 @@
 	} else {
 		
 		_loading = YES;
+        [self bringSubviewToFront:hud.view];
         [hud setCaption:@"正在努力加载中，请稍后..."];
         [hud setProgress:0.01f];
         [hud show];
@@ -225,6 +229,7 @@
 	[self layoutScrollViewAnimated:NO];
 	self.userInteractionEnabled = NO;
     [hud hide];
+    [hud.view removeFromSuperview];
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"EGOPhotoDidFinishLoading" object:[NSDictionary dictionaryWithObjectsAndKeys:self.photo, @"photo", [NSNumber numberWithBool:YES], @"failed", nil]];
 	
 }
@@ -372,6 +377,7 @@
 #pragma mark EGOImageLoader Callbacks
 
 - (void)imageLoaderDidLoad:(NSNotification*)notification {	
+    [hud setProgress:1.0f];
 	[hud hide];
     [hud.view removeFromSuperview];
 	if ([notification userInfo] == nil) return;
