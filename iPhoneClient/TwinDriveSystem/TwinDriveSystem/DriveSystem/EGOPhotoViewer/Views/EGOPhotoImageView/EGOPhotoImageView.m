@@ -187,7 +187,7 @@
 		
 		_loading = YES;
         [hud setCaption:@"正在努力加载中，请稍后..."];
-        [hud setProgress:0.001f];
+        [hud setProgress:0.01f];
         [hud show];
 		self.userInteractionEnabled= NO;
 		self.imageView.image = kEGOPhotoLoadingPlaceholder;
@@ -400,6 +400,7 @@
 	NSLog(@"update!!!!!!!!!!!!!!");
     [self addSubview:hud.view];
     [hud setProgress:[progress floatValue]];
+    [hud update];
 }
 
 
