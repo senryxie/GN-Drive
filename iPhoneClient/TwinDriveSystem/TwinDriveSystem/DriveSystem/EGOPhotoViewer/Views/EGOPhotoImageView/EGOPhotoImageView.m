@@ -172,6 +172,7 @@
 	
 	if (self.imageView.image) {
         [hud hide];
+        [hud.view removeFromSuperview];
 		self.userInteractionEnabled = YES;
 		
 		_loading=NO;
@@ -200,6 +201,7 @@
 
 	_loading = NO;
     [hud hide];
+    [hud.view removeFromSuperview];
 	self.imageView.image = aImage; 
 	[self layoutScrollViewAnimated:NO];
 	
@@ -396,7 +398,7 @@
     if(![[[notification userInfo] objectForKey:@"imageURL"] isEqual:self.photo.URL]) return;
     NSNumber *progress = (NSNumber*)[[notification userInfo] objectForKey:@"progress"];
 	NSLog(@"update!!!!!!!!!!!!!!");
-    [hud show];
+    [self addSubview:hud.view];
     [hud setProgress:[progress floatValue]];
 }
 
