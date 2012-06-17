@@ -67,7 +67,7 @@
 		self.opaque = YES;
 		
 		EGOPhotoScrollView *scrollView = [[EGOPhotoScrollView alloc] initWithFrame:self.bounds];
-		scrollView.backgroundColor = [UIColor blackColor];
+		scrollView.backgroundColor = [UIColor clearColor];
 		scrollView.opaque = YES;
 		scrollView.delegate = self;
 		[self addSubview:scrollView];
@@ -78,6 +78,7 @@
         [self addSubview:hud.view];
         
 		UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        imageView.backgroundColor = [UIColor clearColor];
 		imageView.opaque = YES;
 		imageView.contentMode = UIViewContentModeScaleAspectFit;
 		imageView.tag = ZOOM_VIEW_TAG;
@@ -171,10 +172,15 @@
 	
 	if (self.imageView.image) {
         [hud hide];
+        [hud.view removeFromSuperview];
 		self.userInteractionEnabled = YES;
 		
 		_loading=NO;
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"EGOPhotoDidFinishLoading" object:[NSDictionary dictionaryWithObjectsAndKeys:self.photo, @"photo", [NSNumber numberWithBool:NO], @"failed", nil]];
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"EGOPhotoDidFinishLoading" 
+                                                            object:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                    self.photo, @"photo", 
+                                                                    [NSNumber numberWithBool:NO], @"failed",
+                                                                    nil]];
 		
 		
 	} else {
@@ -195,6 +201,7 @@
 
 	_loading = NO;
     [hud hide];
+    [hud.view removeFromSuperview];
 	self.imageView.image = aImage; 
 	[self layoutScrollViewAnimated:NO];
 	
@@ -390,8 +397,10 @@
     if ([notification userInfo] == nil) return;
     if(![[[notification userInfo] objectForKey:@"imageURL"] isEqual:self.photo.URL]) return;
     NSNumber *progress = (NSNumber*)[[notification userInfo] objectForKey:@"progress"];
-	NSLog(@"update!!!!!!!!!!!!!!");
+	NSLog(@"update!!!!!!!!!!!!!!%.1f",progress.floatValue);
+    [self addSubview:hud.view];
     [hud setProgress:[progress floatValue]];
+    [hud update];
 }
 
 
