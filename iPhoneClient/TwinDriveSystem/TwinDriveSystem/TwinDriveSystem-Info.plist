@@ -39,6 +39,8 @@
 	<true/>
 	<key>UILaunchImageFile~iphone</key>
 	<string>Default.png</string>
+	<key>UIPrerenderedIcon</key>
+	<true/>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
