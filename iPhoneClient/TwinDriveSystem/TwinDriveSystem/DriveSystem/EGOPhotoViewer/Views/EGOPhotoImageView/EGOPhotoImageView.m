@@ -67,7 +67,7 @@
 		self.opaque = YES;
 		
 		EGOPhotoScrollView *scrollView = [[EGOPhotoScrollView alloc] initWithFrame:self.bounds];
-		scrollView.backgroundColor = [UIColor blackColor];
+		scrollView.backgroundColor = [UIColor clearColor];
 		scrollView.opaque = YES;
 		scrollView.delegate = self;
 		[self addSubview:scrollView];
@@ -78,6 +78,7 @@
         [self addSubview:hud.view];
         
 		UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        imageView.backgroundColor = [UIColor clearColor];
 		imageView.opaque = YES;
 		imageView.contentMode = UIViewContentModeScaleAspectFit;
 		imageView.tag = ZOOM_VIEW_TAG;
@@ -174,14 +175,18 @@
 		self.userInteractionEnabled = YES;
 		
 		_loading=NO;
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"EGOPhotoDidFinishLoading" object:[NSDictionary dictionaryWithObjectsAndKeys:self.photo, @"photo", [NSNumber numberWithBool:NO], @"failed", nil]];
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"EGOPhotoDidFinishLoading" 
+                                                            object:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                    self.photo, @"photo", 
+                                                                    [NSNumber numberWithBool:NO], @"failed",
+                                                                    nil]];
 		
 		
 	} else {
 		
 		_loading = YES;
         [hud setCaption:@"正在努力加载中，请稍后..."];
-        [hud setProgress:0.01f];
+        [hud setProgress:0.001f];
         [hud show];
 		self.userInteractionEnabled= NO;
 		self.imageView.image = kEGOPhotoLoadingPlaceholder;
@@ -391,6 +396,7 @@
     if(![[[notification userInfo] objectForKey:@"imageURL"] isEqual:self.photo.URL]) return;
     NSNumber *progress = (NSNumber*)[[notification userInfo] objectForKey:@"progress"];
 	NSLog(@"update!!!!!!!!!!!!!!");
+    [hud show];
     [hud setProgress:[progress floatValue]];
 }
 

@@ -87,12 +87,10 @@
 	} else {
         
         CGSize labelSize = [text sizeWithFont:_textLabel.font
-                            constrainedToSize:CGSizeMake(self.frame.size.width-15.0,
+                            constrainedToSize:CGSizeMake(self.frame.size.width-30.0,
                                                          80.0f)
                                 lineBreakMode:UILineBreakModeWordWrap];
-//        if (labelSize.height<40.0) {
-//            labelSize.height = 40.0f;
-//        }
+
         _textLabelFrame.size.height = labelSize.height;
         [_textLabel setFrame:_textLabelFrame];
         _textLabel.text = text;
@@ -140,7 +138,7 @@
 		
 		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 		
-		self.frame = CGRectMake(0.0f, self.superview.frame.size.height - self.frame.size.height - 10, self.frame.size.width, self.frame.size.height);
+		self.frame = CGRectMake(0.0f, self.superview.frame.size.height - self.frame.size.height, self.frame.size.width, self.frame.size.height);
 
 	}
 	
