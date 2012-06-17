@@ -397,7 +397,7 @@
     if ([notification userInfo] == nil) return;
     if(![[[notification userInfo] objectForKey:@"imageURL"] isEqual:self.photo.URL]) return;
     NSNumber *progress = (NSNumber*)[[notification userInfo] objectForKey:@"progress"];
-	NSLog(@"update!!!!!!!!!!!!!!%.1f",progress);
+	NSLog(@"update!!!!!!!!!!!!!!%.1f",progress.floatValue);
     [self addSubview:hud.view];
     [hud setProgress:[progress floatValue]];
     [hud update];
