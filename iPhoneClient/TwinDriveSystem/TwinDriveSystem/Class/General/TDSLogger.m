@@ -13,6 +13,7 @@
 
 + (void) file:(const char*)sourceFile function:(const char*)functionName lineNumber:(int)lineNumber  level:(NSString*)level format:(NSString*)format, ...
 {
+    return;
     if (!format) {
         return;
     }
