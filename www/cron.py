@@ -18,8 +18,8 @@ from predict import predict
 APP_KEY = '459673502'
 APP_SECRET = '87ff70bf34f6b026217a4025a97b0ed0'
 
-access_token = 'f6f03cbc8dd90cbe7d1d2346646360d5'
-token_secret = 'adeb5b5770326a639d58fd3b5609d0ce'
+access_token = '9c98d82fcb32c302f92ac4db2cc3abda'
+token_secret = '3139f78a7279ba6b85f8737b56fad6d1'
 
 client = APIClient(app_key=APP_KEY, app_secret=APP_SECRET)
 client.oauth_token = access_token
