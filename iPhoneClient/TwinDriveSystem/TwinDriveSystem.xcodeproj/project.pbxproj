@@ -1165,8 +1165,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ARCHS = (
+					armv7,
+					armv6,
+				);
+				CODE_SIGN_IDENTITY = "iPhone Developer: song zhen (DNH3VLVCX2)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: song zhen (DNH3VLVCX2)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1180,8 +1184,10 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				SDKROOT = iphoneos;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				PROVISIONING_PROFILE = "539DF2F2-8167-4DE2-B354-2AC716C1DEBA";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "539DF2F2-8167-4DE2-B354-2AC716C1DEBA";
+				SDKROOT = iphoneos5.1;
 			};
 			name = Debug;
 		};
@@ -1189,17 +1195,23 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ARCHS = (
+					armv7,
+					armv6,
+				);
+				CODE_SIGN_IDENTITY = "iPhone Distribution: song zhen";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: song zhen";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				SDKROOT = iphoneos;
+				PROVISIONING_PROFILE = "A928ECE1-CA4B-419D-AA42-205CEC4A6FD1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A928ECE1-CA4B-419D-AA42-205CEC4A6FD1";
+				SDKROOT = iphoneos5.1;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1207,8 +1219,8 @@
 		2F7F5B3E14E7859F0010F670 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: song zhen (DNH3VLVCX2)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: song zhen (DNH3VLVCX2)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1233,8 +1245,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "539DF2F2-8167-4DE2-B354-2AC716C1DEBA";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "539DF2F2-8167-4DE2-B354-2AC716C1DEBA";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1243,7 +1255,7 @@
 		2F7F5B3F14E7859F0010F670 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: song zhen";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: song zhen";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1269,8 +1281,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "EA158376-DA02-4EB2-B7A0-36C68D7BF935";
+				PROVISIONING_PROFILE = "A928ECE1-CA4B-419D-AA42-205CEC4A6FD1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A928ECE1-CA4B-419D-AA42-205CEC4A6FD1";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
