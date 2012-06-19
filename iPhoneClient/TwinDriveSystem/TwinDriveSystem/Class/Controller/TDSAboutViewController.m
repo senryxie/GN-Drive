@@ -9,7 +9,7 @@
 #import "TDSAboutViewController.h"
 #import "TDSFeedBackViewController.h"
 
-#define _FEEDBACK_SECTION 1
+#define _FEEDBACK_INDEX 2
 
 @implementation TDSAboutViewController
 @synthesize tableView = _tableView;
@@ -29,19 +29,13 @@
         
         _feedbackViewController = [[TDSFeedBackViewController alloc] init];
         _feedbackViewController.navigationItem.title = @"意见反馈";
+
         
-        _sectionHeaders = [[NSArray alloc] initWithObjects:@"新浪微博", @"意见反馈", @"关于", nil];
-		_sectionFooters = [[NSArray alloc] initWithObjects:@"", @"", @"©IcePhone Studio 2012", nil];
-        
-		NSArray *section0 = [NSArray arrayWithObjects:@"登录用户", nil];
-		NSArray *section1 = [NSArray arrayWithObjects:@"欢迎大家积极反馈", nil];
-		NSArray *section2 = [NSArray arrayWithObjects:@"当前版本", @"联系方式", nil];
-        _cellCaptions = [[NSArray alloc] initWithObjects:section0, section1, section2, nil];
+		NSArray *section1 = [NSArray arrayWithObjects:@"当前版本", @"联系方式",@"欢迎大家积极反馈", nil];
+        _cellCaptions = [[NSArray alloc] initWithObjects:section1,  nil];
 		
-		NSArray *label0 = [NSArray arrayWithObjects:@"悬崖乐马", nil];
-		NSArray *label1 = [NSArray arrayWithObjects:@"", nil];
-		NSArray *label2 = [NSArray arrayWithObjects:@"1.0", @"jiepaikong@gmail.com", nil];
-        _cellInfosLabels = [[NSArray alloc] initWithObjects:label0, label1, label2, nil];
+		NSArray *label1 = [NSArray arrayWithObjects:@"1.0", @"jiepaikong@gmail.com",@"", nil];
+        _cellInfosLabels = [[NSArray alloc] initWithObjects:label1,  nil];
 	}
 	return self;
 }
@@ -62,7 +56,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];    
-    self.navigationItem.title = @"设置";
+    self.navigationItem.title = @"关于";
 }
 
 - (void)viewDidUnload
@@ -78,29 +72,19 @@
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if(indexPath.section == _FEEDBACK_SECTION){        
-        [self.navigationController pushViewController:_feedbackViewController animated:YES];
+    if(indexPath.row == _FEEDBACK_INDEX){        
+        [self.navigationController pushViewController:_feedbackViewController 
+                                             animated:YES];
     }
 }
 
 #pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return [_sectionHeaders count];
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return [_sectionHeaders objectAtIndex:section];
-}
-
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
-	return [_sectionFooters objectAtIndex:section];
+	return @"©IcePhone Studio 2012";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    int sec[3] = {1,1,2};
-    return sec[section];
+    return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -122,7 +106,7 @@
     infoLabel.text = [[_cellInfosLabels objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     
     //滑动到意见反馈页
-    if (indexPath.section == _FEEDBACK_SECTION) {
+    if (indexPath.row == _FEEDBACK_INDEX) {
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }

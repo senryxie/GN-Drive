@@ -74,7 +74,7 @@
         NSIndexPath *startIndexPath = [TDSDataPersistenceAssistant getReadedPhotoIndexPath];
         _recordPageSection = startIndexPath.section;
         _recordPageIndex = startIndexPath.row;
-        NSLog(@" recordPage<%d,%d>",_recordPageSection,_recordPageIndex);
+        TDSLOG_info(@" recordPage<%d,%d>",_recordPageSection,_recordPageIndex);
 
         _pageIndex = _recordPageIndex; // 重置了下初始index,EGO自带处理，真好
         
@@ -174,7 +174,7 @@
     // 在浏览到第一张照片的时候添加loadingView和请求
     if (index == 0 && _startPage-_requestPrePageCount > 0) 
     {
-        NSLog(@" ### now index = 0");
+        TDSLOG_info(@" ### now index = 0");
         if (_isExtremity) {
             [self showExtremity:YES];
         }else if(_isNoPrevious){
@@ -248,7 +248,7 @@
 - (void)setStatusBarHidden:(BOOL)hidden animated:(BOOL)animated{
 	if (UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPad) return; 
     
-    NSLog(@" $$$$ inTDS setStatusBarHidden:%d",hidden);
+    TDSLOG_info(@" $$$$ inTDS setStatusBarHidden:%d",hidden);
 	if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 3.2) {
 		
 //		[[UIApplication sharedApplication] setStatusBarHidden:hidden withAnimation:UIStatusBarAnimationFade];
@@ -264,7 +264,7 @@
 - (void)setBarsHidden:(BOOL)hidden animated:(BOOL)animated{
     if (hidden&&_barsHidden) return;
     [super setBarsHidden:hidden animated:animated];
-    NSLog(@" $$$$ inTDS setBarsHidden:%d",hidden);
+    TDSLOG_info(@" $$$$ inTDS setBarsHidden:%d",hidden);
     
     
     TDSPhotoView *photoView = (TDSPhotoView*)[[self photoSource] objectAtIndex:_pageIndex];
@@ -404,7 +404,7 @@
         NSRange range ;
         range.location = (page - (_startPage-_requestPrePageCount))*ONCE_REQUEST_COUNT_LIMIT;
         range.length = photoArray.count;
-        NSLog(@" ### range:(%d,%d)",range.location,range.length);
+        TDSLOG_info(@" ### range:(%d,%d)",range.location,range.length);
         [[self photoSource] updatePhotos:photoArray inRange:range];
         if (range.length < ONCE_REQUEST_COUNT_LIMIT) {
             range.location += range.length;
@@ -477,7 +477,7 @@
     TDSLOG_debug(@"result :%@",response );
     if ([response isKindOfClass:[TDSRequestObject class]]) {
         TDSRequestObject *responseObject = (TDSRequestObject *)response;
-        NSLog(@" %@",responseObject.rootObject);
+        TDSLOG_info(@" %@",responseObject.rootObject);
         TDSLOG_info(@"---->get response with page:%@",[responseObject.userInfo objectForKey:@"page"]);
         if (![responseObject.rootObject isKindOfClass:[NSDictionary class]]) {
             return;
@@ -505,7 +505,7 @@
             NSNumber *pId = [responseDic objectForKey:@"id"];
             NSString *caption = [responseDic objectForKey:@"text"];
             NSString *url = [responseDic objectForKey:@"url"];
-            NSLog(@"###### get single photo[%@]:%@\n%@",pId,url,caption);                        
+            TDSLOG_info(@"###### get single photo[%@]:%@\n%@",pId,url,caption);                        
         }
         // 多张照片
         else if([actionString isEqualToString:ResponseAction_MultiPhoto]){
