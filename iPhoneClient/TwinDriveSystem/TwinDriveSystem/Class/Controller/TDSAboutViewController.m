@@ -9,14 +9,23 @@
 #import "TDSAboutViewController.h"
 #import "TDSFeedBackViewController.h"
 
-#define _FEEDBACK_INDEX 2
-
+#define FEEDBACK_INDEX 2
+#define WB_LOGIN_INDEX 3
 @implementation TDSAboutViewController
 @synthesize tableView = _tableView;
 
-
 #pragma mark -
 #pragma mark View lifecycle
+- (void)dealloc{
+    [_sectionHeaders release];
+    [_sectionFooters release];
+    [_cellCaptions release];
+    [_cellInfosLabels release];
+    [_feedbackViewController release];
+    self.tableView = nil;
+    [super dealloc];
+}
+
 - (id)init {
 	if ((self = [super init])) {
 
@@ -29,26 +38,21 @@
         
         _feedbackViewController = [[TDSFeedBackViewController alloc] init];
         _feedbackViewController.navigationItem.title = @"意见反馈";
-
         
-		NSArray *section1 = [NSArray arrayWithObjects:@"当前版本", @"联系方式",@"欢迎大家积极反馈", nil];
+        // 微博SDK
+        [[SDKController getInstance].weiBoEngine setRootViewController:self];
+        [[SDKController getInstance].weiBoEngine setDelegate:self];
+        
+		NSArray *section1 = [NSArray arrayWithObjects:@"当前版本", @"联系方式",@"欢迎大家积极反馈",@"登陆微博", nil];
         _cellCaptions = [[NSArray alloc] initWithObjects:section1,  nil];
 		
-		NSArray *label1 = [NSArray arrayWithObjects:@"1.0", @"jiepaikong@gmail.com",@"", nil];
+		NSArray *label1 = [NSArray arrayWithObjects:@"1.0", @"jiepaikong@gmail.com",@"",@"", nil];
         _cellInfosLabels = [[NSArray alloc] initWithObjects:label1,  nil];
+
 	}
 	return self;
 }
 
-- (void)dealloc{
-    [_sectionHeaders release];
-    [_sectionFooters release];
-    [_cellCaptions release];
-    [_cellInfosLabels release];
-    [_feedbackViewController release];
-    self.tableView = nil;
-    [super dealloc];
-}
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     _feedbackViewController.view.frame = self.view.bounds;
@@ -72,9 +76,11 @@
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if(indexPath.row == _FEEDBACK_INDEX){        
+    if(indexPath.row == FEEDBACK_INDEX){        
         [self.navigationController pushViewController:_feedbackViewController 
                                              animated:YES];
+    }else if(indexPath.row == WB_LOGIN_INDEX){
+        [[SDKController getInstance].weiBoEngine logIn];
     }
 }
 
@@ -84,7 +90,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 3;
+    return 4;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -106,7 +112,7 @@
     infoLabel.text = [[_cellInfosLabels objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     
     //滑动到意见反馈页
-    if (indexPath.row == _FEEDBACK_INDEX) {
+    if (indexPath.row == FEEDBACK_INDEX) {
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
@@ -123,4 +129,75 @@
 	
 	return cell;
 }
+
+#pragma mark - WBEngineDelegate
+- (void)engineAlreadyLoggedIn:(WBEngine *)engine
+{
+    //    [indicatorView stopAnimating];
+    if ([engine isUserExclusive])
+    {
+        UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:nil 
+                                                           message:@"请先登出！" 
+                                                          delegate:nil
+                                                 cancelButtonTitle:@"确定" 
+                                                 otherButtonTitles:nil];
+        [alertView show];
+        [alertView release];
+    }
+}
+
+- (void)engineDidLogIn:(WBEngine *)engine
+{
+    //    [indicatorView stopAnimating];
+    UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:nil 
+													   message:@"登录成功！" 
+													  delegate:self
+											 cancelButtonTitle:@"确定" 
+											 otherButtonTitles:nil];
+    //    [alertView setTag:kWBAlertViewLogInTag];
+	[alertView show];
+	[alertView release];
+}
+
+- (void)engine:(WBEngine *)engine didFailToLogInWithError:(NSError *)error
+{
+    //    [indicatorView stopAnimating];
+    NSLog(@"didFailToLogInWithError: %@", error);
+    UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:nil 
+													   message:@"登录失败！" 
+													  delegate:nil
+											 cancelButtonTitle:@"确定" 
+											 otherButtonTitles:nil];
+	[alertView show];
+	[alertView release];
+}
+
+- (void)engineDidLogOut:(WBEngine *)engine
+{
+    UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:nil 
+													   message:@"登出成功！" 
+													  delegate:self
+											 cancelButtonTitle:@"确定" 
+											 otherButtonTitles:nil];
+    //    [alertView setTag:kWBAlertViewLogOutTag];
+	[alertView show];
+	[alertView release];
+}
+
+- (void)engineNotAuthorized:(WBEngine *)engine
+{
+    
+}
+
+- (void)engineAuthorizeExpired:(WBEngine *)engine
+{
+    UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:nil 
+													   message:@"请重新登录！" 
+													  delegate:nil
+											 cancelButtonTitle:@"确定" 
+											 otherButtonTitles:nil];
+	[alertView show];
+	[alertView release];
+}
+
 @end

@@ -10,7 +10,6 @@
 @class TDSFeedBackViewController;
 
 @interface TDSAboutViewController : UIViewController <UITableViewDelegate,UITableViewDataSource>{
-    UITableView *_tableView;
     NSArray *_sectionHeaders;
 	NSArray *_sectionFooters;
 	NSArray *_cellCaptions;
