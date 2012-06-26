@@ -216,18 +216,21 @@
 - (void)setupImageViewWithImage:(UIImage*)aImage {	
 	if (!aImage) return; 
 	_loading = NO;
+    if (aImage) {
+        [_progressView setProgress:1.0f];        
+    }
     
-    [_textLabel setHidden:YES];    
-    [_progressView setProgress:1.0f];
-    [_progressView setHidden:YES];
-    
-	self.imageView.image = aImage; 
-	[self layoutScrollViewAnimated:NO];
-	
-	[[self layer] addAnimation:[self fadeAnimation] forKey:@"opacity"];
-	self.userInteractionEnabled = YES;
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"EGOPhotoDidFinishLoading" object:[NSDictionary dictionaryWithObjectsAndKeys:self.photo, @"photo", [NSNumber numberWithBool:NO], @"failed", nil]];
-	
+    self.imageView.image = aImage; 
+    [self layoutScrollViewAnimated:NO];                             
+    [[self layer] addAnimation:[self fadeAnimation] forKey:@"opacity"];
+    self.userInteractionEnabled = YES;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"EGOPhotoDidFinishLoading" 
+                                                        object:[NSDictionary 
+                                                                dictionaryWithObjectsAndKeys:self.photo, @"photo", [NSNumber numberWithBool:NO], @"failed", nil]];
+	if (aImage) {
+        [_textLabel setHidden:YES];   
+        [_progressView setHidden:YES];
+    }
 }
 
 - (void)prepareForReusue{
@@ -392,10 +395,7 @@
 #pragma mark EGOImageLoader Callbacks
 
 - (void)imageLoaderDidLoad:(NSNotification*)notification {	
-    [_textLabel setHidden:YES];
-    [_progressView setProgress:1.0f];
-    [_progressView setHidden:YES];	
-
+    
 	if ([notification userInfo] == nil) return;
 	if(![[[notification userInfo] objectForKey:@"imageURL"] isEqual:self.photo.URL]) return;
 	
