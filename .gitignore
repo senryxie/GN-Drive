@@ -15,3 +15,6 @@ www/snap.svm
 www/feature_words.txt
 www/sample.dat
 *.bak
+iPhoneClient/TwinDriveSystem/TwinDriveSystem.xcodeproj/project.xcworkspace/xcuserdata/*
+iPhoneClient/TwinDriveSystem/TwinDriveSystem.xcodeproj/xcuserdata/*
+iPhoneClient/TwinDriveSystem/TwinDriveSystem/Dependencies/SBJson/SBJson.xcodeproj/xcuserdata/*
