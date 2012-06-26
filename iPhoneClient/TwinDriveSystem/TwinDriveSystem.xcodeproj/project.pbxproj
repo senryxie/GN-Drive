@@ -59,8 +59,6 @@
 		2F5D11D51599F46300818A5C /* WBSendView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5D11BA1599F46300818A5C /* WBSendView.m */; };
 		2F5D11D61599F46300818A5C /* WBUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5D11BC1599F46300818A5C /* WBUtil.m */; };
 		2F5D11D81599F47600818A5C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F5D11D71599F47600818A5C /* Security.framework */; };
-		2F5D11DC1599F52300818A5C /* WBSDKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5D11DB1599F52300818A5C /* WBSDKViewController.m */; };
-		2F5D11E01599F53F00818A5C /* WXSDKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5D11DF1599F53F00818A5C /* WXSDKViewController.m */; };
 		2F7F5B2414E7859F0010F670 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7F5B2314E7859F0010F670 /* UIKit.framework */; };
 		2F7F5B2614E7859F0010F670 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7F5B2514E7859F0010F670 /* Foundation.framework */; };
 		2F7F5B2814E7859F0010F670 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7F5B2714E7859F0010F670 /* CoreGraphics.framework */; };
@@ -271,10 +269,6 @@
 		2F5D11BD1599F46300818A5C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		2F5D11BE1599F46300818A5C /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		2F5D11D71599F47600818A5C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		2F5D11DA1599F52300818A5C /* WBSDKViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBSDKViewController.h; sourceTree = "<group>"; };
-		2F5D11DB1599F52300818A5C /* WBSDKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBSDKViewController.m; sourceTree = "<group>"; };
-		2F5D11DE1599F53F00818A5C /* WXSDKViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXSDKViewController.h; sourceTree = "<group>"; };
-		2F5D11DF1599F53F00818A5C /* WXSDKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXSDKViewController.m; sourceTree = "<group>"; };
 		2F7F5B1F14E7859F0010F670 /* TwinDriveSystem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwinDriveSystem.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F7F5B2314E7859F0010F670 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2F7F5B2514E7859F0010F670 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -648,24 +642,6 @@
 			path = SFHFKeychainUtils;
 			sourceTree = "<group>";
 		};
-		2F5D11D91599F4FD00818A5C /* WBSDKViewController */ = {
-			isa = PBXGroup;
-			children = (
-				2F5D11DA1599F52300818A5C /* WBSDKViewController.h */,
-				2F5D11DB1599F52300818A5C /* WBSDKViewController.m */,
-			);
-			name = WBSDKViewController;
-			sourceTree = "<group>";
-		};
-		2F5D11DD1599F52A00818A5C /* WXSKDViewController */ = {
-			isa = PBXGroup;
-			children = (
-				2F5D11DE1599F53F00818A5C /* WXSDKViewController.h */,
-				2F5D11DF1599F53F00818A5C /* WXSDKViewController.m */,
-			);
-			name = WXSKDViewController;
-			sourceTree = "<group>";
-		};
 		2F7F5B1414E7859F0010F670 = {
 			isa = PBXGroup;
 			children = (
@@ -985,8 +961,6 @@
 		2F7F5C5114E789730010F670 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				2F5D11DD1599F52A00818A5C /* WXSKDViewController */,
-				2F5D11D91599F4FD00818A5C /* WBSDKViewController */,
 				2FB05F2214FD1F5400AD77AB /* MainScreenViewController */,
 				2F989D211533205100FFF4EE /* TDS+EGOPhotoViewController */,
 				2F7F5C6314E790220010F670 /* PhotoViewController */,
@@ -1358,8 +1332,6 @@
 				2F5D11D41599F46300818A5C /* WBRequest.m in Sources */,
 				2F5D11D51599F46300818A5C /* WBSendView.m in Sources */,
 				2F5D11D61599F46300818A5C /* WBUtil.m in Sources */,
-				2F5D11DC1599F52300818A5C /* WBSDKViewController.m in Sources */,
-				2F5D11E01599F53F00818A5C /* WXSDKViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
