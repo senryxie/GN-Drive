@@ -32,8 +32,8 @@
 		2F46F413157D1D730011D616 /* collect@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F46F411157D1D730011D616 /* collect@2x.png */; };
 		2F46F416157D1E120011D616 /* likeIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F46F414157D1E120011D616 /* likeIcon.png */; };
 		2F46F417157D1E120011D616 /* likeIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F46F415157D1E120011D616 /* likeIcon@2x.png */; };
-		2F4D8E66158C925000EF6E6C /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F4D8E63158C925000EF6E6C /* libWeChatSDK.a */; };
 		2F5B669315999D9000571267 /* TDSProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5B669215999D9000571267 /* TDSProgressView.m */; };
+		2F5D11921599F3C800818A5C /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F5D118E1599F39C00818A5C /* libWeChatSDK.a */; };
 		2F7F5B2414E7859F0010F670 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7F5B2314E7859F0010F670 /* UIKit.framework */; };
 		2F7F5B2614E7859F0010F670 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7F5B2514E7859F0010F670 /* Foundation.framework */; };
 		2F7F5B2814E7859F0010F670 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7F5B2714E7859F0010F670 /* CoreGraphics.framework */; };
@@ -201,11 +201,11 @@
 		2F46F411157D1D730011D616 /* collect@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "collect@2x.png"; sourceTree = "<group>"; };
 		2F46F414157D1E120011D616 /* likeIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = likeIcon.png; sourceTree = "<group>"; };
 		2F46F415157D1E120011D616 /* likeIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "likeIcon@2x.png"; sourceTree = "<group>"; };
-		2F4D8E63158C925000EF6E6C /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
-		2F4D8E64158C925000EF6E6C /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
-		2F4D8E65158C925000EF6E6C /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		2F5B669115999D9000571267 /* TDSProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSProgressView.h; sourceTree = "<group>"; };
 		2F5B669215999D9000571267 /* TDSProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSProgressView.m; sourceTree = "<group>"; };
+		2F5D118E1599F39C00818A5C /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
+		2F5D118F1599F39C00818A5C /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
+		2F5D11901599F39C00818A5C /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		2F7F5B1F14E7859F0010F670 /* TwinDriveSystem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwinDriveSystem.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F7F5B2314E7859F0010F670 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2F7F5B2514E7859F0010F670 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -354,6 +354,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F5D11921599F3C800818A5C /* libWeChatSDK.a in Frameworks */,
 				2F0E43FF1526215F00010CDD /* AudioToolbox.framework in Frameworks */,
 				2F8B058E14E96F36003731A4 /* libsbjson-ios.a in Frameworks */,
 				2F7F5C5614E78AAA0010F670 /* libz.dylib in Frameworks */,
@@ -365,7 +366,6 @@
 				2F7F5B2414E7859F0010F670 /* UIKit.framework in Frameworks */,
 				2F7F5B2614E7859F0010F670 /* Foundation.framework in Frameworks */,
 				2F7F5B2814E7859F0010F670 /* CoreGraphics.framework in Frameworks */,
-				2F4D8E66158C925000EF6E6C /* libWeChatSDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -468,16 +468,6 @@
 			name = hudView;
 			sourceTree = "<group>";
 		};
-		2F4D8E62158C925000EF6E6C /* WeixinSDK */ = {
-			isa = PBXGroup;
-			children = (
-				2F4D8E63158C925000EF6E6C /* libWeChatSDK.a */,
-				2F4D8E64158C925000EF6E6C /* WXApi.h */,
-				2F4D8E65158C925000EF6E6C /* WXApiObject.h */,
-			);
-			path = WeixinSDK;
-			sourceTree = "<group>";
-		};
 		2F5B669015999D7B00571267 /* TDSProgressView */ = {
 			isa = PBXGroup;
 			children = (
@@ -485,6 +475,72 @@
 				2F5B669215999D9000571267 /* TDSProgressView.m */,
 			);
 			name = TDSProgressView;
+			sourceTree = "<group>";
+		};
+		2F5D11861599F36900818A5C /* SDK */ = {
+			isa = PBXGroup;
+			children = (
+				2F5D11871599F36900818A5C /* SinaWeiBoSDK */,
+				2F5D118D1599F36900818A5C /* WeiXinSDK */,
+			);
+			path = SDK;
+			sourceTree = "<group>";
+		};
+		2F5D11871599F36900818A5C /* SinaWeiBoSDK */ = {
+			isa = PBXGroup;
+			children = (
+				2F5D11881599F36900818A5C /* CTMBase64 */,
+				2F5D11891599F36900818A5C /* Resource */,
+				2F5D118B1599F36900818A5C /* SBJSON */,
+				2F5D118C1599F36900818A5C /* SFHFKeychainUtils */,
+			);
+			path = SinaWeiBoSDK;
+			sourceTree = "<group>";
+		};
+		2F5D11881599F36900818A5C /* CTMBase64 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = CTMBase64;
+			sourceTree = "<group>";
+		};
+		2F5D11891599F36900818A5C /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				2F5D118A1599F36900818A5C /* Images */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		2F5D118A1599F36900818A5C /* Images */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		2F5D118B1599F36900818A5C /* SBJSON */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = SBJSON;
+			sourceTree = "<group>";
+		};
+		2F5D118C1599F36900818A5C /* SFHFKeychainUtils */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = SFHFKeychainUtils;
+			sourceTree = "<group>";
+		};
+		2F5D118D1599F36900818A5C /* WeiXinSDK */ = {
+			isa = PBXGroup;
+			children = (
+				2F5D118E1599F39C00818A5C /* libWeChatSDK.a */,
+				2F5D118F1599F39C00818A5C /* WXApi.h */,
+				2F5D11901599F39C00818A5C /* WXApiObject.h */,
+			);
+			path = WeiXinSDK;
 			sourceTree = "<group>";
 		};
 		2F7F5B1414E7859F0010F670 = {
@@ -526,6 +582,7 @@
 		2F7F5B2914E7859F0010F670 /* TwinDriveSystem */ = {
 			isa = PBXGroup;
 			children = (
+				2F5D11861599F36900818A5C /* SDK */,
 				2F0C576715243F5E00E0B91F /* Model */,
 				2F7F5C5114E789730010F670 /* Controller */,
 				2F7F5C5214E789730010F670 /* DataSource */,
@@ -563,7 +620,6 @@
 		2F7F5B9314E7895B0010F670 /* DriveSystem */ = {
 			isa = PBXGroup;
 			children = (
-				2F4D8E62158C925000EF6E6C /* WeixinSDK */,
 				2F7F5BEB14E7895B0010F670 /* EGOPhotoViewer */,
 				2F7F5B9414E7895B0010F670 /* ASIHttpRequest */,
 			);
@@ -1253,6 +1309,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/TwinDriveSystem/DriveSystem/WeixinSDK\"",
+					"\"$(SRCROOT)/TwinDriveSystem/SDK/WeiXinSDK\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lxml2",
@@ -1289,6 +1346,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/TwinDriveSystem/DriveSystem/WeixinSDK\"",
+					"\"$(SRCROOT)/TwinDriveSystem/SDK/WeiXinSDK\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lxml2",
