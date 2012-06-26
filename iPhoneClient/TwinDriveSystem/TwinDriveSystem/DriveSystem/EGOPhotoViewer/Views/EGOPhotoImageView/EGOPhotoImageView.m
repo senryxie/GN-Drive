@@ -25,7 +25,7 @@
 //
 
 #import "EGOPhotoImageView.h"
-#import "ATMHud.h"
+#import "TDSProgressView.h"
 
 #define ZOOM_VIEW_TAG 0x101
 
@@ -56,7 +56,6 @@
 @synthesize imageView=_imageView;
 @synthesize scrollView=_scrollView;
 @synthesize loading=_loading;
-@synthesize hud;
 
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
@@ -73,7 +72,7 @@
 		[self addSubview:scrollView];
 		_scrollView = [scrollView retain];
 		[scrollView release];
-
+        
 		UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.bounds];
         imageView.backgroundColor = [UIColor clearColor];
 		imageView.opaque = YES;
@@ -82,13 +81,26 @@
 		[_scrollView addSubview:imageView];
 		_imageView = [imageView retain];
 		[imageView release];
-		
-        hud = [[ATMHud alloc] initWithDelegate:self];
-        [self addSubview:hud.view];
-        [self bringSubviewToFront:hud.view];
-        [hud setCaption:@"正在努力加载中，请稍后..."];
-        [hud setProgress:0.01f];
-        [hud show];
+		        
+        CGRect progressFrame = CGRectMake(50.0f, 200.0f, self.bounds.size.width-100.0f, 10.0f);
+        _progressView = [[TDSProgressView alloc] initWithFrame:progressFrame] ;
+        [_progressView setBorderGap:.1f];
+        [_progressView setEmptyColor: [UIColor clearColor]];
+        [_progressView setOuterColor: [UIColor whiteColor]] ;
+        [_progressView setInnerColor: [UIColor whiteColor]] ;
+        
+        [self addSubview: _progressView];
+        
+        _textLabel = [[UILabel alloc] init];
+        _textLabel.backgroundColor = [UIColor clearColor];
+        _textLabel.textColor = [UIColor whiteColor];
+        _textLabel.text = @"努力加载中。。。";
+        _textLabel.font = [UIFont systemFontOfSize:15.0f];
+        _textLabel.textAlignment = UITextAlignmentCenter;
+        progressFrame.origin.y -= 25.0f;
+        progressFrame.size.height = 15.0f;
+        _textLabel.frame = progressFrame;
+        [self addSubview:_textLabel];
         
 		RotateGesture *gesture = [[RotateGesture alloc] initWithTarget:self action:@selector(rotate:)];
 		[self addGestureRecognizer:gesture];
@@ -174,8 +186,8 @@
 	}
 	
 	if (self.imageView.image) {
-        [hud hide];
-        [hud.view removeFromSuperview];
+        [_progressView setHidden:YES];
+        [_textLabel setHidden:YES];
 		self.userInteractionEnabled = YES;
 		
 		_loading=NO;
@@ -189,10 +201,11 @@
 	} else {
 		
 		_loading = YES;
-        [self bringSubviewToFront:hud.view];
-        [hud setCaption:@"正在努力加载中，请稍后..."];
-        [hud setProgress:0.01f];
-        [hud show];
+        
+        [_textLabel setHidden:NO];        
+        [_progressView setHidden:NO];
+        [_progressView setProgress:0.01f];
+        
 		self.userInteractionEnabled= NO;
 		self.imageView.image = kEGOPhotoLoadingPlaceholder;
 	}
@@ -202,10 +215,12 @@
 
 - (void)setupImageViewWithImage:(UIImage*)aImage {	
 	if (!aImage) return; 
-
 	_loading = NO;
-    [hud hide];
-    [hud.view removeFromSuperview];
+    
+    [_textLabel setHidden:YES];    
+    [_progressView setProgress:1.0f];
+    [_progressView setHidden:YES];
+    
 	self.imageView.image = aImage; 
 	[self layoutScrollViewAnimated:NO];
 	
@@ -228,8 +243,8 @@
 	self.photo.failed = YES;
 	[self layoutScrollViewAnimated:NO];
 	self.userInteractionEnabled = NO;
-    [hud hide];
-    [hud.view removeFromSuperview];
+    [_progressView setHidden:YES];
+    [_textLabel setHidden:YES];
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"EGOPhotoDidFinishLoading" object:[NSDictionary dictionaryWithObjectsAndKeys:self.photo, @"photo", [NSNumber numberWithBool:YES], @"failed", nil]];
 	
 }
@@ -377,21 +392,20 @@
 #pragma mark EGOImageLoader Callbacks
 
 - (void)imageLoaderDidLoad:(NSNotification*)notification {	
-    [hud setProgress:1.0f];
-    // 抖一下？
-    [hud show];
-	[hud hide];
-    [hud.view removeFromSuperview];
+    [_textLabel setHidden:YES];
+    [_progressView setProgress:1.0f];
+    [_progressView setHidden:YES];	
+
 	if ([notification userInfo] == nil) return;
 	if(![[[notification userInfo] objectForKey:@"imageURL"] isEqual:self.photo.URL]) return;
 	
 	[self setupImageViewWithImage:[[notification userInfo] objectForKey:@"image"]];
-	
-}
+}    
+    
 
 - (void)imageLoaderDidFailToLoad:(NSNotification*)notification {
-	[hud hide];
-    [hud.view removeFromSuperview];
+    [_textLabel setHidden:YES];
+   [_progressView setHidden:YES];	
     
 	if ([notification userInfo] == nil) return;
 	if(![[[notification userInfo] objectForKey:@"imageURL"] isEqual:self.photo.URL]) return;
@@ -406,9 +420,7 @@
     if(![[[notification userInfo] objectForKey:@"imageURL"] isEqual:self.photo.URL]) return;
     NSNumber *progress = (NSNumber*)[[notification userInfo] objectForKey:@"progress"];
 	NSLog(@"update!!!!!!!!!!!!!!%.1f",progress.floatValue);
-    [self addSubview:hud.view];
-    [hud setProgress:[progress floatValue]];
-    [hud update];
+    [_progressView setProgress:progress.floatValue];
 }
 
 
@@ -600,8 +612,8 @@
 	}
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	hud.delegate = nil;
-    [hud release];
+    [_textLabel release],_textLabel = nil;
+    [_progressView release],_progressView = nil;
 	[_imageView release]; _imageView=nil;
 	[_scrollView release]; _scrollView=nil;
 	[_photo release]; _photo=nil;
