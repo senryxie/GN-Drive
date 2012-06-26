@@ -20,6 +20,13 @@
 #import "TDSHudView.h"
 #import "TDSEGOPhotoViewController.h"
 #import "Reachability.h"
+#import "WBEngine.h"
+
+// SDK
+#define kWBSDKAppKey @"459673502"
+#define kWBSDKAppSecret @"87ff70bf34f6b026217a4025a97b0ed0"
+#define kWBSDKRedirectURI @"http://morelife.sinaapp.com/connect_callback"
+
 
 // notification
 #define TDSNewPhotoNotification              @"TDSNewPhotoNotification"
