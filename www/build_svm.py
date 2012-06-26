@@ -61,7 +61,7 @@ def get_training_data():
     count_trash = len(trash_tweets)
     print '垃圾样本数量'
 
-    rs = conn.execute('select * from entry order by rand() limit %s' % count_trash)
+    rs = conn.execute('select * from entry')
     snap_tweets = map(Draft._make, rs)
 
 

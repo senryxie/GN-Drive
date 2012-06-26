@@ -82,7 +82,7 @@
 		_imageView = [imageView retain];
 		[imageView release];
 		        
-        CGRect progressFrame = CGRectMake(50.0f, 200.0f, self.bounds.size.width-100.0f, 10.0f);
+        CGRect progressFrame = CGRectMake(70.0f, 200.0f, self.bounds.size.width-140.0f, 14.0f);
         _progressView = [[TDSProgressView alloc] initWithFrame:progressFrame] ;
         [_progressView setBorderGap:.1f];
         [_progressView setEmptyColor: [UIColor clearColor]];
@@ -94,8 +94,8 @@
         _textLabel = [[UILabel alloc] init];
         _textLabel.backgroundColor = [UIColor clearColor];
         _textLabel.textColor = [UIColor whiteColor];
-        _textLabel.text = @"努力加载中。。。";
-        _textLabel.font = [UIFont systemFontOfSize:15.0f];
+        _textLabel.text = @"正在努力加载中，请稍后...";
+        _textLabel.font = [UIFont boldSystemFontOfSize:14.0f];
         _textLabel.textAlignment = UITextAlignmentCenter;
         progressFrame.origin.y -= 25.0f;
         progressFrame.size.height = 15.0f;
