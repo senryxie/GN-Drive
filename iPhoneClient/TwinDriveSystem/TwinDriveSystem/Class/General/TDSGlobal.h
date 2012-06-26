@@ -21,6 +21,7 @@
 #import "TDSEGOPhotoViewController.h"
 #import "Reachability.h"
 #import "WBEngine.h"
+#import "SDKController.h"
 
 // SDK
 #define kWBSDKAppKey @"459673502"

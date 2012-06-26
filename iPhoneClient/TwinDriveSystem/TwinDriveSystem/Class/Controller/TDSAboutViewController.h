@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 @class TDSFeedBackViewController;
 
-@interface TDSAboutViewController : UIViewController <UITableViewDelegate,UITableViewDataSource,WBEngineDelegate, UIAlertViewDelegate>{
+@interface TDSAboutViewController : UIViewController <UITableViewDelegate,UITableViewDataSource>{
     NSArray *_sectionHeaders;
 	NSArray *_sectionFooters;
 	NSArray *_cellCaptions;
@@ -18,5 +18,4 @@
 }
 
 @property (nonatomic, retain) UITableView *tableView;
-@property (nonatomic ,retain) WBEngine *weiBoEngine;
 @end

@@ -13,7 +13,6 @@
 #define WB_LOGIN_INDEX 3
 @implementation TDSAboutViewController
 @synthesize tableView = _tableView;
-@synthesize weiBoEngine = _weiBoEngine;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -24,7 +23,6 @@
     [_cellInfosLabels release];
     [_feedbackViewController release];
     self.tableView = nil;
-    self.weiBoEngine = nil;
     [super dealloc];
 }
 
@@ -40,15 +38,10 @@
         
         _feedbackViewController = [[TDSFeedBackViewController alloc] init];
         _feedbackViewController.navigationItem.title = @"意见反馈";
-
-        WBEngine *engine = [[WBEngine alloc] initWithAppKey:kWBSDKAppKey appSecret:kWBSDKAppSecret];
-        [engine setRootViewController:self];
-        [engine setDelegate:self];
-        [engine setRedirectURI:kWBSDKRedirectURI];
-        [engine setIsUserExclusive:NO];
-        self.weiBoEngine = engine;
-        [engine release];
-
+        
+        // 微博SDK
+        [[SDKController getInstance].weiBoEngine setRootViewController:self];
+        [[SDKController getInstance].weiBoEngine setDelegate:self];
         
 		NSArray *section1 = [NSArray arrayWithObjects:@"当前版本", @"联系方式",@"欢迎大家积极反馈",@"登陆微博", nil];
         _cellCaptions = [[NSArray alloc] initWithObjects:section1,  nil];
@@ -87,7 +80,7 @@
         [self.navigationController pushViewController:_feedbackViewController 
                                              animated:YES];
     }else if(indexPath.row == WB_LOGIN_INDEX){
-        [self.weiBoEngine logIn];
+        [[SDKController getInstance].weiBoEngine logIn];
     }
 }
 
